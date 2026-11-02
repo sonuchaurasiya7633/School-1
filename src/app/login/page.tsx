@@ -12,8 +12,8 @@ function LoginFormContent() {
   const initialRole = searchParams.get('role');
 
   const { login } = useAuth();
-  const [identifier, setIdentifier] = useState('student@school.com');
-  const [password, setPassword] = useState('password123');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [activeRole, setActiveRole] = useState<'student' | 'teacher'>('student');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,12 +21,8 @@ function LoginFormContent() {
   useEffect(() => {
     if (initialRole === 'teacher') {
       setActiveRole('teacher');
-      setIdentifier('teacher@school.com');
-      setPassword('password123');
-    } else {
+    } else if (initialRole === 'student') {
       setActiveRole('student');
-      setIdentifier('student@school.com');
-      setPassword('password123');
     }
   }, [initialRole]);
 
@@ -50,13 +46,6 @@ function LoginFormContent() {
   const selectRole = (role: 'student' | 'teacher') => {
     setActiveRole(role);
     setError('');
-    if (role === 'teacher') {
-      setIdentifier('teacher@school.com');
-      setPassword('password123');
-    } else {
-      setIdentifier('student@school.com');
-      setPassword('password123');
-    }
   };
 
   return (
@@ -126,7 +115,7 @@ function LoginFormContent() {
               required
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              placeholder={activeRole === 'student' ? 'student@school.com or STD001' : 'teacher@school.com or TCH001'}
+              placeholder={activeRole === 'student' ? 'Enter Student ID or Email' : 'Enter Teacher ID or Email'}
               className="block w-full pl-9 pr-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-medium"
             />
           </div>
@@ -173,15 +162,6 @@ function LoginFormContent() {
           )}
         </button>
       </form>
-
-      <div className="mt-6 pt-5 border-t border-slate-100 text-center space-y-1">
-        <p className="text-xs text-slate-500">
-          Demo Password: <span className="font-mono font-bold text-slate-700">password123</span>
-        </p>
-        <p className="text-[11px] text-slate-400">
-          Default test accounts: student@school.com • teacher@school.com
-        </p>
-      </div>
     </div>
   );
 }

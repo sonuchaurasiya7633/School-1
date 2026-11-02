@@ -13,15 +13,14 @@ import {
   ArrowRight,
   Sparkles,
   ArrowLeft,
-  KeyRound,
   Building,
 } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const [identifier, setIdentifier] = useState('admin@school.com');
-  const [password, setPassword] = useState('password123');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -46,12 +45,6 @@ export default function AdminLoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setIdentifier('admin@school.com');
-    setPassword('password123');
-    setError('');
   };
 
   return (
@@ -104,24 +97,6 @@ export default function AdminLoginPage() {
       {/* Card Form */}
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-slate-900/90 backdrop-blur-xl py-8 px-6 sm:px-10 shadow-2xl rounded-3xl border border-slate-800 relative">
-          {/* Quick Demo Fill Pill */}
-          <div className="mb-6 p-3 bg-purple-950/40 border border-purple-800/40 rounded-xl flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <KeyRound className="w-4 h-4 text-purple-400" />
-              <div>
-                <p className="text-[11px] font-bold text-purple-200">Default Super Admin</p>
-                <p className="text-[10px] text-purple-400">admin@school.com</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold rounded-lg transition"
-            >
-              Fill Demo
-            </button>
-          </div>
-
           {error && (
             <div className="mb-5 p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs rounded-xl flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
@@ -143,7 +118,7 @@ export default function AdminLoginPage() {
                   required
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="admin@school.com"
+                  placeholder="Enter admin ID or email"
                   className="block w-full pl-10 pr-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
                 />
               </div>
