@@ -197,55 +197,57 @@ export default function TeacherAttendancePage() {
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider">
-            <tr>
-              <th className="py-3 px-4">Roll</th>
-              <th className="py-3 px-4">Student Name</th>
-              <th className="py-3 px-4">Mark Status</th>
-              <th className="py-3 px-4">Notes</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {records.map((r, idx) => (
-              <tr key={r.studentId} className="hover:bg-slate-50/70">
-                <td className="py-3 px-4 font-bold text-slate-700">#{r.rollNumber}</td>
-                <td className="py-3 px-4 font-bold text-slate-800 text-sm">{r.name}</td>
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-1.5">
-                    {['Present', 'Absent', 'Late'].map((st) => (
-                      <button
-                        key={st}
-                        type="button"
-                        onClick={() => handleStatusChange(idx, st)}
-                        className={`px-3 py-1 rounded-md font-bold text-xs transition ${
-                          r.status === st
-                            ? st === 'Present'
-                              ? 'bg-emerald-600 text-white'
-                              : st === 'Absent'
-                              ? 'bg-rose-600 text-white'
-                              : 'bg-amber-500 text-white'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        }`}
-                      >
-                        {st}
-                      </button>
-                    ))}
-                  </div>
-                </td>
-                <td className="py-3 px-4">
-                  <input
-                    type="text"
-                    value={r.remarks}
-                    onChange={(e) => handleRemarksChange(idx, e.target.value)}
-                    placeholder="e.g. Leave note, tardy..."
-                    className="w-full max-w-xs px-2 py-1 text-xs border border-slate-200 rounded"
-                  />
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider">
+              <tr>
+                <th className="py-3 px-4 whitespace-nowrap">Roll</th>
+                <th className="py-3 px-4 whitespace-nowrap">Student Name</th>
+                <th className="py-3 px-4 whitespace-nowrap">Mark Status</th>
+                <th className="py-3 px-4 whitespace-nowrap">Notes</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {records.map((r, idx) => (
+                <tr key={r.studentId} className="hover:bg-slate-50/70">
+                  <td className="py-3 px-4 font-bold text-slate-700 whitespace-nowrap">#{r.rollNumber}</td>
+                  <td className="py-3 px-4 font-bold text-slate-800 text-sm whitespace-nowrap">{r.name}</td>
+                  <td className="py-3 px-4 whitespace-nowrap">
+                    <div className="flex items-center gap-1.5">
+                      {['Present', 'Absent', 'Late'].map((st) => (
+                        <button
+                          key={st}
+                          type="button"
+                          onClick={() => handleStatusChange(idx, st)}
+                          className={`px-3 py-1 rounded-md font-bold text-xs transition ${
+                            r.status === st
+                              ? st === 'Present'
+                                ? 'bg-emerald-600 text-white'
+                                : st === 'Absent'
+                                ? 'bg-rose-600 text-white'
+                                : 'bg-amber-500 text-white'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                        >
+                          {st}
+                        </button>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="py-3 px-4 whitespace-nowrap">
+                    <input
+                      type="text"
+                      value={r.remarks}
+                      onChange={(e) => handleRemarksChange(idx, e.target.value)}
+                      placeholder="e.g. Leave note, tardy..."
+                      className="w-full max-w-xs px-2 py-1 text-xs border border-slate-200 rounded"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </DashboardShell>
   );

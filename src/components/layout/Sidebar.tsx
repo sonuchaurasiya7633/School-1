@@ -96,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
 
   return (
-    <aside className="w-68 bg-slate-950 text-slate-300 flex flex-col h-full border-r border-slate-800/80 shadow-2xl relative select-none">
+    <aside className="w-full md:w-68 max-w-full bg-slate-950 text-slate-300 flex flex-col h-full border-r border-slate-800/80 shadow-2xl relative select-none">
       {/* Brand Header */}
       <div className="p-5 border-b border-slate-800/80 flex items-center gap-3.5">
         <div className="relative w-11 h-11 rounded-2xl overflow-hidden bg-white p-1 shrink-0 shadow-lg border border-white/20">

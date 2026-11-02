@@ -31,18 +31,19 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, fee
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden border border-slate-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
+      <div className="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
         {/* Modal Actions */}
-        <div className="flex items-center justify-between px-6 py-3 bg-slate-50 border-b border-slate-200 print:hidden">
-          <span className="text-sm font-semibold text-slate-700">Official Fee Receipt</span>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-slate-50 border-b border-slate-200 print:hidden sticky top-0 z-10">
+          <span className="text-xs sm:text-sm font-semibold text-slate-700">Official Fee Receipt</span>
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium shadow-xs"
             >
               <Printer className="w-4 h-4" />
-              <span>Print Receipt</span>
+              <span className="hidden sm:inline">Print Receipt</span>
+              <span className="sm:hidden">Print</span>
             </button>
             <button
               onClick={onClose}
@@ -54,7 +55,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, fee
         </div>
 
         {/* Receipt Printable Content */}
-        <div id="printable-receipt" className="p-8 print:p-0">
+        <div id="printable-receipt" className="p-4 sm:p-8 print:p-0">
           <div className="text-center pb-6 border-b-2 border-emerald-700">
             <div className="flex justify-center mb-2">
               <div className="relative w-16 h-16">
@@ -94,23 +95,23 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, fee
             </div>
           </div>
 
-          <div className="my-6">
+          <div className="my-6 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-slate-500 text-xs text-left">
-                  <th className="py-2">Description</th>
-                  <th className="py-2">Mode</th>
-                  <th className="py-2 text-right">Amount</th>
+                  <th className="py-2 whitespace-nowrap">Description</th>
+                  <th className="py-2 whitespace-nowrap">Mode</th>
+                  <th className="py-2 text-right whitespace-nowrap">Amount</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 <tr>
-                  <td className="py-3 font-medium text-slate-800">
+                  <td className="py-3 font-medium text-slate-800 whitespace-nowrap">
                     Tuition Fee ({feeData.className})
                     {feeData.remarks && <span className="block text-xs text-slate-400">{feeData.remarks}</span>}
                   </td>
-                  <td className="py-3 text-slate-600">{feeData.paymentMethod}</td>
-                  <td className="py-3 text-right font-bold text-slate-800">
+                  <td className="py-3 text-slate-600 whitespace-nowrap">{feeData.paymentMethod}</td>
+                  <td className="py-3 text-right font-bold text-slate-800 whitespace-nowrap">
                     {formatCurrency(feeData.amount)}
                   </td>
                 </tr>

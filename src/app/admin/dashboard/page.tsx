@@ -174,7 +174,7 @@ export default function AdminDashboardPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="flex items-center justify-center gap-6 text-xs font-bold mt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-bold mt-2">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-emerald-500" />
               <span className="text-slate-600">Present ({stats.attendance?.present || 0})</span>

@@ -114,7 +114,7 @@ export default function TeacherStudentsPage() {
       {/* Student View Modal */}
       {selectedStudent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-sm w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Student Record</span>
               <button onClick={() => setSelectedStudent(null)} className="p-1.5 text-slate-400 hover:text-slate-600">

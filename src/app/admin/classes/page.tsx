@@ -282,7 +282,7 @@ export default function AdminClassesPage() {
       {/* Add / Edit Class Modal */}
       {showClassModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <h3 className="font-bold text-slate-800 text-base">
                 {editClass ? 'Edit Class' : 'Create New Class'}
@@ -378,7 +378,7 @@ export default function AdminClassesPage() {
       {/* Add Subject Modal */}
       {showSubjectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <h3 className="font-bold text-slate-800 text-base">Add Subject</h3>
               <button onClick={() => setShowSubjectModal(false)} className="p-1.5 text-slate-400 hover:text-slate-600">

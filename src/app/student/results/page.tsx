@@ -183,52 +183,54 @@ export default function StudentResultsPage() {
           <span className="text-xs text-slate-400">Published Marksheet</span>
         </div>
 
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50/50 border-b border-slate-200 text-slate-500 font-semibold uppercase">
-            <tr>
-              <th className="py-3 px-4">Subject</th>
-              <th className="py-3 px-4 text-center">Maximum Marks</th>
-              <th className="py-3 px-4 text-center">Marks Obtained</th>
-              <th className="py-3 px-4 text-center">Grade</th>
-              <th className="py-3 px-4">Teacher Comments</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {marks.length === 0 ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50/50 border-b border-slate-200 text-slate-500 font-semibold uppercase">
               <tr>
-                <td colSpan={5} className="py-12 text-center text-slate-400">
-                  No examination marks have been published yet for your profile.
+                <th className="py-3 px-4 whitespace-nowrap">Subject</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Maximum Marks</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Marks Obtained</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Grade</th>
+                <th className="py-3 px-4 whitespace-nowrap">Teacher Comments</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {marks.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-12 text-center text-slate-400">
+                    No examination marks have been published yet for your profile.
+                  </td>
+                </tr>
+              ) : (
+                marks.map((m) => (
+                  <tr key={m._id} className="hover:bg-slate-50/70">
+                    <td className="py-3 px-4 font-bold text-slate-800 whitespace-nowrap">
+                      {m.subject?.name} <span className="text-xs text-slate-400 font-mono">({m.subject?.code})</span>
+                    </td>
+                    <td className="py-3 px-4 text-center text-slate-600 font-medium">{m.maxMarks}</td>
+                    <td className="py-3 px-4 text-center font-black text-slate-800 text-sm">{m.marksObtained}</td>
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-block px-2 py-0.5 rounded font-black text-emerald-600 bg-emerald-50 text-xs">
+                        {m.grade}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-slate-500 italic whitespace-nowrap">{m.remarks || 'Very good work'}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+            <tfoot className="bg-slate-50 border-t border-slate-200 font-bold">
+              <tr>
+                <td className="py-3 px-4 text-slate-800 whitespace-nowrap">Cumulative Total</td>
+                <td className="py-3 px-4 text-center text-slate-600 whitespace-nowrap">{totalMax}</td>
+                <td className="py-3 px-4 text-center text-emerald-700 text-sm whitespace-nowrap">{totalObt}</td>
+                <td colSpan={2} className="py-3 px-4 text-right text-emerald-700 whitespace-nowrap">
+                  Percentage: {percentage}%
                 </td>
               </tr>
-            ) : (
-              marks.map((m) => (
-                <tr key={m._id} className="hover:bg-slate-50/70">
-                  <td className="py-3 px-4 font-bold text-slate-800">
-                    {m.subject?.name} <span className="text-xs text-slate-400 font-mono">({m.subject?.code})</span>
-                  </td>
-                  <td className="py-3 px-4 text-center text-slate-600 font-medium">{m.maxMarks}</td>
-                  <td className="py-3 px-4 text-center font-black text-slate-800 text-sm">{m.marksObtained}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="inline-block px-2 py-0.5 rounded font-black text-emerald-600 bg-emerald-50 text-xs">
-                      {m.grade}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-slate-500 italic">{m.remarks || 'Very good work'}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-          <tfoot className="bg-slate-50 border-t border-slate-200 font-bold">
-            <tr>
-              <td className="py-3 px-4 text-slate-800">Cumulative Total</td>
-              <td className="py-3 px-4 text-center text-slate-600">{totalMax}</td>
-              <td className="py-3 px-4 text-center text-emerald-700 text-sm">{totalObt}</td>
-              <td colSpan={2} className="py-3 px-4 text-right text-emerald-700">
-                Percentage: {percentage}%
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+            </tfoot>
+          </table>
+        </div>
       </div>
 
       {/* Official Printable Report Card Modal */}

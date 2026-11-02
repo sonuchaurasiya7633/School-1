@@ -100,48 +100,50 @@ export default function StudentFeesPage() {
           </span>
         </div>
 
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50/50 border-b border-slate-200 text-slate-500 font-semibold uppercase">
-            <tr>
-              <th className="py-3 px-4">Receipt Number</th>
-              <th className="py-3 px-4">Date</th>
-              <th className="py-3 px-4">Payment Method</th>
-              <th className="py-3 px-4 text-right">Amount Paid</th>
-              <th className="py-3 px-4 text-right">Receipt Voucher</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {feeRecord?.payments?.length === 0 ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50/50 border-b border-slate-200 text-slate-500 font-semibold uppercase">
               <tr>
-                <td colSpan={5} className="py-12 text-center text-slate-400">
-                  No fee payment transactions recorded yet.
-                </td>
+                <th className="py-3 px-4 whitespace-nowrap">Receipt Number</th>
+                <th className="py-3 px-4 whitespace-nowrap">Date</th>
+                <th className="py-3 px-4 whitespace-nowrap">Payment Method</th>
+                <th className="py-3 px-4 text-right whitespace-nowrap">Amount Paid</th>
+                <th className="py-3 px-4 text-right whitespace-nowrap">Receipt Voucher</th>
               </tr>
-            ) : (
-              feeRecord?.payments?.map((p: any, idx: number) => (
-                <tr key={idx} className="hover:bg-slate-50/70">
-                  <td className="py-3.5 px-4 font-bold text-slate-800 font-mono">
-                    {p.receiptNumber}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-600">{formatDate(p.date)}</td>
-                  <td className="py-3.5 px-4 font-medium text-slate-700">{p.paymentMethod}</td>
-                  <td className="py-3.5 px-4 text-right font-bold text-emerald-700 text-sm">
-                    {formatCurrency(p.amount)}
-                  </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <button
-                      onClick={() => openReceipt(p)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg transition"
-                    >
-                      <Printer className="w-3.5 h-3.5" />
-                      <span>Print Voucher</span>
-                    </button>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {feeRecord?.payments?.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-12 text-center text-slate-400">
+                    No fee payment transactions recorded yet.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                feeRecord?.payments?.map((p: any, idx: number) => (
+                  <tr key={idx} className="hover:bg-slate-50/70">
+                    <td className="py-3.5 px-4 font-bold text-slate-800 font-mono whitespace-nowrap">
+                      {p.receiptNumber}
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">{formatDate(p.date)}</td>
+                    <td className="py-3.5 px-4 font-medium text-slate-700 whitespace-nowrap">{p.paymentMethod}</td>
+                    <td className="py-3.5 px-4 text-right font-bold text-emerald-700 text-sm whitespace-nowrap">
+                      {formatCurrency(p.amount)}
+                    </td>
+                    <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                      <button
+                        onClick={() => openReceipt(p)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg transition"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Print Voucher</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Official Printable Receipt Modal */}

@@ -45,17 +45,18 @@ export const ReportCardModal: React.FC<ReportCardModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden border border-slate-200">
-        <div className="flex items-center justify-between px-6 py-3 bg-slate-50 border-b border-slate-200 print:hidden">
-          <span className="text-sm font-semibold text-slate-700">Official Academic Mark Sheet</span>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-slate-50 border-b border-slate-200 print:hidden sticky top-0 z-10">
+          <span className="text-xs sm:text-sm font-semibold text-slate-700">Official Academic Mark Sheet</span>
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium shadow-xs"
             >
               <Printer className="w-4 h-4" />
-              <span>Print Report Card</span>
+              <span className="hidden sm:inline">Print Report Card</span>
+              <span className="sm:hidden">Print</span>
             </button>
             <button
               onClick={onClose}
@@ -66,7 +67,7 @@ export const ReportCardModal: React.FC<ReportCardModalProps> = ({
           </div>
         </div>
 
-        <div id="printable-report" className="p-8 print:p-0">
+        <div id="printable-report" className="p-4 sm:p-8 print:p-0">
           <div className="text-center pb-6 border-b-2 border-emerald-700">
             <div className="flex justify-center mb-2">
               <div className="relative w-16 h-16">
@@ -106,41 +107,43 @@ export const ReportCardModal: React.FC<ReportCardModalProps> = ({
             </div>
           </div>
 
-          <table className="w-full text-sm my-4 border border-slate-200">
-            <thead className="bg-slate-100 text-xs font-semibold text-slate-700">
-              <tr>
-                <th className="py-2.5 px-3 text-left border-b">Subject</th>
-                <th className="py-2.5 px-3 text-center border-b">Max Marks</th>
-                <th className="py-2.5 px-3 text-center border-b">Obtained</th>
-                <th className="py-2.5 px-3 text-center border-b">Grade</th>
-                <th className="py-2.5 px-3 text-left border-b">Remarks</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {reportData.marks.map((m, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/60">
-                  <td className="py-2.5 px-3 font-medium text-slate-800">
-                    {m.subjectName} <span className="text-xs text-slate-400">({m.subjectCode})</span>
-                  </td>
-                  <td className="py-2.5 px-3 text-center text-slate-600">{m.maxMarks}</td>
-                  <td className="py-2.5 px-3 text-center font-bold text-slate-800">{m.marksObtained}</td>
-                  <td className="py-2.5 px-3 text-center font-bold text-emerald-600">{m.grade}</td>
-                  <td className="py-2.5 px-3 text-xs text-slate-500">{m.remarks || 'Good'}</td>
+          <div className="overflow-x-auto my-4">
+            <table className="w-full text-sm border border-slate-200">
+              <thead className="bg-slate-100 text-xs font-semibold text-slate-700">
+                <tr>
+                  <th className="py-2.5 px-3 text-left border-b whitespace-nowrap">Subject</th>
+                  <th className="py-2.5 px-3 text-center border-b whitespace-nowrap">Max Marks</th>
+                  <th className="py-2.5 px-3 text-center border-b whitespace-nowrap">Obtained</th>
+                  <th className="py-2.5 px-3 text-center border-b whitespace-nowrap">Grade</th>
+                  <th className="py-2.5 px-3 text-left border-b whitespace-nowrap">Remarks</th>
                 </tr>
-              ))}
-            </tbody>
-            <tfoot className="bg-slate-50 font-bold border-t border-slate-300">
-              <tr>
-                <td className="py-3 px-3 text-slate-800">Grand Total</td>
-                <td className="py-3 px-3 text-center text-slate-600">{totalMax}</td>
-                <td className="py-3 px-3 text-center text-emerald-700 text-base">{totalObtained}</td>
-                <td colSpan={2} className="py-3 px-3 text-right">
-                  <span className="text-xs text-slate-500 mr-2">Percentage:</span>
-                  <span className="text-emerald-700 text-base">{percentage}%</span>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {reportData.marks.map((m, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/60">
+                    <td className="py-2.5 px-3 font-medium text-slate-800 whitespace-nowrap">
+                      {m.subjectName} <span className="text-xs text-slate-400">({m.subjectCode})</span>
+                    </td>
+                    <td className="py-2.5 px-3 text-center text-slate-600">{m.maxMarks}</td>
+                    <td className="py-2.5 px-3 text-center font-bold text-slate-800">{m.marksObtained}</td>
+                    <td className="py-2.5 px-3 text-center font-bold text-emerald-600">{m.grade}</td>
+                    <td className="py-2.5 px-3 text-xs text-slate-500 whitespace-nowrap">{m.remarks || 'Good'}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className="bg-slate-50 font-bold border-t border-slate-300">
+                <tr>
+                  <td className="py-3 px-3 text-slate-800">Grand Total</td>
+                  <td className="py-3 px-3 text-center text-slate-600">{totalMax}</td>
+                  <td className="py-3 px-3 text-center text-emerald-700 text-base">{totalObtained}</td>
+                  <td colSpan={2} className="py-3 px-3 text-right">
+                    <span className="text-xs text-slate-500 mr-2">Percentage:</span>
+                    <span className="text-emerald-700 text-base">{percentage}%</span>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
 
           <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-xl border border-emerald-100 my-4">
             <div className="flex items-center gap-2">

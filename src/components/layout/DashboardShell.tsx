@@ -86,7 +86,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
           onRefresh={onRefresh}
         />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 scroll-smooth">
           <div className="max-w-7xl mx-auto space-y-6 pb-12">{children}</div>
         </main>
       </div>

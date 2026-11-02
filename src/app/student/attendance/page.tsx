@@ -85,53 +85,55 @@ export default function StudentAttendancePage() {
           <span className="text-xs text-slate-400">Total Tracked: {history.length} Sessions</span>
         </div>
 
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50/50 border-b border-slate-200 text-slate-500 font-semibold uppercase">
-            <tr>
-              <th className="py-3 px-4">Date</th>
-              <th className="py-3 px-4">Standard & Section</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4">Teacher Remarks</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {history.length === 0 ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50/50 border-b border-slate-200 text-slate-500 font-semibold uppercase">
               <tr>
-                <td colSpan={4} className="py-12 text-center text-slate-400">
-                  No attendance records recorded for this term yet.
-                </td>
+                <th className="py-3 px-4 whitespace-nowrap">Date</th>
+                <th className="py-3 px-4 whitespace-nowrap">Standard & Section</th>
+                <th className="py-3 px-4 whitespace-nowrap">Status</th>
+                <th className="py-3 px-4 whitespace-nowrap">Teacher Remarks</th>
               </tr>
-            ) : (
-              history.map((h, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/70">
-                  <td className="py-3 px-4 font-bold text-slate-800">{formatDate(h.date)}</td>
-                  <td className="py-3 px-4 font-medium text-slate-600">
-                    {h.class?.name || 'Class 10'} — {h.section}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
-                        h.status === 'Present'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : h.status === 'Absent'
-                          ? 'bg-rose-100 text-rose-800'
-                          : 'bg-amber-100 text-amber-800'
-                      }`}
-                    >
-                      {h.status === 'Present' && <CheckCircle2 className="w-3 h-3 text-emerald-600" />}
-                      {h.status === 'Absent' && <XCircle className="w-3 h-3 text-rose-600" />}
-                      {h.status !== 'Present' && h.status !== 'Absent' && <Clock className="w-3 h-3 text-amber-600" />}
-                      {h.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-slate-500 italic">
-                    {h.remarks || 'Standard session'}
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {history.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-12 text-center text-slate-400">
+                    No attendance records recorded for this term yet.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                history.map((h, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/70">
+                    <td className="py-3 px-4 font-bold text-slate-800 whitespace-nowrap">{formatDate(h.date)}</td>
+                    <td className="py-3 px-4 font-medium text-slate-600 whitespace-nowrap">
+                      {h.class?.name || 'Class 10'} — {h.section}
+                    </td>
+                    <td className="py-3 px-4 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
+                          h.status === 'Present'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : h.status === 'Absent'
+                            ? 'bg-rose-100 text-rose-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        {h.status === 'Present' && <CheckCircle2 className="w-3 h-3 text-emerald-600" />}
+                        {h.status === 'Absent' && <XCircle className="w-3 h-3 text-rose-600" />}
+                        {h.status !== 'Present' && h.status !== 'Absent' && <Clock className="w-3 h-3 text-amber-600" />}
+                        {h.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-slate-500 italic whitespace-nowrap">
+                      {h.remarks || 'Standard session'}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </DashboardShell>
   );

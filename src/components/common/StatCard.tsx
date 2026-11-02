@@ -80,7 +80,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <div
-      className={`group relative bg-white rounded-2xl p-5 sm:p-6 border ${scheme.border} shadow-sm hover:shadow-xl ${scheme.glow} transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex flex-col justify-between`}
+      className={`group relative bg-white rounded-2xl p-4 sm:p-6 border ${scheme.border} shadow-sm hover:shadow-xl ${scheme.glow} transition-all duration-300 hover:-translate-y-0.5 overflow-hidden flex flex-col justify-between`}
     >
       {/* Subtle background ambient gradient */}
       <div

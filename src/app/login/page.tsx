@@ -49,17 +49,17 @@ function LoginFormContent() {
   };
 
   return (
-    <div className="bg-white py-8 px-6 sm:px-10 shadow-2xl rounded-3xl border border-slate-200">
+    <div className="bg-white py-6 sm:py-8 px-4 sm:px-10 shadow-2xl rounded-2xl sm:rounded-3xl border border-slate-200">
       {/* Student vs Teacher Switcher */}
       <div className="mb-6">
         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
           Select Your Login Role:
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => selectRole('student')}
-            className={`py-3 px-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center ${
+            className={`py-2.5 sm:py-3 px-2 sm:px-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center ${
               activeRole === 'student'
                 ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-sm'
                 : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
@@ -71,13 +71,13 @@ function LoginFormContent() {
               <GraduationCap className="w-4 h-4" />
             </div>
             <span className="font-extrabold text-xs">Student Portal</span>
-            <span className="text-[10px] text-slate-500">Classes, Tasks & Results</span>
+            <span className="text-[10px] text-slate-500 hidden sm:block">Classes, Tasks & Results</span>
           </button>
 
           <button
             type="button"
             onClick={() => selectRole('teacher')}
-            className={`py-3 px-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center ${
+            className={`py-2.5 sm:py-3 px-2 sm:px-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center ${
               activeRole === 'teacher'
                 ? 'bg-blue-50 border-blue-500 text-blue-900 shadow-sm'
                 : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
@@ -89,7 +89,7 @@ function LoginFormContent() {
               <Users className="w-4 h-4" />
             </div>
             <span className="font-extrabold text-xs">Teacher Portal</span>
-            <span className="text-[10px] text-slate-500">Lectures, Marks & Tasks</span>
+            <span className="text-[10px] text-slate-500 hidden sm:block">Lectures, Marks & Tasks</span>
           </button>
         </div>
       </div>
@@ -168,7 +168,7 @@ function LoginFormContent() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 selection:bg-emerald-500 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-900 flex flex-col justify-center py-6 sm:py-10 px-3.5 sm:px-6 lg:px-8 selection:bg-emerald-500 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md mb-4 flex items-center justify-between text-xs">

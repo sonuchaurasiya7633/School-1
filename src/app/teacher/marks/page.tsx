@@ -218,54 +218,56 @@ export default function TeacherMarksPage() {
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider">
-            <tr>
-              <th className="py-3 px-4">Roll</th>
-              <th className="py-3 px-4">Student Name</th>
-              <th className="py-3 px-4 text-center">Marks Obtained (Max: 100)</th>
-              <th className="py-3 px-4 text-center">Grade</th>
-              <th className="py-3 px-4">Evaluator Remarks</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {students.map((st) => {
-              const val = marksState[st.user?._id] || { score: '0', remarks: '' };
-              const grade = calculateGrade(Number(val.score), 100);
-              return (
-                <tr key={st.user?._id} className="hover:bg-slate-50/70">
-                  <td className="py-3 px-4 font-bold text-slate-700">#{st.rollNumber}</td>
-                  <td className="py-3 px-4 font-bold text-slate-800 text-sm">
-                    {st.user?.name}
-                    <span className="block text-[11px] font-mono text-slate-400 font-normal">{st.user?.userId}</span>
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <input
-                      type="number"
-                      max={100}
-                      min={0}
-                      value={val.score}
-                      onChange={(e) => handleScoreChange(st.user?._id, e.target.value)}
-                      className="w-20 px-2 py-1.5 border border-slate-300 rounded-lg text-center font-bold text-sm text-emerald-700 focus:ring-2 focus:ring-emerald-500"
-                    />
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="font-bold text-emerald-600 text-sm">{grade}</span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <input
-                      type="text"
-                      value={val.remarks}
-                      onChange={(e) => handleRemarksChange(st.user?._id, e.target.value)}
-                      placeholder="e.g. Excellent math skills"
-                      className="w-full max-w-sm px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs"
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider">
+              <tr>
+                <th className="py-3 px-4 whitespace-nowrap">Roll</th>
+                <th className="py-3 px-4 whitespace-nowrap">Student Name</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Marks Obtained (Max: 100)</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Grade</th>
+                <th className="py-3 px-4 whitespace-nowrap">Evaluator Remarks</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {students.map((st) => {
+                const val = marksState[st.user?._id] || { score: '0', remarks: '' };
+                const grade = calculateGrade(Number(val.score), 100);
+                return (
+                  <tr key={st.user?._id} className="hover:bg-slate-50/70">
+                    <td className="py-3 px-4 font-bold text-slate-700 whitespace-nowrap">#{st.rollNumber}</td>
+                    <td className="py-3 px-4 font-bold text-slate-800 text-sm whitespace-nowrap">
+                      {st.user?.name}
+                      <span className="block text-[11px] font-mono text-slate-400 font-normal">{st.user?.userId}</span>
+                    </td>
+                    <td className="py-3 px-4 text-center whitespace-nowrap">
+                      <input
+                        type="number"
+                        max={100}
+                        min={0}
+                        value={val.score}
+                        onChange={(e) => handleScoreChange(st.user?._id, e.target.value)}
+                        className="w-20 px-2 py-1.5 border border-slate-300 rounded-lg text-center font-bold text-sm text-emerald-700 focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </td>
+                    <td className="py-3 px-4 text-center whitespace-nowrap">
+                      <span className="font-bold text-emerald-600 text-sm">{grade}</span>
+                    </td>
+                    <td className="py-3 px-4 whitespace-nowrap">
+                      <input
+                        type="text"
+                        value={val.remarks}
+                        onChange={(e) => handleRemarksChange(st.user?._id, e.target.value)}
+                        placeholder="e.g. Excellent math skills"
+                        className="w-full max-w-sm px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs"
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </DashboardShell>
   );

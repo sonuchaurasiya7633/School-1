@@ -162,27 +162,27 @@ export default function HomePage() {
           </p>
 
           {/* Quick CTA Buttons */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
             <Link
               href="/admissions"
-              className="px-6 py-3.5 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg flex items-center gap-2 hover:opacity-95"
+              className="w-full sm:w-auto px-6 py-3.5 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg flex items-center justify-center gap-2 hover:opacity-95 text-center"
               style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
             >
-              <Award className="w-4 h-4" />
+              <Award className="w-4 h-4 shrink-0" />
               <span>Apply for Admission 2026-27</span>
             </Link>
             <Link
               href="/academics"
-              className="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center justify-center gap-2 text-center"
             >
-              <BookOpen className="w-4 h-4 text-[#E8B4A8]" />
+              <BookOpen className="w-4 h-4 text-[#E8B4A8] shrink-0" />
               <span>Explore Programs & Streams</span>
             </Link>
             <Link
               href="/login"
-              className="px-6 py-3.5 bg-emerald-900/80 hover:bg-emerald-900 text-emerald-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-emerald-700/60 transition flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-3.5 bg-emerald-900/80 hover:bg-emerald-900 text-emerald-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-emerald-700/60 transition flex items-center justify-center gap-2 text-center"
             >
-              <GraduationCap className="w-4 h-4 text-[#E8B4A8]" />
+              <GraduationCap className="w-4 h-4 text-[#E8B4A8] shrink-0" />
               <span>Student & Faculty Portal</span>
             </Link>
           </div>
@@ -276,8 +276,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="lg:col-span-6 grid grid-cols-2 gap-4">
-              <div className="p-6 rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
                   <Monitor className="w-5 h-5 text-[#214F39]" />
                 </div>
@@ -287,7 +287,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
                   <Atom className="w-5 h-5 text-[#214F39]" />
                 </div>
@@ -297,7 +297,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
                   <FileCheck2 className="w-5 h-5 text-[#214F39]" />
                 </div>
@@ -307,7 +307,7 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
                   <HeartHandshake className="w-5 h-5 text-[#214F39]" />
                 </div>

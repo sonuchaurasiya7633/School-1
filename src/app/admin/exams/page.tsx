@@ -481,57 +481,59 @@ export default function AdminExamsPage() {
                     </button>
                   </div>
 
-                  <table className="w-full text-xs text-left border rounded-lg overflow-hidden">
-                    <thead className="bg-slate-100 text-slate-700 font-bold border-b">
-                      <tr>
-                        <th className="py-2.5 px-3">Student</th>
-                        <th className="py-2.5 px-3">Roll No</th>
-                        <th className="py-2.5 px-3 text-center">Subjects Evaluated</th>
-                        <th className="py-2.5 px-3 text-center">Total Marks</th>
-                        <th className="py-2.5 px-3 text-center">Percentage</th>
-                        <th className="py-2.5 px-3 text-center">Overall Grade</th>
-                        <th className="py-2.5 px-3 text-right">Individual Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {studentGroupsArray.map((sg, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50/70">
-                          <td className="py-2.5 px-3 font-bold text-slate-800">
-                            {sg.student?.name}
-                            <span className="block text-[10px] font-mono text-slate-400 font-normal">
-                              {sg.student?.userId}
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-3 font-bold text-emerald-700 font-mono">
-                            #{sg.rollNumber}
-                          </td>
-                          <td className="py-2.5 px-3 text-center text-slate-600">
-                            {sg.marks.length} Subjects
-                          </td>
-                          <td className="py-2.5 px-3 text-center font-bold text-slate-800">
-                            {sg.totalObtained} / {sg.totalMax}
-                          </td>
-                          <td className="py-2.5 px-3 text-center font-black text-emerald-700">
-                            {sg.percentage}%
-                          </td>
-                          <td className="py-2.5 px-3 text-center">
-                            <span className="inline-block px-2 py-0.5 rounded font-black text-xs text-emerald-700 bg-emerald-100">
-                              {sg.overallGrade}
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-3 text-right">
-                            <button
-                              onClick={() => openIndividualStudentReportCard(sg)}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded-md text-[11px] font-semibold"
-                            >
-                              <Printer className="w-3 h-3 text-emerald-400" />
-                              <span>Print Marksheet</span>
-                            </button>
-                          </td>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs text-left border rounded-lg overflow-hidden">
+                      <thead className="bg-slate-100 text-slate-700 font-bold border-b">
+                        <tr>
+                          <th className="py-2.5 px-3 whitespace-nowrap">Student</th>
+                          <th className="py-2.5 px-3 whitespace-nowrap">Roll No</th>
+                          <th className="py-2.5 px-3 text-center whitespace-nowrap">Subjects Evaluated</th>
+                          <th className="py-2.5 px-3 text-center whitespace-nowrap">Total Marks</th>
+                          <th className="py-2.5 px-3 text-center whitespace-nowrap">Percentage</th>
+                          <th className="py-2.5 px-3 text-center whitespace-nowrap">Overall Grade</th>
+                          <th className="py-2.5 px-3 text-right whitespace-nowrap">Individual Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {studentGroupsArray.map((sg, idx) => (
+                          <tr key={idx} className="hover:bg-slate-50/70">
+                            <td className="py-2.5 px-3 font-bold text-slate-800 whitespace-nowrap">
+                              {sg.student?.name}
+                              <span className="block text-[10px] font-mono text-slate-400 font-normal">
+                                {sg.student?.userId}
+                              </span>
+                            </td>
+                            <td className="py-2.5 px-3 font-bold text-emerald-700 font-mono whitespace-nowrap">
+                              #{sg.rollNumber}
+                            </td>
+                            <td className="py-2.5 px-3 text-center text-slate-600 whitespace-nowrap">
+                              {sg.marks.length} Subjects
+                            </td>
+                            <td className="py-2.5 px-3 text-center font-bold text-slate-800 whitespace-nowrap">
+                              {sg.totalObtained} / {sg.totalMax}
+                            </td>
+                            <td className="py-2.5 px-3 text-center font-black text-emerald-700 whitespace-nowrap">
+                              {sg.percentage}%
+                            </td>
+                            <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                              <span className="inline-block px-2 py-0.5 rounded font-black text-xs text-emerald-700 bg-emerald-100">
+                                {sg.overallGrade}
+                              </span>
+                            </td>
+                            <td className="py-2.5 px-3 text-right whitespace-nowrap">
+                              <button
+                                onClick={() => openIndividualStudentReportCard(sg)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded-md text-[11px] font-semibold"
+                              >
+                                <Printer className="w-3 h-3 text-emerald-400" />
+                                <span>Print Marksheet</span>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </div>
