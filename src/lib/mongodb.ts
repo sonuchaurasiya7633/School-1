@@ -18,7 +18,8 @@ import '@/models/SchoolSetting';
 import '@/models/Timetable';
 import '@/models/Faculty';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/school_management';
+const ATLAS_FALLBACK_URI = 'mongodb+srv://sonukumar763303_db_user:JRrnDHofZ3IhKq4B@cluster0.pvcryae.mongodb.net/Success-Point-school';
+const MONGODB_URI = process.env.MONGODB_URI || ATLAS_FALLBACK_URI;
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -43,8 +44,8 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
   if (!cached.promise) {
     const opts: mongoose.ConnectOptions = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 10000,
-      connectTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000,
     };
 
     cached.promise = (async () => {
@@ -55,26 +56,34 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
         console.log('MongoDB successfully connected!');
         return m;
       } catch (err: any) {
-        console.warn(`Standard MongoDB connection failed (${err.message}). Initializing fallback in-memory MongoDB...`);
-        try {
-          const { MongoMemoryServer } = await import('mongodb-memory-server');
-          if (!cached.memServer) {
-            cached.memServer = await MongoMemoryServer.create({
-              instance: {
-                dbName: 'school_management',
-              },
+        console.warn(`Primary MongoDB connection failed: ${err.message}`);
+
+        // Never attempt in-memory MongoDB in Vercel or production serverless environments
+        const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === 'production';
+        if (!isServerless) {
+          try {
+            const { MongoMemoryServer } = await import('mongodb-memory-server');
+            if (!cached.memServer) {
+              cached.memServer = await MongoMemoryServer.create({
+                instance: {
+                  dbName: 'school_management',
+                },
+              });
+            }
+            const memoryUri = cached.memServer.getUri();
+            console.log(`Connected to local In-Memory MongoDB at ${memoryUri}`);
+            const m = await mongoose.connect(memoryUri, {
+              bufferCommands: false,
             });
+            return m;
+          } catch (memErr: any) {
+            console.error('Failed to initialize in-memory MongoDB server:', memErr);
           }
-          const memoryUri = cached.memServer.getUri();
-          console.log(`Connected to In-Memory MongoDB at ${memoryUri}`);
-          const m = await mongoose.connect(memoryUri, {
-            bufferCommands: false,
-          });
-          return m;
-        } catch (memErr: any) {
-          console.error('Failed to initialize in-memory MongoDB server:', memErr);
-          throw memErr;
         }
+
+        throw new Error(
+          `Database connection error: ${err.message}. If deploying on Vercel, ensure MongoDB Atlas Network Access has IP whitelist set to 0.0.0.0/0 (Allow access from anywhere).`
+        );
       }
     })();
   }
