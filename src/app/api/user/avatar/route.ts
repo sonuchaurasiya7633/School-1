@@ -4,8 +4,10 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { getUserFromRequest } from '@/lib/auth';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import User from '@/models/User';
+import Faculty from '@/models/Faculty';
 
 export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,14 +38,21 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Upload file directly to Cloudinary in avatars folder
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      const uploadRes = await uploadToCloudinary(buffer, {
-        folder: 'success_point_school/avatars',
-        resource_type: 'image',
-      });
-      avatarUrl = uploadRes.secure_url;
+
+      // Try Cloudinary upload, with safe base64 fallback if external API is unreachable
+      try {
+        const uploadRes = await uploadToCloudinary(buffer, {
+          folder: 'success_point_school/avatars',
+          resource_type: 'image',
+        });
+        avatarUrl = uploadRes.secure_url;
+      } catch (cloudErr) {
+        console.warn('Cloudinary upload warning, falling back to base64 storage:', cloudErr);
+        const mimeType = file.type || 'image/jpeg';
+        avatarUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
     }
     // 2. JSON Payload (Base64 or direct Image URL)
     else if (contentType.includes('application/json')) {
@@ -58,13 +67,17 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // If rawData is base64 data URI, upload to Cloudinary
       if (typeof rawData === 'string' && rawData.startsWith('data:image/')) {
-        const uploadRes = await uploadToCloudinary(rawData, {
-          folder: 'success_point_school/avatars',
-          resource_type: 'image',
-        });
-        avatarUrl = uploadRes.secure_url;
+        try {
+          const uploadRes = await uploadToCloudinary(rawData, {
+            folder: 'success_point_school/avatars',
+            resource_type: 'image',
+          });
+          avatarUrl = uploadRes.secure_url;
+        } catch (cloudErr) {
+          console.warn('Cloudinary JSON upload warning, keeping base64:', cloudErr);
+          avatarUrl = rawData;
+        }
       } else {
         avatarUrl = rawData;
       }
@@ -75,23 +88,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Determine target user to update
+    // Determine target user or faculty to update
     let userToUpdate: any = null;
+    let facultyToUpdate: any = null;
 
     if (targetUserId) {
       // Only Super Admin can change another user's avatar
       if (tokenUser.role !== 'admin') {
         return NextResponse.json(
-          { success: false, message: 'Forbidden. Only Super Admin can update other users\' profile pictures.' },
+          { success: false, message: "Forbidden. Only Super Admin can update other users' profile pictures." },
           { status: 403 }
         );
       }
 
-      // Find by MongoDB _id or userId (e.g. STD001, TCH001) or email
+      // Check if target is a User _id or userId (e.g. STD001, TCH001) or email
       if (mongoose.Types.ObjectId.isValid(targetUserId)) {
         userToUpdate = await User.findById(targetUserId);
+        if (!userToUpdate) {
+          facultyToUpdate = await Faculty.findById(targetUserId);
+        }
       }
-      if (!userToUpdate) {
+
+      if (!userToUpdate && !facultyToUpdate) {
         userToUpdate = await User.findOne({
           $or: [
             { userId: { $regex: new RegExp(`^${targetUserId}$`, 'i') } },
@@ -100,9 +118,16 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      if (!userToUpdate) {
+      if (!userToUpdate && !facultyToUpdate) {
+        // Try finding faculty by name
+        facultyToUpdate = await Faculty.findOne({
+          name: { $regex: new RegExp(`^${targetUserId}$`, 'i') },
+        });
+      }
+
+      if (!userToUpdate && !facultyToUpdate) {
         return NextResponse.json(
-          { success: false, message: `Target user "${targetUserId}" not found.` },
+          { success: false, message: `Target record "${targetUserId}" not found.` },
           { status: 404 }
         );
       }
@@ -117,23 +142,70 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Save avatar
-    userToUpdate.avatar = avatarUrl;
-    await userToUpdate.save();
+    // If User found, update User.avatar
+    if (userToUpdate) {
+      userToUpdate.avatar = avatarUrl;
+      await userToUpdate.save();
+
+      // If user is a teacher, also sync with Faculty Directory document for public website!
+      if (userToUpdate.role === 'teacher') {
+        try {
+          const matchingFaculty = await Faculty.findOne({
+            name: { $regex: new RegExp(`^${userToUpdate.name.trim()}$`, 'i') },
+          });
+          if (matchingFaculty) {
+            matchingFaculty.avatar = avatarUrl;
+            await matchingFaculty.save();
+          }
+        } catch (facErr) {
+          console.error('Error syncing faculty avatar:', facErr);
+        }
+      }
+    }
+
+    // If Faculty record found, update Faculty.avatar and sync with User if matching teacher exists
+    if (facultyToUpdate) {
+      facultyToUpdate.avatar = avatarUrl;
+      await facultyToUpdate.save();
+
+      try {
+        const matchingUser = await User.findOne({
+          role: 'teacher',
+          name: { $regex: new RegExp(`^${facultyToUpdate.name.trim()}$`, 'i') },
+        });
+        if (matchingUser) {
+          matchingUser.avatar = avatarUrl;
+          await matchingUser.save();
+        }
+      } catch (usrErr) {
+        console.error('Error syncing user avatar from faculty:', usrErr);
+      }
+    }
+
+    const displayName = userToUpdate?.name || facultyToUpdate?.name || 'User';
 
     return NextResponse.json({
       success: true,
       message: targetUserId
-        ? `Profile picture updated for ${userToUpdate.name} (${userToUpdate.userId})!`
+        ? `Profile picture updated for ${displayName}!`
         : 'Your profile picture has been updated successfully!',
-      avatar: userToUpdate.avatar,
-      user: {
-        _id: userToUpdate._id,
-        userId: userToUpdate.userId,
-        name: userToUpdate.name,
-        role: userToUpdate.role,
-        avatar: userToUpdate.avatar,
-      },
+      avatar: avatarUrl,
+      user: userToUpdate
+        ? {
+            _id: userToUpdate._id,
+            userId: userToUpdate.userId,
+            name: userToUpdate.name,
+            role: userToUpdate.role,
+            avatar: userToUpdate.avatar,
+          }
+        : null,
+      faculty: facultyToUpdate
+        ? {
+            _id: facultyToUpdate._id,
+            name: facultyToUpdate.name,
+            avatar: facultyToUpdate.avatar,
+          }
+        : null,
     });
   } catch (err: any) {
     console.error('Avatar update error:', err);

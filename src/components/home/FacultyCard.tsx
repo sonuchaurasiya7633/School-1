@@ -44,10 +44,17 @@ export default function FacultyCard({ member }: FacultyCardProps) {
               style={{
                 backgroundColor: 'rgba(33, 79, 57, 0.06)',
               }}
-              aria-label={`Profile placeholder for ${member.name}`}
+              aria-label={`Profile for ${member.name}`}
             >
-              {/* Neutral avatar silhouette with stylized graduation/academic motif */}
-              <User className="w-10 h-10 text-[#214F39]/70 group-hover:text-[#214F39] transition-colors" strokeWidth={1.5} />
+              {member.avatar ? (
+                <img
+                  src={member.avatar}
+                  alt={member.name}
+                  className="w-full h-full object-cover object-top"
+                />
+              ) : (
+                <User className="w-10 h-10 text-[#214F39]/70 group-hover:text-[#214F39] transition-colors" strokeWidth={1.5} />
+              )}
             </div>
           </div>
 

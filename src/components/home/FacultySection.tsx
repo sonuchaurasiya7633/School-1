@@ -27,6 +27,7 @@ export default function FacultySection({ id = 'faculty', className = '' }: Facul
             university: item.university || '',
             additional: item.additional || '',
             tags: item.category ? [item.category.toLowerCase()] : ['general'],
+            avatar: item.avatar || '',
           }));
           setFacultyList(mapped);
         }

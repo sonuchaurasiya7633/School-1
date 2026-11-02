@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Camera, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -27,6 +27,12 @@ export function AvatarUploader({
   const [avatar, setAvatar] = useState(currentAvatar || '');
   const [uploading, setUploading] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    if (currentAvatar !== undefined) {
+      setAvatar(currentAvatar || '');
+    }
+  }, [currentAvatar]);
 
   const sizeClasses = {
     sm: 'w-10 h-10 text-sm',
@@ -66,17 +72,24 @@ export function AvatarUploader({
         body: formData,
       });
 
-      const data = await res.json();
+      const rawText = await res.text();
+      let data: any = {};
+      try {
+        data = rawText ? JSON.parse(rawText) : {};
+      } catch {
+        throw new Error(rawText || `Server returned error (${res.status})`);
+      }
 
-      if (data.success && data.avatar) {
+      if (res.ok && data.success && data.avatar) {
         setAvatar(data.avatar);
         setStatusMsg({ type: 'success', text: data.message || 'Profile picture updated!' });
         if (onSuccess) onSuccess(data.avatar);
         await refreshUser();
       } else {
-        setStatusMsg({ type: 'error', text: data.message || 'Failed to upload photo.' });
+        setStatusMsg({ type: 'error', text: data.message || `Failed to upload photo (${res.status})` });
       }
     } catch (err: any) {
+      console.error('Avatar upload error:', err);
       setStatusMsg({ type: 'error', text: err.message || 'Upload error occurred.' });
     } finally {
       setUploading(false);

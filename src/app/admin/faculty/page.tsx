@@ -18,6 +18,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import Link from 'next/link';
+import { AvatarUploader } from '@/components/common/AvatarUploader';
 
 export default function AdminFacultyPage() {
   const [faculty, setFaculty] = useState<any[]>([]);
@@ -244,9 +245,13 @@ export default function AdminFacultyPage() {
                   <tr key={item._id} className="hover:bg-slate-800/40 transition">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300 flex items-center justify-center font-bold">
-                          {item.name.charAt(0)}
-                        </div>
+                        <AvatarUploader
+                          currentAvatar={item.avatar}
+                          name={item.name}
+                          targetUserId={item._id}
+                          size="sm"
+                          onSuccess={loadFaculty}
+                        />
                         <div>
                           <p className="font-bold text-white text-sm">{item.name}</p>
                           <span className="text-[10px] text-slate-500 uppercase tracking-wider">
@@ -336,6 +341,25 @@ export default function AdminFacultyPage() {
                   Fill in the verified qualification, name, and university details.
                 </p>
               </div>
+
+              {editingItem && (
+                <div className="flex items-center gap-4 p-3 bg-slate-950/60 rounded-xl border border-slate-800">
+                  <AvatarUploader
+                    currentAvatar={editingItem.avatar}
+                    name={editingItem.name}
+                    targetUserId={editingItem._id}
+                    size="md"
+                    onSuccess={(newUrl) => {
+                      setEditingItem({ ...editingItem, avatar: newUrl });
+                      loadFaculty();
+                    }}
+                  />
+                  <div>
+                    <p className="text-xs font-bold text-slate-200">Faculty Photo</p>
+                    <p className="text-[11px] text-slate-400">Click camera badge to upload or change image</p>
+                  </div>
+                </div>
+              )}
 
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
