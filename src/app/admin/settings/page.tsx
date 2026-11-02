@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/context/AuthContext';
-import { Settings, Save, Lock, RefreshCw, CheckCircle, ShieldAlert } from 'lucide-react';
+import { Settings, Save, Lock, RefreshCw, CheckCircle, ShieldAlert, UserCheck } from 'lucide-react';
+import { AvatarUploader } from '@/components/common/AvatarUploader';
 
 export default function AdminSettingsPage() {
   const { user } = useAuth();
@@ -262,6 +263,26 @@ export default function AdminSettingsPage() {
 
         {/* Change Password & Reseed DB Column */}
         <div className="space-y-6">
+          {/* Admin Profile Photo Card */}
+          <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-xs">
+            <div className="flex items-center gap-2 pb-3 border-b border-slate-200 mb-4">
+              <UserCheck className="w-4 h-4 text-emerald-600" />
+              <h3 className="font-bold text-sm text-slate-800">Admin Profile Photo</h3>
+            </div>
+            <div className="flex flex-col items-center justify-center py-2 text-center">
+              <AvatarUploader
+                currentAvatar={user?.avatar}
+                name={user?.name || 'Admin'}
+                size="xl"
+              />
+              <p className="mt-3 text-xs font-bold text-slate-800">{user?.name || 'Administrator'}</p>
+              <p className="text-[11px] text-slate-500">{user?.email}</p>
+              <span className="mt-1 px-2.5 py-0.5 bg-purple-100 text-purple-800 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                Super Admin
+              </span>
+            </div>
+          </div>
+
           {/* Change Password Card */}
           <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-xs">
             <div className="flex items-center gap-2 pb-3 border-b border-slate-200 mb-4">

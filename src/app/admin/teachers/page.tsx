@@ -12,6 +12,7 @@ import {
   X,
   BookOpen,
 } from 'lucide-react';
+import { AvatarUploader } from '@/components/common/AvatarUploader';
 
 export default function AdminTeachersPage() {
   const [teachers, setTeachers] = useState<any[]>([]);
@@ -203,9 +204,13 @@ export default function AdminTeachersPage() {
             <div>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center shrink-0">
-                    {t.user?.name?.charAt(0) || 'T'}
-                  </div>
+                  <AvatarUploader
+                    currentAvatar={t.user?.avatar}
+                    name={t.user?.name}
+                    targetUserId={t.user?._id || t.user?.userId}
+                    size="md"
+                    onSuccess={fetchData}
+                  />
                   <div>
                     <h3 className="font-bold text-sm text-slate-800">{t.user?.name}</h3>
                     <p className="text-[11px] text-slate-400 font-mono">{t.user?.userId} • {t.user?.email}</p>
@@ -408,6 +413,23 @@ export default function AdminTeachersPage() {
             </div>
 
             <form onSubmit={handleEditSubmit} className="space-y-4 mt-4 text-xs">
+              <div className="flex flex-col items-center justify-center py-2 px-3 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                <AvatarUploader
+                  currentAvatar={selectedTeacher?.user?.avatar}
+                  name={selectedTeacher?.user?.name || formData.name}
+                  targetUserId={selectedTeacher?.user?._id || selectedTeacher?.user?.userId}
+                  size="lg"
+                  onSuccess={(url: string) => {
+                    setSelectedTeacher((prev: any) => ({
+                      ...prev,
+                      user: { ...prev.user, avatar: url },
+                    }));
+                    fetchData();
+                  }}
+                />
+                <span className="text-[11px] text-slate-500 font-medium mt-1">Super Admin: Change Faculty Profile Picture</span>
+              </div>
+
               <div>
                 <label className="font-semibold text-slate-700">Full Name</label>
                 <input

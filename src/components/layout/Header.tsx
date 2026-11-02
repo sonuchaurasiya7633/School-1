@@ -75,8 +75,12 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle, onOpenMobileMen
               {user?.role}
             </span>
           </div>
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-black flex items-center justify-center text-sm shadow-md ring-2 ring-white">
-            {user?.name ? user.name.charAt(0) : 'U'}
+          <div className="w-10 h-10 rounded-2xl overflow-hidden bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-black flex items-center justify-center text-sm shadow-md ring-2 ring-white">
+            {user?.avatar ? (
+              <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+            ) : (
+              <span>{user?.name ? user.name.charAt(0) : 'U'}</span>
+            )}
           </div>
         </div>
       </div>

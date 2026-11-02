@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
+import AvatarUploader from '@/components/common/AvatarUploader';
 import { useAuth } from '@/context/AuthContext';
 import { UserCheck, Lock, CheckCircle, ShieldAlert } from 'lucide-react';
 
@@ -96,9 +97,12 @@ export default function StudentProfilePage() {
         {/* Personal & Academic Details */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200/80 p-6 shadow-xs">
           <div className="flex items-center gap-4 pb-5 border-b border-slate-200 mb-5">
-            <div className="w-16 h-16 rounded-full bg-emerald-600 text-white text-2xl font-black flex items-center justify-center shadow-md">
-              {profile?.name?.charAt(0) || 'S'}
-            </div>
+            <AvatarUploader
+              currentAvatar={profile?.avatar}
+              name={profile?.name || 'Student'}
+              size="lg"
+              onSuccess={(url) => setProfile((p: any) => ({ ...p, avatar: url }))}
+            />
             <div>
               <h3 className="font-bold text-lg text-slate-800">{profile?.name}</h3>
               <p className="text-xs text-emerald-600 font-semibold font-mono">

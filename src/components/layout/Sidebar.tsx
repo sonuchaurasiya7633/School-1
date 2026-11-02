@@ -172,8 +172,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       <div className="p-4 border-t border-slate-800/80 bg-slate-900/70 backdrop-blur-md">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black text-xs uppercase shadow-md shrink-0">
-              {user?.name ? user.name.charAt(0) : 'U'}
+            <div className="w-9 h-9 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center font-black text-xs uppercase shadow-md shrink-0">
+              {user?.avatar ? (
+                <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                <span>{user?.name ? user.name.charAt(0) : 'U'}</span>
+              )}
             </div>
             <div className="min-w-0">
               <p className="text-xs font-bold text-white truncate leading-tight">

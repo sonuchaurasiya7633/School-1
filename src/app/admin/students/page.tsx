@@ -17,6 +17,7 @@ import {
   Mail,
   UserCheck,
 } from 'lucide-react';
+import { AvatarUploader } from '@/components/common/AvatarUploader';
 
 export default function AdminStudentsPage() {
   const [students, setStudents] = useState<any[]>([]);
@@ -280,9 +281,13 @@ export default function AdminStudentsPage() {
                   <tr key={s._id} className="hover:bg-slate-50/70 transition">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0">
-                          {s.user?.name ? s.user.name.charAt(0) : 'S'}
-                        </div>
+                        <AvatarUploader
+                          currentAvatar={s.user?.avatar}
+                          name={s.user?.name}
+                          targetUserId={s.user?._id || s.user?.userId}
+                          size="sm"
+                          onSuccess={fetchData}
+                        />
                         <div>
                           <p className="font-bold text-slate-800 text-sm">{s.user?.name}</p>
                           <p className="text-[11px] text-slate-400 font-mono">{s.user?.userId} • {s.user?.email}</p>
@@ -529,6 +534,23 @@ export default function AdminStudentsPage() {
             </div>
 
             <form onSubmit={handleEditSubmit} className="space-y-4 mt-4 text-xs">
+              <div className="flex flex-col items-center justify-center py-2 px-3 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                <AvatarUploader
+                  currentAvatar={selectedStudent?.user?.avatar}
+                  name={selectedStudent?.user?.name || formData.name}
+                  targetUserId={selectedStudent?.user?._id || selectedStudent?.user?.userId}
+                  size="lg"
+                  onSuccess={(url: string) => {
+                    setSelectedStudent((prev: any) => ({
+                      ...prev,
+                      user: { ...prev.user, avatar: url },
+                    }));
+                    fetchData();
+                  }}
+                />
+                <span className="text-[11px] text-slate-500 font-medium mt-1">Super Admin: Change Student Profile Picture</span>
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-semibold text-slate-700">Full Name</label>
@@ -643,8 +665,20 @@ export default function AdminStudentsPage() {
             </div>
 
             <div className="text-center py-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-600 text-white text-2xl font-black flex items-center justify-center mx-auto shadow-md">
-                {selectedStudent.user?.name?.charAt(0)}
+              <div className="flex justify-center mb-2">
+                <AvatarUploader
+                  currentAvatar={selectedStudent.user?.avatar}
+                  name={selectedStudent.user?.name}
+                  targetUserId={selectedStudent.user?._id || selectedStudent.user?.userId}
+                  size="xl"
+                  onSuccess={(url: string) => {
+                    setSelectedStudent((prev: any) => ({
+                      ...prev,
+                      user: { ...prev.user, avatar: url },
+                    }));
+                    fetchData();
+                  }}
+                />
               </div>
               <h3 className="font-bold text-lg text-slate-800 mt-2">{selectedStudent.user?.name}</h3>
               <p className="text-xs text-emerald-600 font-semibold font-mono">
