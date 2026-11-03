@@ -38,6 +38,7 @@ export interface ISchoolSettingDocument extends Document {
   heroCta1Link: string;
   heroCta2Text: string;
   heroCta2Link: string;
+  heroImage?: string;
 
   // Home Page - Stats Ribbon
   statsStudents: string;
@@ -156,6 +157,7 @@ const SchoolSettingSchema = new Schema<ISchoolSettingDocument>(
     heroCta1Link: { type: String, default: '/admissions' },
     heroCta2Text: { type: String, default: 'Explore Programs & Streams' },
     heroCta2Link: { type: String, default: '/academics' },
+    heroImage: { type: String, default: '/images/hero-banner.jpg' },
 
     // Stats Ribbon
     statsStudents: { type: String, default: '1,400+' },
