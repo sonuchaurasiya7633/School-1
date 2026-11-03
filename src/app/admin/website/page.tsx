@@ -27,9 +27,20 @@ import {
 import Link from 'next/link';
 import { authFetch } from '@/lib/api';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
+import FooterCMSManager from '@/components/admin/FooterCMSManager';
 
 export default function AdminWebsiteCMSPage() {
-  const [activeTab, setActiveTab] = useState<'home' | 'about' | 'academics' | 'admissions' | 'contact' | 'testimonials'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'about' | 'academics' | 'admissions' | 'contact' | 'testimonials' | 'footer'>('home');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab && ['home', 'about', 'academics', 'admissions', 'contact', 'testimonials', 'footer'].includes(tab)) {
+        setActiveTab(tab as any);
+      }
+    }
+  }, []);
 
   const [formData, setFormData] = useState<any>({
     // Global & Header
@@ -237,6 +248,7 @@ export default function AdminWebsiteCMSPage() {
     { id: 'admissions', label: 'Admissions Page', icon: Award },
     { id: 'contact', label: 'Contact & Campus', icon: MapPin },
     { id: 'testimonials', label: 'Reviews & Testimonials', icon: Star },
+    { id: 'footer', label: 'Footer Management', icon: Layers },
   ];
 
   return (
@@ -308,7 +320,10 @@ export default function AdminWebsiteCMSPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        {activeTab === 'footer' ? (
+          <FooterCMSManager />
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-8">
           {/* ========================================================= */}
           {/* TAB 1: HOME PAGE CMS */}
           {/* ========================================================= */}
@@ -1217,6 +1232,7 @@ export default function AdminWebsiteCMSPage() {
             </button>
           </div>
         </form>
+      )}
       </div>
     </DashboardShell>
   );

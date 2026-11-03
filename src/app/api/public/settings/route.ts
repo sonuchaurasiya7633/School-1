@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
-import SchoolSetting from '@/models/SchoolSetting';
+import SchoolSetting, { DEFAULT_FOOTER_SETTINGS } from '@/models/SchoolSetting';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +31,10 @@ export async function GET() {
         heroTitle: 'Building Knowledge, Character & Academic Brilliance',
         heroSubtitle:
           'Welcome to the digital learning campus of Success Point School (S.P.S.). We provide state-of-the-art classroom education, recorded video lectures, continuous evaluation, and dedicated student care.',
+        footer: DEFAULT_FOOTER_SETTINGS,
       });
+    } else if (!settings.footer) {
+      settings.footer = DEFAULT_FOOTER_SETTINGS;
     }
 
     return NextResponse.json({ success: true, settings });
