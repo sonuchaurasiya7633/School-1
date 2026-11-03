@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
-import SchoolSetting, { DEFAULT_FOOTER_SETTINGS } from '@/models/SchoolSetting';
+import SchoolSetting from '@/models/SchoolSetting';
+import { DEFAULT_FOOTER_SETTINGS } from '@/types/footer';
 
 export const dynamic = 'force-dynamic';
 

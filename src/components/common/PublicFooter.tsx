@@ -17,7 +17,7 @@ import {
   GraduationCap,
   Users,
 } from 'lucide-react';
-import { IFooterSettings, DEFAULT_FOOTER_SETTINGS } from '@/models/SchoolSetting';
+import { IFooterSettings, DEFAULT_FOOTER_SETTINGS } from '@/types/footer';
 
 interface PublicFooterProps {
   initialData?: IFooterSettings;

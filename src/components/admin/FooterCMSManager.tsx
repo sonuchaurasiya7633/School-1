@@ -30,7 +30,7 @@ import {
   Shield,
   Check,
 } from 'lucide-react';
-import { IFooterSettings, IFooterLink, IFooterPortal, DEFAULT_FOOTER_SETTINGS } from '@/models/SchoolSetting';
+import { IFooterSettings, IFooterLink, IFooterPortal, DEFAULT_FOOTER_SETTINGS } from '@/types/footer';
 import { authFetch } from '@/lib/api';
 import PublicFooter from '@/components/common/PublicFooter';
 
