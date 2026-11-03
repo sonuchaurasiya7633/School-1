@@ -70,7 +70,6 @@ export default function AdminWebsiteCMSPage() {
     heroCta1Link: '/admissions',
     heroCta2Text: 'Explore Programs & Streams',
     heroCta2Link: '/academics',
-    heroImage: '/images/hero-banner.jpg',
 
     // Home - Stats
     statsStudents: '1,400+',
@@ -512,35 +511,6 @@ export default function AdminWebsiteCMSPage() {
                       className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:border-purple-500 focus:outline-none"
                     />
                   </div>
-                </div>
-
-                {/* Hero Banner Showcase Image */}
-                <div className="pt-4 border-t border-slate-800 space-y-3">
-                  <label className="block text-xs font-bold text-slate-300">
-                    Hero Showcase Banner Image URL
-                  </label>
-                  <p className="text-[11px] text-slate-400">
-                    Official school banner image displayed prominently in the hero section below the CTA buttons.
-                  </p>
-                  <input
-                    type="text"
-                    value={formData.heroImage || ''}
-                    onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:border-purple-500 focus:outline-none"
-                    placeholder="/images/hero-banner.jpg or https://..."
-                  />
-                  {formData.heroImage && (
-                    <div className="mt-3 relative rounded-xl overflow-hidden border border-slate-700 bg-slate-950 max-w-md">
-                      <img
-                        src={formData.heroImage}
-                        alt="Hero Banner Preview"
-                        className="w-full h-auto object-cover max-h-48"
-                      />
-                      <div className="p-2 bg-slate-900/90 text-[10px] text-slate-300 font-medium">
-                        Live Preview: {formData.heroImage}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
 

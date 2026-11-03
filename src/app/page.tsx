@@ -42,7 +42,6 @@ export default function HomePage() {
     heroCta1Link: '/admissions',
     heroCta2Text: 'Explore Programs & Streams',
     heroCta2Link: '/academics',
-    heroImage: '/images/hero-banner.jpg',
     admissionsOpen: true,
 
     statsStudents: '1,400+',
@@ -216,21 +215,6 @@ export default function HomePage() {
               <GraduationCap className="w-4 h-4 text-[#E8B4A8] shrink-0" />
               <span>Student & Faculty Portal</span>
             </Link>
-          </div>
-
-          {/* Official School Hero Banner Showcase */}
-          <div className="mt-10 sm:mt-14 max-w-5xl mx-auto relative group">
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-emerald-500/30 via-[#E8B4A8]/30 to-teal-400/30 rounded-3xl sm:rounded-[32px] blur-xl opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none" />
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-white/25 shadow-2xl bg-emerald-950/40">
-              <Image
-                src={settings.heroImage || '/images/hero-banner.jpg'}
-                alt="Success Point School Campus & Students"
-                width={1200}
-                height={600}
-                priority
-                className="w-full h-auto object-cover transform group-hover:scale-[1.01] transition-transform duration-700"
-              />
-            </div>
           </div>
         </div>
       </section>
