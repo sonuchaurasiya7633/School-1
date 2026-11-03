@@ -26,6 +26,7 @@ import {
   Sparkles,
   School,
   LogIn,
+  Calendar,
 } from 'lucide-react';
 
 interface PublicHeaderProps {
@@ -101,6 +102,7 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
     { label: 'Faculty & Team', href: '/faculty', icon: Users },
     { label: 'Campus & Facilities', href: '/gallery', icon: Camera },
     { label: 'Notice Board', href: '/notices', icon: Bell },
+    { label: 'Calendar', href: '/calendar', icon: Calendar, badge: '2027' },
     { label: 'Contact', href: '/contact', icon: Phone },
   ];
 

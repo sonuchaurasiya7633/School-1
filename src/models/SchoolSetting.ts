@@ -359,7 +359,7 @@ const SchoolSettingSchema = new Schema<ISchoolSettingDocument>(
 );
 
 const SchoolSetting: Model<ISchoolSettingDocument> =
-  mongoose.models.SchoolSetting ||
+  (mongoose.models && mongoose.models.SchoolSetting) ||
   mongoose.model<ISchoolSettingDocument>('SchoolSetting', SchoolSettingSchema);
 
 export default SchoolSetting;

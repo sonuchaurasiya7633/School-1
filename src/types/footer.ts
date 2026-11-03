@@ -74,6 +74,7 @@ export const DEFAULT_FOOTER_SETTINGS: IFooterSettings = {
     { id: 'link-5', label: 'Director & Faculty Directory', url: '/faculty', isExternal: false, enabled: true },
     { id: 'link-6', label: 'Campus & Smart Classrooms', url: '/gallery', isExternal: false, enabled: true },
     { id: 'link-7', label: 'Official Notice Board', url: '/notices', isExternal: false, enabled: true },
+    { id: 'link-calendar', label: 'Academic Calendar 2027', url: '/calendar', isExternal: false, enabled: true },
     { id: 'link-8', label: 'Contact & Campus Map', url: '/contact', isExternal: false, enabled: true },
   ],
   portals: [

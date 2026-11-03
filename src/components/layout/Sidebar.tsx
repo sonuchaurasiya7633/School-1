@@ -25,6 +25,7 @@ import {
   ExternalLink,
   Globe,
   FileText,
+  CalendarDays,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -47,6 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
     { name: 'Fee Collection', href: '/admin/fees', icon: CreditCard },
     { name: 'Exams & Marksheets', href: '/admin/exams', icon: Award },
     { name: 'Class Timetable', href: '/admin/timetable', icon: Calendar },
+    { name: 'School Calendar', href: '/admin/calendar', icon: CalendarDays },
     { name: 'School Notices', href: '/admin/notices', icon: Bell },
     { name: 'School Settings', href: '/admin/settings', icon: Settings },
   ];
