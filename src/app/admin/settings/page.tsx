@@ -9,7 +9,7 @@ import { AvatarUploader } from '@/components/common/AvatarUploader';
 import { authFetch } from '@/lib/api';
 
 export default function AdminSettingsPage() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [settings, setSettings] = useState<any>({
     schoolName: 'Success Point School',
     tagline: 'Best Education, Good Results.',
@@ -22,6 +22,12 @@ export default function AdminSettingsPage() {
     principalName: 'Dr. A. K. Sharma',
   });
 
+  const [adminProfileData, setAdminProfileData] = useState({
+    name: '',
+    phone: '',
+    address: '',
+  });
+
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -29,10 +35,46 @@ export default function AdminSettingsPage() {
   });
 
   const [savingSettings, setSavingSettings] = useState(false);
+  const [savingAdminProfile, setSavingAdminProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
   const [reseedLoading, setReseedLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setAdminProfileData({
+        name: user.name || '',
+        phone: user.phone || '',
+        address: user.address || '',
+      });
+    }
+  }, [user]);
+
+  const handleAdminProfileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingAdminProfile(true);
+    setSuccessMsg('');
+    setErrorMsg('');
+    try {
+      const res = await authFetch('/api/user/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(adminProfileData),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSuccessMsg('Super Administrator profile updated successfully!');
+        await refreshUser();
+      } else {
+        setErrorMsg(data.message || 'Error updating profile.');
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Network error.');
+    } finally {
+      setSavingAdminProfile(false);
+    }
+  };
 
   const fetchSettings = async () => {
     try {
@@ -264,17 +306,18 @@ export default function AdminSettingsPage() {
 
         {/* Change Password & Reseed DB Column */}
         <div className="space-y-6">
-          {/* Admin Profile Photo Card */}
+          {/* Admin Profile & Details Card */}
           <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-xs">
             <div className="flex items-center gap-2 pb-3 border-b border-slate-200 mb-4">
               <UserCheck className="w-4 h-4 text-emerald-600" />
-              <h3 className="font-bold text-sm text-slate-800">Admin Profile Photo</h3>
+              <h3 className="font-bold text-sm text-slate-800">Administrator Profile Details</h3>
             </div>
             <div className="flex flex-col items-center justify-center py-2 text-center">
               <AvatarUploader
                 currentAvatar={user?.avatar}
                 name={user?.name || 'Admin'}
                 size="xl"
+                onSuccess={() => refreshUser()}
               />
               <p className="mt-3 text-xs font-bold text-slate-800">{user?.name || 'Administrator'}</p>
               <p className="text-[11px] text-slate-500">{user?.email}</p>
@@ -282,6 +325,61 @@ export default function AdminSettingsPage() {
                 Super Admin
               </span>
             </div>
+
+            {/* Admin Profile Edit Form */}
+            <form onSubmit={handleAdminProfileSubmit} className="mt-4 pt-4 border-t border-slate-100 space-y-3 text-xs">
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Admin Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={adminProfileData.name}
+                  onChange={(e) => setAdminProfileData({ ...adminProfileData, name: e.target.value })}
+                  className="w-full p-2 border border-slate-300 rounded-lg text-slate-900 font-semibold"
+                  placeholder="Administrator Name"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Contact Phone Number</label>
+                <input
+                  type="text"
+                  value={adminProfileData.phone}
+                  onChange={(e) => setAdminProfileData({ ...adminProfileData, phone: e.target.value })}
+                  className="w-full p-2 border border-slate-300 rounded-lg text-slate-900 font-mono"
+                  placeholder="+91 98765 43210"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Office / Residential Address</label>
+                <textarea
+                  rows={2}
+                  value={adminProfileData.address}
+                  onChange={(e) => setAdminProfileData({ ...adminProfileData, address: e.target.value })}
+                  className="w-full p-2 border border-slate-300 rounded-lg text-slate-900 leading-relaxed"
+                  placeholder="Administrative Office / Address"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={savingAdminProfile}
+                className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg transition text-xs flex items-center justify-center gap-1.5 disabled:opacity-50"
+              >
+                {savingAdminProfile ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Saving Profile...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Update Admin Profile</span>
+                  </>
+                )}
+              </button>
+            </form>
           </div>
 
           {/* Change Password Card */}

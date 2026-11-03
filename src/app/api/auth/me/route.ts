@@ -5,6 +5,8 @@ import User from '@/models/User';
 import StudentProfile from '@/models/StudentProfile';
 import TeacherProfile from '@/models/TeacherProfile';
 
+export { PUT } from '@/app/api/user/profile/route';
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
