@@ -88,6 +88,42 @@ export default function AdminDashboardPage() {
       allowedRoles={['admin']}
       onRefresh={fetchStats}
     >
+      {/* Top Status Banner (Inspired by Reference Image 3) */}
+      <div className="bg-white/85 backdrop-blur-xl rounded-[28px] p-4 sm:p-5 border border-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
+            <Sparkles className="w-5 h-5 drop-shadow-xs" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <h3 className="font-black text-sm sm:text-base text-slate-900 leading-none">
+                All school operations & systems running smoothly!
+              </h3>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Active Session 2026-2027 • {stats.totalStudents} enrolled learners • {stats.totalTeachers} verified faculty
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+          <Link
+            href="/admin/website"
+            className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition shadow-xs flex items-center gap-1.5"
+          >
+            <span>Website CMS</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+          <Link
+            href="/admin/settings"
+            className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+          >
+            Settings
+          </Link>
+        </div>
+      </div>
+
       {/* 4 Primary Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <StatCard
