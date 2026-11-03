@@ -11,6 +11,10 @@ import {
   XCircle,
   X,
   BookOpen,
+  Copy,
+  Check,
+  Key,
+  GraduationCap,
 } from 'lucide-react';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
 import { authFetch } from '@/lib/api';
@@ -24,6 +28,18 @@ export default function AdminTeachersPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<any>(null);
+  const [editAssignedClasses, setEditAssignedClasses] = useState<any[]>([]);
+  const [newAssignClass, setNewAssignClass] = useState('');
+  const [newAssignSection, setNewAssignSection] = useState('A');
+  const [newAssignSubject, setNewAssignSubject] = useState('');
+
+  const [createdCredentials, setCreatedCredentials] = useState<{
+    name: string;
+    userId: string;
+    email: string;
+    password: string;
+  } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -100,6 +116,27 @@ export default function AdminTeachersPage() {
       const data = await res.json();
       if (data.success) {
         setShowAddModal(false);
+        const createdUser = data.teacher?.user;
+        const savedPass = formData.password || 'password123';
+        setCreatedCredentials({
+          name: createdUser?.name || formData.name,
+          userId: createdUser?.userId || '',
+          email: createdUser?.email || formData.email,
+          password: savedPass,
+        });
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          address: '',
+          gender: 'Female',
+          qualification: 'M.Sc., B.Ed',
+          specialization: 'Mathematics',
+          password: 'password123',
+          assignedClassId: classes[0]?._id || '',
+          assignedSection: 'A',
+          assignedSubjectId: subjects[0]?._id || '',
+        });
         fetchData();
       } else {
         alert(data.message || 'Error adding teacher.');
@@ -113,6 +150,12 @@ export default function AdminTeachersPage() {
     e.preventDefault();
     if (!selectedTeacher) return;
     try {
+      const formattedAssigned = editAssignedClasses.map((ac) => ({
+        class: ac.class,
+        section: ac.section,
+        subject: ac.subject,
+      }));
+
       const res = await authFetch('/api/admin/teachers', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -123,6 +166,8 @@ export default function AdminTeachersPage() {
           phone: formData.phone,
           qualification: formData.qualification,
           specialization: formData.specialization,
+          password: formData.password || undefined,
+          assignedClasses: formattedAssigned,
         }),
       });
 
@@ -136,6 +181,44 @@ export default function AdminTeachersPage() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleAddAssignedClass = () => {
+    if (!newAssignClass || !newAssignSubject) {
+      alert('Please select both a Class and a Subject.');
+      return;
+    }
+
+    const clsObj = classes.find((c) => c._id === newAssignClass);
+    const subObj = subjects.find((s) => s._id === newAssignSubject);
+
+    // Check duplicate
+    const isDup = editAssignedClasses.some(
+      (ac) =>
+        ac.class === newAssignClass &&
+        ac.section === newAssignSection &&
+        ac.subject === newAssignSubject
+    );
+
+    if (isDup) {
+      alert('This Class + Section + Subject is already assigned to this teacher.');
+      return;
+    }
+
+    setEditAssignedClasses((prev) => [
+      ...prev,
+      {
+        class: newAssignClass,
+        className: clsObj?.name || 'Class',
+        section: newAssignSection,
+        subject: newAssignSubject,
+        subjectName: subObj?.name || 'Subject',
+      },
+    ]);
+  };
+
+  const handleRemoveAssignedClass = (index: number) => {
+    setEditAssignedClasses((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleDelete = async (id: string) => {
@@ -174,7 +257,20 @@ export default function AdminTeachersPage() {
       phone: t.user?.phone || '',
       qualification: t.qualification || '',
       specialization: t.specialization || '',
+      password: '',
     });
+
+    const initialAssigned = (t.assignedClasses || []).map((ac: any) => ({
+      class: ac.class?._id || ac.class,
+      className: ac.class?.name || 'Class',
+      section: ac.section || 'A',
+      subject: ac.subject?._id || ac.subject,
+      subjectName: ac.subject?.name || 'Subject',
+    }));
+    setEditAssignedClasses(initialAssigned);
+    setNewAssignClass(classes[0]?._id || '');
+    setNewAssignSection('A');
+    setNewAssignSubject(subjects[0]?._id || '');
     setShowEditModal(true);
   };
 
@@ -263,19 +359,32 @@ export default function AdminTeachersPage() {
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+            <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
               <button
+                type="button"
                 onClick={() => openEditModal(t)}
-                className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1.5 rounded-lg border border-emerald-200 transition"
               >
-                <Edit2 className="w-4 h-4" />
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Assign Classes & Subjects</span>
               </button>
-              <button
-                onClick={() => handleDelete(t._id)}
-                className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => openEditModal(t)}
+                  className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                  title="Edit Teacher Profile"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDelete(t._id)}
+                  className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                  title="Delete Teacher"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -405,16 +514,21 @@ export default function AdminTeachersPage() {
       {/* Edit Teacher Modal */}
       {showEditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 overflow-y-auto max-h-[92vh]">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <h3 className="font-bold text-slate-800 text-base">Edit Faculty Information</h3>
-              <button onClick={() => setShowEditModal(false)} className="p-1.5 text-slate-400 hover:text-slate-600">
+              <div>
+                <h3 className="font-black text-slate-800 text-base">Edit Faculty & Manage Assignments</h3>
+                <p className="text-[11px] text-slate-500 font-mono">
+                  {selectedTeacher?.user?.userId} • {selectedTeacher?.user?.email}
+                </p>
+              </div>
+              <button onClick={() => setShowEditModal(false)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleEditSubmit} className="space-y-4 mt-4 text-xs">
-              <div className="flex flex-col items-center justify-center py-2 px-3 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+              <div className="flex flex-col items-center justify-center py-3 px-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
                 <AvatarUploader
                   currentAvatar={selectedTeacher?.user?.avatar}
                   name={selectedTeacher?.user?.name || formData.name}
@@ -431,61 +545,270 @@ export default function AdminTeachersPage() {
                 <span className="text-[11px] text-slate-500 font-medium mt-1">Super Admin: Change Faculty Profile Picture</span>
               </div>
 
-              <div>
-                <label className="font-semibold text-slate-700">Full Name</label>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold text-slate-700">Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700">Email Address (Login ID)</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="font-semibold text-slate-700">Phone</label>
+                  <input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700">Qualification</label>
+                  <input
+                    type="text"
+                    value={formData.qualification}
+                    onChange={(e) => setFormData({ ...formData, qualification: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700">Specialization</label>
+                  <input
+                    type="text"
+                    value={formData.specialization}
+                    onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Password Reset Field */}
+              <div className="p-3 bg-amber-50/80 rounded-2xl border border-amber-200">
+                <label className="font-bold text-amber-900 block text-xs mb-1">
+                  Reset Teacher Login Password (Optional)
+                </label>
                 <input
                   type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Enter new password, or leave blank to keep unchanged"
+                  className="w-full p-2 border border-amber-300 rounded-lg text-xs bg-white text-slate-900 placeholder:text-slate-400"
                 />
+                <span className="text-[10px] text-amber-800 mt-1 block">
+                  Agar teacher password bhool jaye, to yaha naya password enter kar ke update kar sakte hain.
+                </span>
               </div>
-              <div>
-                <label className="font-semibold text-slate-700">Email Address</label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-slate-700">Qualification</label>
-                <input
-                  type="text"
-                  value={formData.qualification}
-                  onChange={(e) => setFormData({ ...formData, qualification: e.target.value })}
-                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-slate-700">Specialization</label>
-                <input
-                  type="text"
-                  value={formData.specialization}
-                  onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg"
-                />
+
+              {/* Class-wise & Subject-wise Assignment Section */}
+              <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-emerald-950 text-xs">
+                    Assigned Classes & Subjects ({editAssignedClasses.length})
+                  </span>
+                  <span className="text-[10px] text-emerald-700 font-semibold">Class-wise & Subject-wise</span>
+                </div>
+
+                {/* Current Assignments List */}
+                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                  {editAssignedClasses.length > 0 ? (
+                    editAssignedClasses.map((ac, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between px-3 py-1.5 bg-white rounded-xl border border-emerald-200 shadow-2xs text-xs"
+                      >
+                        <div className="flex items-center gap-2">
+                          <BookOpen className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                          <span className="font-bold text-slate-800">
+                            {ac.className || 'Class'} ({ac.section})
+                          </span>
+                          <span className="text-slate-400">—</span>
+                          <span className="font-semibold text-emerald-800">{ac.subjectName || 'Subject'}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveAssignedClass(idx)}
+                          className="p-1 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition"
+                          title="Remove assignment"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-slate-400 italic py-1">No classes or subjects assigned yet.</p>
+                  )}
+                </div>
+
+                {/* Add New Class-wise / Subject-wise Assignment Row */}
+                <div className="pt-2 border-t border-emerald-200/60">
+                  <span className="block text-[11px] font-bold text-emerald-900 mb-1.5">
+                    + Assign Another Class & Subject
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-7 gap-2 items-center">
+                    <div className="sm:col-span-3">
+                      <select
+                        value={newAssignClass}
+                        onChange={(e) => setNewAssignClass(e.target.value)}
+                        className="w-full p-2 border border-slate-300 rounded-lg text-xs bg-white"
+                      >
+                        <option value="">Select Class</option>
+                        {classes.map((c) => (
+                          <option key={c._id} value={c._id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-1">
+                      <input
+                        type="text"
+                        value={newAssignSection}
+                        onChange={(e) => setNewAssignSection(e.target.value.toUpperCase())}
+                        placeholder="Sec"
+                        className="w-full p-2 border border-slate-300 rounded-lg text-xs text-center font-bold bg-white"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <select
+                        value={newAssignSubject}
+                        onChange={(e) => setNewAssignSubject(e.target.value)}
+                        className="w-full p-2 border border-slate-300 rounded-lg text-xs bg-white"
+                      >
+                        <option value="">Select Subject</option>
+                        {subjects.map((s) => (
+                          <option key={s._id} value={s._id}>
+                            {s.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-1">
+                      <button
+                        type="button"
+                        onClick={handleAddAssignedClass}
+                        className="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs shadow-xs transition"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="pt-4 border-t border-slate-200 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700"
+                  className="px-4 py-2 border border-slate-300 rounded-xl text-slate-700 font-bold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg"
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs transition"
                 >
-                  Update Faculty
+                  Save & Update Faculty
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Teacher Created Credentials Success Modal */}
+      {createdCredentials && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-emerald-100 text-slate-800 space-y-5 animate-in fade-in zoom-in-95">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                  <CheckCircle2 className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base text-slate-900">Teacher Registered Successfully!</h3>
+                  <p className="text-xs text-slate-500">Teacher login credentials generated</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setCreatedCredentials(null);
+                  setCopied(false);
+                }}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 space-y-2 text-xs">
+              <div className="flex justify-between items-center py-1 border-b border-emerald-200/60">
+                <span className="text-emerald-900 font-semibold">Teacher Name:</span>
+                <span className="font-bold text-slate-900">{createdCredentials.name}</span>
+              </div>
+              <div className="flex justify-between items-center py-1 border-b border-emerald-200/60">
+                <span className="text-emerald-900 font-semibold">Teacher User ID:</span>
+                <span className="font-mono font-black text-emerald-800">{createdCredentials.userId}</span>
+              </div>
+              <div className="flex justify-between items-center py-1 border-b border-emerald-200/60">
+                <span className="text-emerald-900 font-semibold">Teacher Gmail / Email:</span>
+                <span className="font-mono font-bold text-slate-800">{createdCredentials.email}</span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-emerald-900 font-semibold">Login Password:</span>
+                <span className="font-mono font-black bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-950">
+                  {createdCredentials.password}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Ye login credentials teacher ko de dijiye. Teacher <strong className="text-slate-800">/login</strong> par ja kar apna <strong>Email ya User ID</strong> aur <strong>Password</strong> enter kar ke dashboard access kar sakte hain.
+            </p>
+
+            <div className="flex items-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const text = `Success Point School - Teacher Faculty Credentials\nName: ${createdCredentials.name}\nTeacher ID: ${createdCredentials.userId}\nLogin Email: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/login?role=teacher`;
+                  navigator.clipboard.writeText(text);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 3000);
+                }}
+                className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                <span>{copied ? 'Credentials Copied!' : 'Copy Teacher Credentials'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCreatedCredentials(null);
+                  setCopied(false);
+                }}
+                className="px-5 py-3 border border-slate-300 hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-700 transition"
+              >
+                Done
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -60,8 +60,8 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
 
   return (
     <div className="flex h-screen bg-slate-100/90 font-sans antialiased text-slate-800 overflow-hidden">
-      {/* Desktop Sidebar (w-68) */}
-      <div className="hidden md:flex md:shrink-0 h-full">
+      {/* Desktop Sidebar (w-64) */}
+      <div className="hidden md:flex md:shrink-0 h-full w-64">
         <Sidebar />
       </div>
 

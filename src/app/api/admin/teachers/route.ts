@@ -88,7 +88,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const data = await req.json();
-    const { teacherId, id, _id, name, email, phone, address, gender, qualification, specialization, assignedClasses, isActive } = data;
+    const { teacherId, id, _id, name, email, phone, address, gender, qualification, specialization, assignedClasses, isActive, password } = data;
     const targetTeacherId = teacherId || id || _id;
 
     const profile = await TeacherProfile.findById(targetTeacherId);
@@ -109,6 +109,9 @@ export async function PUT(req: NextRequest) {
       if (address !== undefined) user.address = address;
       if (gender) user.gender = gender;
       if (isActive !== undefined) user.isActive = isActive;
+      if (password && password.trim()) {
+        user.password = await hashPassword(password.trim());
+      }
       await user.save();
     }
 

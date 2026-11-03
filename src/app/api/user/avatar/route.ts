@@ -236,3 +236,122 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    await connectToDatabase();
+    const tokenUser = getUserFromRequest(req);
+
+    if (!tokenUser) {
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized. Please login.' },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const targetUserId = (searchParams.get('targetUserId') || '').trim();
+
+    // Director Image removal
+    if (targetUserId === 'director' || targetUserId === 'directorImage') {
+      if (tokenUser.role !== 'admin') {
+        return NextResponse.json(
+          { success: false, message: 'Only Administrators can update the Director photo.' },
+          { status: 403 }
+        );
+      }
+      await SchoolSetting.findOneAndUpdate(
+        {},
+        { $set: { directorImage: '/images/director.jpg' } },
+        { upsert: true }
+      );
+      return NextResponse.json({
+        success: true,
+        message: 'Director portrait reset to default.',
+        avatar: '/images/director.jpg',
+      });
+    }
+
+    let userToUpdate: any = null;
+    let facultyToUpdate: any = null;
+
+    if (targetUserId) {
+      if (tokenUser.role !== 'admin' && tokenUser.id !== targetUserId && tokenUser.userId !== targetUserId) {
+        return NextResponse.json(
+          { success: false, message: "Forbidden. Only Super Admin can delete other users' avatars." },
+          { status: 403 }
+        );
+      }
+
+      if (mongoose.Types.ObjectId.isValid(targetUserId)) {
+        userToUpdate = await User.findById(targetUserId);
+        if (!userToUpdate) {
+          facultyToUpdate = await Faculty.findById(targetUserId);
+        }
+      }
+
+      if (!userToUpdate && !facultyToUpdate) {
+        userToUpdate = await User.findOne({
+          $or: [
+            { userId: { $regex: new RegExp(`^${targetUserId}$`, 'i') } },
+            { email: targetUserId.toLowerCase() },
+          ],
+        });
+      }
+
+      if (!userToUpdate && !facultyToUpdate) {
+        facultyToUpdate = await Faculty.findOne({
+          name: { $regex: new RegExp(`^${targetUserId}$`, 'i') },
+        });
+      }
+    } else {
+      userToUpdate = await User.findById(tokenUser.id);
+    }
+
+    if (userToUpdate) {
+      userToUpdate.avatar = '';
+      await userToUpdate.save();
+
+      // If teacher, also clear in Faculty collection
+      if (userToUpdate.role === 'teacher') {
+        try {
+          const matchingFaculty = await Faculty.findOne({
+            name: { $regex: new RegExp(`^${userToUpdate.name.trim()}$`, 'i') },
+          });
+          if (matchingFaculty) {
+            matchingFaculty.avatar = '';
+            await matchingFaculty.save();
+          }
+        } catch (e) {}
+      }
+    }
+
+    if (facultyToUpdate) {
+      facultyToUpdate.avatar = '';
+      await facultyToUpdate.save();
+
+      try {
+        const matchingUser = await User.findOne({
+          role: 'teacher',
+          name: { $regex: new RegExp(`^${facultyToUpdate.name.trim()}$`, 'i') },
+        });
+        if (matchingUser) {
+          matchingUser.avatar = '';
+          await matchingUser.save();
+        }
+      } catch (e) {}
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Profile picture removed successfully.',
+      avatar: '',
+    });
+  } catch (err: any) {
+    console.error('Avatar delete error:', err);
+    return NextResponse.json(
+      { success: false, message: err.message || 'Error deleting profile picture.' },
+      { status: 500 }
+    );
+  }
+}

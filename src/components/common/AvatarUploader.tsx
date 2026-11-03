@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Camera, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Camera, Loader2, CheckCircle2, AlertCircle, X, Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { authFetch } from '@/lib/api';
 
@@ -99,6 +99,38 @@ export function AvatarUploader({
     }
   };
 
+  const handleDeleteAvatar = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm('Are you sure you want to remove this profile picture?')) return;
+
+    setUploading(true);
+    setStatusMsg(null);
+
+    try {
+      const url = targetUserId
+        ? `/api/user/avatar?targetUserId=${encodeURIComponent(targetUserId)}`
+        : '/api/user/avatar';
+
+      const res = await authFetch(url, { method: 'DELETE' });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setAvatar('');
+        setStatusMsg({ type: 'success', text: data.message || 'Profile picture removed.' });
+        if (onSuccess) onSuccess('');
+        await refreshUser();
+      } else {
+        setStatusMsg({ type: 'error', text: data.message || 'Failed to remove photo.' });
+      }
+    } catch (err: any) {
+      console.error('Avatar delete error:', err);
+      setStatusMsg({ type: 'error', text: err.message || 'Delete error occurred.' });
+    } finally {
+      setUploading(false);
+      setTimeout(() => setStatusMsg(null), 4000);
+    }
+  };
+
   const initial = name ? name.trim().charAt(0).toUpperCase() : 'U';
 
   return (
@@ -141,21 +173,36 @@ export function AvatarUploader({
         </div>
       </div>
 
-      {/* Camera Badge Button (Visible always on bottom right) */}
-      <button
-        type="button"
-        disabled={uploading}
-        onClick={() => fileInputRef.current?.click()}
-        className="absolute -bottom-1 -right-1 p-1.5 rounded-xl bg-white border border-slate-200 shadow-md text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 transition active:scale-95 disabled:opacity-50"
-        title="Upload new profile picture"
-        aria-label="Upload photo"
-      >
-        {uploading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
-        ) : (
-          <Camera className="w-3.5 h-3.5 text-emerald-700" />
+      {/* Action Badges on Avatar: Upload / Delete */}
+      <div className="absolute -bottom-1 -right-1 flex items-center gap-1">
+        {avatar && (
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={handleDeleteAvatar}
+            className="p-1.5 rounded-xl bg-white border border-rose-200 shadow-md text-rose-600 hover:text-white hover:bg-rose-600 transition active:scale-95 disabled:opacity-50"
+            title="Remove / Delete profile picture"
+            aria-label="Remove photo"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
         )}
-      </button>
+
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => fileInputRef.current?.click()}
+          className="p-1.5 rounded-xl bg-white border border-slate-200 shadow-md text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 transition active:scale-95 disabled:opacity-50"
+          title="Upload new profile picture"
+          aria-label="Upload photo"
+        >
+          {uploading ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
+          ) : (
+            <Camera className="w-3.5 h-3.5 text-emerald-700" />
+          )}
+        </button>
+      </div>
 
       {/* Temporary Toast Status */}
       {statusMsg && (

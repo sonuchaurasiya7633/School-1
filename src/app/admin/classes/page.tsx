@@ -209,10 +209,42 @@ export default function AdminClassesPage() {
                     </div>
 
                     <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Faculty Head</span>
+                      <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider">Class Teacher</span>
                       <p className="font-bold text-slate-800 text-xs">
                         {c.classTeacher?.name || <span className="text-slate-400 font-normal italic">Unassigned</span>}
                       </p>
+                    </div>
+
+                    <div className="pt-2.5 border-t border-slate-100">
+                      <span className="text-slate-400 font-bold uppercase text-[10px] tracking-wider block mb-1">
+                        Subject Educators
+                      </span>
+                      {(() => {
+                        const classTeachers = teachers.filter((t) =>
+                          t.assignedClasses?.some((ac: any) => (ac.class?._id || ac.class) === c._id)
+                        );
+                        if (classTeachers.length === 0) {
+                          return <span className="text-slate-400 text-[11px] italic">No teachers assigned yet</span>;
+                        }
+                        return (
+                          <div className="flex flex-wrap gap-1">
+                            {classTeachers.map((t) => {
+                              const mySubjects = t.assignedClasses
+                                ?.filter((ac: any) => (ac.class?._id || ac.class) === c._id)
+                                .map((ac: any) => ac.subject?.name || 'Subject')
+                                .join(', ');
+                              return (
+                                <span
+                                  key={t._id}
+                                  className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold"
+                                >
+                                  {t.user?.name} ({mySubjects})
+                                </span>
+                              );
+                            })}
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>

@@ -16,6 +16,9 @@ import {
   Phone,
   Mail,
   UserCheck,
+  Copy,
+  Check,
+  Key,
 } from 'lucide-react';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
 import { authFetch } from '@/lib/api';
@@ -32,6 +35,13 @@ export default function AdminStudentsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [createdCredentials, setCreatedCredentials] = useState<{
+    name: string;
+    userId: string;
+    email: string;
+    password: string;
+  } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -90,6 +100,14 @@ export default function AdminStudentsPage() {
       const data = await res.json();
       if (data.success) {
         setShowAddModal(false);
+        const createdUser = data.student?.user;
+        const savedPassword = formData.password || 'password123';
+        setCreatedCredentials({
+          name: createdUser?.name || formData.name,
+          userId: createdUser?.userId || '',
+          email: createdUser?.email || formData.email,
+          password: savedPassword,
+        });
         setFormData({
           name: '',
           email: '',
@@ -631,6 +649,23 @@ export default function AdminStudentsPage() {
                 </div>
               </div>
 
+              {/* Password Reset Field */}
+              <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200">
+                <label className="font-bold text-amber-900 block text-xs mb-1">
+                  Reset Student Password (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Enter new password, or leave blank to keep current password"
+                  className="w-full p-2 border border-amber-300 rounded-lg text-xs bg-white text-slate-900 placeholder:text-slate-400"
+                />
+                <span className="text-[10px] text-amber-800 mt-1 block">
+                  Agar student apna password bhool jaye, to yaha naya password likh kar &quot;Save Changes&quot; karein.
+                </span>
+              </div>
+
               <div className="pt-4 border-t border-slate-200 flex justify-end gap-2">
                 <button
                   type="button"
@@ -695,8 +730,12 @@ export default function AdminStudentsPage() {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Email:</span>
+                <span className="text-slate-500">Email / Login ID:</span>
                 <span className="font-semibold text-slate-800">{selectedStudent.user?.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Student Roll / User ID:</span>
+                <span className="font-mono font-bold text-emerald-700">{selectedStudent.user?.userId}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Parent Name:</span>
@@ -716,6 +755,99 @@ export default function AdminStudentsPage() {
                   {selectedStudent.user?.isActive ? 'Active' : 'Inactive'}
                 </span>
               </div>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowViewModal(false);
+                  openEditModal(selectedStudent);
+                }}
+                className="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2"
+              >
+                <Key className="w-3.5 h-3.5" />
+                <span>Reset Password / Edit Student</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Student Created Credentials Success Modal */}
+      {createdCredentials && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-emerald-100 text-slate-800 space-y-5 animate-in fade-in zoom-in-95">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                  <CheckCircle2 className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base text-slate-900">Student Enrolled Successfully!</h3>
+                  <p className="text-xs text-slate-500">Student login credentials generated</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setCreatedCredentials(null);
+                  setCopied(false);
+                }}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-200/80 space-y-2 text-xs">
+              <div className="flex justify-between items-center py-1 border-b border-emerald-200/60">
+                <span className="text-emerald-900 font-semibold">Student Name:</span>
+                <span className="font-bold text-slate-900">{createdCredentials.name}</span>
+              </div>
+              <div className="flex justify-between items-center py-1 border-b border-emerald-200/60">
+                <span className="text-emerald-900 font-semibold">Student User ID:</span>
+                <span className="font-mono font-black text-emerald-800">{createdCredentials.userId}</span>
+              </div>
+              <div className="flex justify-between items-center py-1 border-b border-emerald-200/60">
+                <span className="text-emerald-900 font-semibold">Student Gmail / Email:</span>
+                <span className="font-mono font-bold text-slate-800">{createdCredentials.email}</span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-emerald-900 font-semibold">Login Password:</span>
+                <span className="font-mono font-black bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-950">
+                  {createdCredentials.password}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Student ya unke parents ko ye credentials de sakte hain. Student <strong className="text-slate-800">/login</strong> par ja kar apna <strong>Email ya User ID</strong> aur <strong>Password</strong> daal kar direct login kar sakte hain.
+            </p>
+
+            <div className="flex items-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const text = `Success Point School - Student Login Credentials\nName: ${createdCredentials.name}\nUser ID: ${createdCredentials.userId}\nLogin Email: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/login?role=student`;
+                  navigator.clipboard.writeText(text);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 3000);
+                }}
+                className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                <span>{copied ? 'Credentials Copied!' : 'Copy Credentials'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCreatedCredentials(null);
+                  setCopied(false);
+                }}
+                className="px-5 py-3 border border-slate-300 hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-700 transition"
+              >
+                Done
+              </button>
             </div>
           </div>
         </div>

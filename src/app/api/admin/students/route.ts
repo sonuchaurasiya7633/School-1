@@ -156,7 +156,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const data = await req.json();
-    const { studentId, id, _id, name, email, phone, address, gender, dateOfBirth, rollNumber, classId, section, parentName, parentPhone, bloodGroup, isActive } = data;
+    const { studentId, id, _id, name, email, phone, address, gender, dateOfBirth, rollNumber, classId, section, parentName, parentPhone, bloodGroup, isActive, password } = data;
     const targetStudentId = studentId || id || _id;
 
     const studentProfile = await StudentProfile.findById(targetStudentId);
@@ -181,6 +181,9 @@ export async function PUT(req: NextRequest) {
       if (gender) user.gender = gender;
       if (dateOfBirth !== undefined) user.dateOfBirth = dateOfBirth;
       if (isActive !== undefined) user.isActive = isActive;
+      if (password && password.trim()) {
+        user.password = await hashPassword(password.trim());
+      }
       await user.save();
     }
 
