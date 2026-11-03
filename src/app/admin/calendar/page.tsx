@@ -321,7 +321,7 @@ export default function AdminCalendarPage() {
               {stats.totalFullWorkingDays}
             </span>
             <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-              Full Days (Mon–Thu)
+              Full Days (Sun–Thu)
             </span>
           </div>
           <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 shadow-sm text-center">
@@ -345,7 +345,7 @@ export default function AdminCalendarPage() {
               {stats.totalWeekendDays}
             </span>
             <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-              Weekend Days (Sat/Sun)
+              Saturday Offs
             </span>
           </div>
         </div>

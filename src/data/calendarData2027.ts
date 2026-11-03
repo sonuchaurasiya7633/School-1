@@ -3,6 +3,8 @@ import {
   CalendarStats,
   DayScheduleInfo,
   HolidayCategory,
+  WeeklyScheduleConfig,
+  DEFAULT_WEEKLY_SCHEDULE,
 } from '@/types/calendar';
 
 export const INITIAL_2027_EVENTS: ISchoolCalendarEvent[] = [
@@ -715,7 +717,8 @@ export function buildDateEventMap(
  * - Approved Holiday on Weekend = 0 (does NOT double count non-working days)
  */
 export function calculate2027CalendarStats(
-  events: ISchoolCalendarEvent[]
+  events: ISchoolCalendarEvent[],
+  schedule: WeeklyScheduleConfig = DEFAULT_WEEKLY_SCHEDULE
 ): { stats: CalendarStats; dayDetails: Map<string, DayScheduleInfo> } {
   const dateEventMap = buildDateEventMap(events);
   const dayDetails = new Map<string, DayScheduleInfo>();
@@ -739,6 +742,16 @@ export function calculate2027CalendarStats(
     'Saturday',
   ];
 
+  const scheduleMap = [
+    schedule.sunday,    // 0 = Sun: 'open'
+    schedule.monday,    // 1 = Mon: 'open'
+    schedule.tuesday,   // 2 = Tue: 'open'
+    schedule.wednesday, // 3 = Wed: 'open'
+    schedule.thursday,  // 4 = Thu: 'open'
+    schedule.friday,    // 5 = Fri: 'half_day'
+    schedule.saturday,  // 6 = Sat: 'closed'
+  ];
+
   // Iterate all 365 days of 2027
   const cur = new Date('2027-01-01T00:00:00');
   const end = new Date('2027-12-31T00:00:00');
@@ -751,16 +764,9 @@ export function calculate2027CalendarStats(
     const dayOfWeek = cur.getDay(); // 0 = Sun, 1 = Mon, ..., 5 = Fri, 6 = Sat
 
     const dayEvents = dateEventMap.get(dateStr) || [];
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const baseStatus = scheduleMap[dayOfWeek];
+    const isWeekend = baseStatus === 'closed';
     const isFriday = dayOfWeek === 5;
-
-    // Base status according to weekly rule
-    let baseStatus: 'open' | 'closed' | 'half_day' = 'open';
-    if (isWeekend) {
-      baseStatus = 'closed';
-    } else if (isFriday) {
-      baseStatus = 'half_day';
-    }
 
     // Determine effective status
     let effectiveStatus = baseStatus;
@@ -768,7 +774,7 @@ export function calculate2027CalendarStats(
     let holidayCategory: HolidayCategory | undefined = undefined;
     let colorType: DayScheduleInfo['colorType'] = isWeekend
       ? 'weekend'
-      : isFriday
+      : baseStatus === 'half_day'
       ? 'friday_half'
       : 'working_day';
 

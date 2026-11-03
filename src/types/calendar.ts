@@ -8,6 +8,26 @@ export type HolidayCategory =
 
 export type SchoolDayStatus = 'open' | 'closed' | 'half_day';
 
+export interface WeeklyScheduleConfig {
+  sunday: SchoolDayStatus;
+  monday: SchoolDayStatus;
+  tuesday: SchoolDayStatus;
+  wednesday: SchoolDayStatus;
+  thursday: SchoolDayStatus;
+  friday: SchoolDayStatus;
+  saturday: SchoolDayStatus;
+}
+
+export const DEFAULT_WEEKLY_SCHEDULE: WeeklyScheduleConfig = {
+  sunday: 'open', // Sunday is OPEN
+  monday: 'open',
+  tuesday: 'open',
+  wednesday: 'open',
+  thursday: 'open',
+  friday: 'half_day', // Friday Half Day
+  saturday: 'closed', // Saturday Weekly Off
+};
+
 export interface ISchoolCalendarEvent {
   _id?: string;
   id?: string;

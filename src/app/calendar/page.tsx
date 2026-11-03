@@ -292,7 +292,7 @@ export default function CalendarPage() {
                   {stats.totalFullWorkingDays}
                 </span>
                 <span className="text-[11px] font-medium text-emerald-100/80 uppercase tracking-wider">
-                  Full Days (Mon–Thu)
+                  Full Days (Sun–Thu)
                 </span>
               </div>
               <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 text-center">
@@ -316,7 +316,7 @@ export default function CalendarPage() {
                   {stats.totalWeekendDays}
                 </span>
                 <span className="text-[11px] font-medium text-emerald-100/80 uppercase tracking-wider">
-                  Weekend Offs
+                  Saturday Offs
                 </span>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function CalendarPage() {
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 font-medium">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
                   <span className="w-2 h-2 rounded-full bg-emerald-600" />
-                  Mon – Thu: Full Day (1.0 eq)
+                  Sun – Thu: Full Working Day (1.0 eq)
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
                   <span className="w-2 h-2 rounded-full bg-amber-600" />
@@ -342,7 +342,7 @@ export default function CalendarPage() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-900 border border-rose-200">
                   <span className="w-2 h-2 rounded-full bg-rose-600" />
-                  Sat & Sun: Weekend Off (Closed)
+                  Saturday: Weekly Off (School Closed)
                 </span>
               </div>
             </div>
@@ -471,7 +471,7 @@ export default function CalendarPage() {
                 <span className="text-stone-400">Legend:</span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded bg-emerald-200 border border-emerald-400" />
-                  Full Working Day
+                  Full Working Day (Sun–Thu)
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded bg-amber-200 border border-amber-400" />
@@ -479,7 +479,7 @@ export default function CalendarPage() {
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded bg-rose-200 border border-rose-400" />
-                  Weekend Off (Sat/Sun)
+                  Saturday Weekly Off
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded bg-orange-200 border border-orange-400" />
@@ -513,8 +513,10 @@ export default function CalendarPage() {
                       className={`text-center py-2 text-xs font-black uppercase tracking-wider rounded-xl ${
                         i === 4
                           ? 'bg-amber-50 text-amber-900 border border-amber-200/60'
-                          : i >= 5
+                          : i === 5
                           ? 'bg-rose-50 text-rose-900 border border-rose-200/60'
+                          : i === 6
+                          ? 'bg-emerald-50 text-emerald-900 border border-emerald-200/60'
                           : 'bg-stone-50 text-stone-700'
                       }`}
                     >
@@ -866,9 +868,11 @@ export default function CalendarPage() {
                   <span className="font-semibold text-stone-500">Day Schedule:</span>
                   <span className="font-bold text-stone-800">
                     {activeDateModal.isWeekend
-                      ? 'Weekend Off (Saturday / Sunday)'
+                      ? 'Weekly Off (Saturday)'
                       : activeDateModal.isFridayHalfDay
                       ? 'Friday Half Working Day'
+                      : activeDateModal.dayOfWeek === 0
+                      ? 'Sunday Full Working Day (School Open)'
                       : 'Full Working Day (Mon–Thu)'}
                   </span>
                 </div>
@@ -919,9 +923,11 @@ export default function CalendarPage() {
               {!activeDateModal.holidayName && (
                 <p className="text-xs text-stone-500 italic text-center py-2">
                   {activeDateModal.isWeekend
-                    ? 'School remains closed on Saturdays and Sundays.'
+                    ? 'School remains closed on Saturdays (Weekly Off).'
                     : activeDateModal.isFridayHalfDay
                     ? 'Regular academic classes in morning. Half-day dismissal at 12:30 PM.'
+                    : activeDateModal.dayOfWeek === 0
+                    ? 'Sunday school is open with regular full academic timetable.'
                     : 'Normal full school working day with regular timetable.'}
                 </p>
               )}
