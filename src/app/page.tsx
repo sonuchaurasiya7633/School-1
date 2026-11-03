@@ -31,13 +31,43 @@ import {
 
 export default function HomePage() {
   const [notices, setNotices] = useState<any[]>([]);
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<any>({
     schoolName: 'Success Point School',
     tagline: 'Best Education, Good Results.',
+    heroBadge: 'Success Point School • Empowering Future Leaders',
     heroTitle: 'Building Knowledge, Character & Academic Brilliance',
     heroSubtitle:
       'Welcome to the digital learning campus of Success Point School (S.P.S.). We provide state-of-the-art classroom education, recorded video lectures, continuous evaluation, and dedicated student care.',
+    heroCta1Text: 'Apply for Admission 2026-27',
+    heroCta1Link: '/admissions',
+    heroCta2Text: 'Explore Programs & Streams',
+    heroCta2Link: '/academics',
     admissionsOpen: true,
+
+    statsStudents: '1,400+',
+    statsStudentsSub: 'Nursery to Class 12th',
+    statsFaculty: '35+',
+    statsFacultySub: 'B.Ed / D.El.Ed Certified',
+    statsSmartClasses: '100%',
+    statsSmartClassesSub: 'Audio/Video Enabled',
+    statsDistinction: '99.4%',
+    statsDistinctionSub: 'Consistent Top Ranks',
+
+    aboutHomeBadge: 'About Our Institution',
+    aboutHomeTitle: 'Empowering Students with Knowledge, Ethics & Modern Skills',
+    aboutHomeDesc:
+      'At Success Point School, education transcends routine textbooks. We blend rigorous academic instruction with interactive smart classroom technologies, moral values, debate, sports, and science exhibitions.',
+    aboutHomeFeature1: 'Activity-Based Kindergarten',
+    aboutHomeFeature2: 'Digital Video Lecture Portal',
+    aboutHomeFeature3: 'Science, Arts & Commerce Streams',
+    aboutHomeFeature4: 'CCTV Safe & Secure Campus',
+
+    admissionsBannerBadge: 'Enrollment Open 2026-2027',
+    admissionsBannerTitle: 'Give Your Child the Advantage of Quality Education',
+    admissionsBannerDesc:
+      'Admissions are now open for Nursery through Class 11th. Seats are allotted on a first-come, first-served basis following our interaction assessment.',
+
+    testimonials: [],
   });
 
   useEffect(() => {
@@ -45,7 +75,7 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.settings) {
-          setSettings((prev) => ({
+          setSettings((prev: any) => ({
             ...prev,
             ...data.settings,
           }));
@@ -150,7 +180,7 @@ export default function HomePage() {
             style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
           >
             <Sparkles className="w-3.5 h-3.5 text-[#214F39] shrink-0" />
-            <span className="truncate">Success Point School • Empowering Future Leaders</span>
+            <span className="truncate">{settings.heroBadge || 'Success Point School • Empowering Future Leaders'}</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
@@ -164,19 +194,19 @@ export default function HomePage() {
           {/* Quick CTA Buttons */}
           <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
             <Link
-              href="/admissions"
+              href={settings.heroCta1Link || '/admissions'}
               className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg flex items-center justify-center gap-2 hover:opacity-95 text-center"
               style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
             >
               <Award className="w-4 h-4 shrink-0" />
-              <span>Apply for Admission 2026-27</span>
+              <span>{settings.heroCta1Text || 'Apply for Admission 2026-27'}</span>
             </Link>
             <Link
-              href="/academics"
+              href={settings.heroCta2Link || '/academics'}
               className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center justify-center gap-2 text-center"
             >
               <BookOpen className="w-4 h-4 text-[#E8B4A8] shrink-0" />
-              <span>Explore Programs & Streams</span>
+              <span>{settings.heroCta2Text || 'Explore Programs & Streams'}</span>
             </Link>
             <Link
               href="/login"
@@ -194,32 +224,48 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">1,400+</p>
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">
+                {settings.statsStudents || '1,400+'}
+              </p>
               <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Enrolled Students
               </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">Nursery to Class 12th</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+                {settings.statsStudentsSub || 'Nursery to Class 12th'}
+              </p>
             </div>
             <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">35+</p>
+              <p className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
+                {settings.statsFaculty || '35+'}
+              </p>
               <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Qualified Faculty
               </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">B.Ed / D.El.Ed Certified</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+                {settings.statsFacultySub || 'B.Ed / D.El.Ed Certified'}
+              </p>
             </div>
             <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">100%</p>
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">
+                {settings.statsSmartClasses || '100%'}
+              </p>
               <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Smart Classrooms
               </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">Audio/Video Enabled</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+                {settings.statsSmartClassesSub || 'Audio/Video Enabled'}
+              </p>
             </div>
             <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">99.4%</p>
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">
+                {settings.statsDistinction || '99.4%'}
+              </p>
               <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Board Distinction
               </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">Consistent Top Ranks</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+                {settings.statsDistinctionSub || 'Consistent Top Ranks'}
+              </p>
             </div>
           </div>
         </div>
@@ -237,31 +283,36 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
                 style={{ backgroundColor: '#FAF8F5', color: '#214F39', border: '1px solid #E8B4A8' }}
               >
-                <span>About Our Institution</span>
+                <span>{settings.aboutHomeBadge || 'About Our Institution'}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-black text-stone-900 leading-tight">
-                Empowering Students with <br />
-                <span style={{ color: '#214F39' }}>Knowledge, Ethics & Modern Skills</span>
+                {settings.aboutHomeTitle || (
+                  <>
+                    Empowering Students with <br />
+                    <span style={{ color: '#214F39' }}>Knowledge, Ethics & Modern Skills</span>
+                  </>
+                )}
               </h2>
               <p className="text-sm text-stone-600 leading-relaxed">
-                At Success Point School, education transcends routine textbooks. We blend rigorous academic instruction with interactive smart classroom technologies, moral values, debate, sports, and science exhibitions.
+                {settings.aboutHomeDesc ||
+                  'At Success Point School, education transcends routine textbooks. We blend rigorous academic instruction with interactive smart classroom technologies, moral values, debate, sports, and science exhibitions.'}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
                 <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
                   <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>Activity-Based Kindergarten</span>
+                  <span>{settings.aboutHomeFeature1 || 'Activity-Based Kindergarten'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
                   <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>Digital Video Lecture Portal</span>
+                  <span>{settings.aboutHomeFeature2 || 'Digital Video Lecture Portal'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
                   <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>Science, Arts & Commerce Streams</span>
+                  <span>{settings.aboutHomeFeature3 || 'Science, Arts & Commerce Streams'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
                   <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>CCTV Safe & Secure Campus</span>
+                  <span>{settings.aboutHomeFeature4 || 'CCTV Safe & Secure Campus'}</span>
                 </div>
               </div>
               <div className="pt-3">
@@ -424,13 +475,14 @@ export default function HomePage() {
                 className="px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-xs"
                 style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
               >
-                Enrollment Open 2026-2027
+                {settings.admissionsBannerBadge || 'Enrollment Open 2026-2027'}
               </span>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-                Give Your Child the Advantage of Quality Education
+                {settings.admissionsBannerTitle || 'Give Your Child the Advantage of Quality Education'}
               </h2>
               <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                Admissions are now open for Nursery through Class 11th. Seats are allotted on a first-come, first-served basis following our interaction assessment.
+                {settings.admissionsBannerDesc ||
+                  'Admissions are now open for Nursery through Class 11th. Seats are allotted on a first-come, first-served basis following our interaction assessment.'}
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
@@ -591,14 +643,17 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((t, i) => (
+            {(settings.testimonials && settings.testimonials.length > 0
+              ? settings.testimonials
+              : testimonials
+            ).map((t: any, i: number) => (
               <div
                 key={i}
                 className="bg-white p-7 rounded-3xl border border-stone-200/90 shadow-sm flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-1 text-amber-500 mb-4">
-                    {[...Array(t.rating)].map((_, s) => (
+                    {[...Array(t.rating || 5)].map((_, s) => (
                       <Star key={s} className="w-4 h-4 fill-amber-500" />
                     ))}
                   </div>

@@ -1,5 +1,6 @@
-import React from 'react';
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PublicHeader from '@/components/common/PublicHeader';
 import PublicFooter from '@/components/common/PublicFooter';
@@ -7,23 +8,37 @@ import {
   BookOpen,
   GraduationCap,
   Video,
-  Award,
   CheckCircle2,
   Atom,
   TrendingUp,
   Palette,
-  FileCheck2,
   ArrowRight,
-  Layers,
 } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Academics & Curriculum | Success Point School',
-  description:
-    'Explore the academic structure, curriculum, Science/Commerce/Arts streams, smart classrooms, and video lecture system at Success Point School.',
-};
-
 export default function AcademicsPage() {
+  const [settings, setSettings] = useState<any>({
+    academicsPageTitle: 'Comprehensive Curriculum Designed for Intellectual Mastery & Distinction',
+    academicsPageSubtitle:
+      'From playful foundational learning to rigorous senior secondary preparation, our structured curriculum develops critical thinking, conceptual clarity, and exam excellence.',
+    academicsScienceDesc:
+      'Rigorous scientific pedagogy with state-of-the-art laboratory practicals. Prepares students for Engineering, Medicine, Research, and Technical fields.',
+    academicsCommerceDesc:
+      'Comprehensive financial, managerial, and economic acumen. Ideal for Chartered Accountancy (CA), Management (BBA/MBA), Banking, and Entrepreneurship.',
+    academicsArtsDesc:
+      'Deep understanding of societal structures, governance, global affairs, and literature. Ideal for Civil Services (UPSC), Law, Journalism, and Academia.',
+  });
+
+  useEffect(() => {
+    fetch('/api/public/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          setSettings((prev: any) => ({ ...prev, ...data.settings }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const levels = [
     {
       level: 'Foundational Stage',
@@ -69,6 +84,7 @@ export default function AcademicsPage() {
       tag: 'Medical & Non-Medical',
       subjects: ['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Computer Science', 'English'],
       description:
+        settings.academicsScienceDesc ||
         'Rigorous scientific pedagogy with state-of-the-art laboratory practicals. Prepares students for Engineering, Medicine, Research, and Technical fields.',
     },
     {
@@ -77,6 +93,7 @@ export default function AcademicsPage() {
       tag: 'Business & Finance',
       subjects: ['Accountancy', 'Business Studies', 'Economics', 'Mathematics / Informatics', 'English'],
       description:
+        settings.academicsCommerceDesc ||
         'Comprehensive financial, managerial, and economic acumen. Ideal for Chartered Accountancy (CA), Management (BBA/MBA), Banking, and Entrepreneurship.',
     },
     {
@@ -85,6 +102,7 @@ export default function AcademicsPage() {
       tag: 'Social Sciences & Law',
       subjects: ['Political Science', 'History', 'Geography', 'Economics', 'Hindi', 'English'],
       description:
+        settings.academicsArtsDesc ||
         'Deep understanding of societal structures, governance, global affairs, and literature. Ideal for Civil Services (UPSC), Law, Journalism, and Academia.',
     },
   ];
@@ -106,12 +124,12 @@ export default function AcademicsPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            Comprehensive Curriculum Designed for <br className="hidden sm:block" />
-            <span className="text-[#E8B4A8]">Intellectual Mastery & Distinction</span>
+            {settings.academicsPageTitle || 'Comprehensive Curriculum Designed for Intellectual Mastery & Distinction'}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-emerald-100/90 max-w-2xl mx-auto leading-relaxed">
-            From playful foundational learning to rigorous senior secondary preparation, our structured curriculum develops critical thinking, conceptual clarity, and exam excellence.
+            {settings.academicsPageSubtitle ||
+              'From playful foundational learning to rigorous senior secondary preparation, our structured curriculum develops critical thinking, conceptual clarity, and exam excellence.'}
           </p>
         </div>
       </section>

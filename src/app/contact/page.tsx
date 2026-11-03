@@ -17,6 +17,18 @@ import {
 } from 'lucide-react';
 
 export default function ContactPage() {
+  const [settings, setSettings] = useState<any>({
+    contactPageTitle: 'Connect With Our School Administration & Academic Admissions Desk',
+    contactPageSubtitle:
+      'Have questions regarding admissions, transport facilities, or curriculum? Reach out via phone, email, or send us a direct message below.',
+    address: 'Success Point School Campus, Knowledge City Zone, Main City Road, Pin - 800001',
+    phone: '+91 8051217686',
+    phoneAlt: '+91 98765 43210',
+    email: 'info@successpointschool.edu',
+    contactOfficeHours: 'Monday to Saturday: 08:00 AM – 02:30 PM',
+    contactMapEmbedUrl: '',
+  });
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -28,6 +40,17 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  React.useEffect(() => {
+    fetch('/api/public/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          setSettings((prev: any) => ({ ...prev, ...data.settings }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,12 +105,12 @@ export default function ContactPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            Connect With Our School Administration & <br className="hidden sm:block" />
-            <span className="text-[#E8B4A8]">Academic Admissions Desk</span>
+            {settings.contactPageTitle || 'Connect With Our School Administration & Academic Admissions Desk'}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-emerald-100/90 max-w-2xl mx-auto leading-relaxed">
-            Have questions regarding admissions, transport facilities, or curriculum? Reach out via phone, email, or send us a direct message below.
+            {settings.contactPageSubtitle ||
+              'Have questions regarding admissions, transport facilities, or curriculum? Reach out via phone, email, or send us a direct message below.'}
           </p>
         </div>
       </section>
@@ -116,7 +139,7 @@ export default function ContactPage() {
                         Campus Address
                       </span>
                       <p className="text-xs sm:text-sm font-semibold text-stone-800 leading-snug mt-0.5">
-                        Success Point School Campus, Knowledge City Zone, Main City Road, Pin - 800001
+                        {settings.address || 'Success Point School Campus, Knowledge City Zone, Main City Road, Pin - 800001'}
                       </p>
                     </div>
                   </div>
@@ -133,7 +156,17 @@ export default function ContactPage() {
                         Phone Helpline
                       </span>
                       <p className="text-xs sm:text-sm font-semibold text-stone-800 leading-snug mt-0.5">
-                        +91 98765 43210 / +91 91234 56789
+                        <a href={`tel:${settings.phone || '+918051217686'}`} className="hover:underline">
+                          {settings.phone || '+91 8051217686'}
+                        </a>
+                        {settings.phoneAlt && (
+                          <>
+                            {' / '}
+                            <a href={`tel:${settings.phoneAlt}`} className="hover:underline">
+                              {settings.phoneAlt}
+                            </a>
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>
@@ -150,7 +183,9 @@ export default function ContactPage() {
                         Email Desk
                       </span>
                       <p className="text-xs sm:text-sm font-semibold text-stone-800 leading-snug mt-0.5">
-                        info@successpointschool.edu
+                        <a href={`mailto:${settings.email || 'info@successpointschool.edu'}`} className="hover:underline">
+                          {settings.email || 'info@successpointschool.edu'}
+                        </a>
                       </p>
                     </div>
                   </div>
@@ -167,7 +202,7 @@ export default function ContactPage() {
                         Visiting Hours
                       </span>
                       <p className="text-xs sm:text-sm font-semibold text-stone-800 leading-snug mt-0.5">
-                        Monday to Saturday: 08:00 AM – 02:30 PM
+                        {settings.contactOfficeHours || 'Monday to Saturday: 08:00 AM – 02:30 PM'}
                       </p>
                     </div>
                   </div>

@@ -20,6 +20,28 @@ import {
 } from 'lucide-react';
 
 export default function AdmissionsPage() {
+  const [settings, setSettings] = useState<any>({
+    admissionsPageTitle: 'Begin Your Child’s Journey to Academic Distinction & Character',
+    admissionsPageSubtitle:
+      'Welcome to Success Point School. Registrations are invited for Nursery through Class 11th for the 2026-27 academic session. Submit an inquiry online or visit our campus.',
+    admissionsProcessStep1Title: 'Submit Inquiry / Registration',
+    admissionsProcessStep1Desc:
+      'Fill out the online admission registration form on this page or visit the school admission cell in person.',
+    admissionsProcessStep2Title: 'Interaction & Assessment',
+    admissionsProcessStep2Desc:
+      'A friendly, age-appropriate interactive dialogue or basic diagnostic assessment to understand the child’s learning readiness.',
+    admissionsProcessStep3Title: 'Document Verification',
+    admissionsProcessStep3Desc:
+      'Verification of birth certificate, previous school records, transfer certificate (TC), and parent identification.',
+    admissionsProcessStep4Title: 'Confirmation & Welcome Kit',
+    admissionsProcessStep4Desc:
+      'Fee clearance, generation of student enrollment number, uniform sizing, and issuance of student portal access credentials.',
+    admissionsRequiredDocsText:
+      'Original Transfer Certificate (T.C.) from previous recognized school\nSelf-attested copy of Birth Certificate (issued by Municipal / Gram Panchayat)\nPrevious Academic Year Report Card / Marksheet\n4 recent passport size photographs of the student\n2 passport size photographs of Father and Mother / Guardian\nCopy of Aadhar Card of Student and Parents',
+    phone: '+91 8051217686',
+    phoneAlt: '+91 98765 43210',
+  });
+
   const [formData, setFormData] = useState({
     studentName: '',
     parentName: '',
@@ -32,6 +54,17 @@ export default function AdmissionsPage() {
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  React.useEffect(() => {
+    fetch('/api/public/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          setSettings((prev: any) => ({ ...prev, ...data.settings }));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,34 +106,39 @@ export default function AdmissionsPage() {
   const steps = [
     {
       num: '01',
-      title: 'Submit Inquiry / Registration',
-      desc: 'Fill out the online admission registration form on this page or visit the school admission cell in person.',
+      title: settings.admissionsProcessStep1Title || 'Submit Inquiry / Registration',
+      desc: settings.admissionsProcessStep1Desc || 'Fill out the online admission registration form on this page or visit the school admission cell in person.',
     },
     {
       num: '02',
-      title: 'Interaction & Assessment',
-      desc: 'A friendly, age-appropriate interactive dialogue or basic diagnostic assessment to understand the child’s learning readiness.',
+      title: settings.admissionsProcessStep2Title || 'Interaction & Assessment',
+      desc: settings.admissionsProcessStep2Desc || 'A friendly, age-appropriate interactive dialogue or basic diagnostic assessment to understand the child’s learning readiness.',
     },
     {
       num: '03',
-      title: 'Document Verification',
-      desc: 'Verification of birth certificate, previous school records, transfer certificate (TC), and parent identification.',
+      title: settings.admissionsProcessStep3Title || 'Document Verification',
+      desc: settings.admissionsProcessStep3Desc || 'Verification of birth certificate, previous school records, transfer certificate (TC), and parent identification.',
     },
     {
       num: '04',
-      title: 'Confirmation & Welcome Kit',
-      desc: 'Fee clearance, generation of student enrollment number, uniform sizing, and issuance of student portal access credentials.',
+      title: settings.admissionsProcessStep4Title || 'Confirmation & Welcome Kit',
+      desc: settings.admissionsProcessStep4Desc || 'Fee clearance, generation of student enrollment number, uniform sizing, and issuance of student portal access credentials.',
     },
   ];
 
-  const requiredDocs = [
-    'Original Transfer Certificate (T.C.) from previous recognized school',
-    'Self-attested copy of Birth Certificate (issued by Municipal / Gram Panchayat)',
-    'Previous Academic Year Report Card / Marksheet',
-    '4 recent passport size photographs of the student',
-    '2 passport size photographs of Father and Mother / Guardian',
-    'Copy of Aadhar Card of Student and Parents',
-  ];
+  const requiredDocs = settings.admissionsRequiredDocsText
+    ? settings.admissionsRequiredDocsText
+        .split('\n')
+        .map((s: string) => s.trim())
+        .filter((s: string) => s.length > 0)
+    : [
+        'Original Transfer Certificate (T.C.) from previous recognized school',
+        'Self-attested copy of Birth Certificate (issued by Municipal / Gram Panchayat)',
+        'Previous Academic Year Report Card / Marksheet',
+        '4 recent passport size photographs of the student',
+        '2 passport size photographs of Father and Mother / Guardian',
+        'Copy of Aadhar Card of Student and Parents',
+      ];
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-[#214F39] selection:text-white">
@@ -119,12 +157,12 @@ export default function AdmissionsPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            Begin Your Child&apos;s Journey to <br className="hidden sm:block" />
-            <span className="text-[#E8B4A8]">Academic Distinction & Character</span>
+            {settings.admissionsPageTitle || 'Begin Your Child’s Journey to Academic Distinction & Character'}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-emerald-100/90 max-w-2xl mx-auto leading-relaxed">
-            Welcome to Success Point School. Registrations are invited for Nursery through Class 11th for the 2026-27 academic session. Submit an inquiry online or visit our campus.
+            {settings.admissionsPageSubtitle ||
+              'Welcome to Success Point School. Registrations are invited for Nursery through Class 11th for the 2026-27 academic session. Submit an inquiry online or visit our campus.'}
           </p>
         </div>
       </section>
@@ -185,7 +223,7 @@ export default function AdmissionsPage() {
                   Parents are requested to bring original copies along with self-attested photocopies during document verification:
                 </p>
                 <div className="grid grid-cols-1 gap-2.5">
-                  {requiredDocs.map((doc, idx) => (
+                  {requiredDocs.map((doc: string, idx: number) => (
                     <div key={idx} className="flex items-start gap-2.5 text-xs text-stone-700">
                       <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0 mt-0.5" />
                       <span>{doc}</span>
@@ -207,12 +245,12 @@ export default function AdmissionsPage() {
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <a
-                    href="tel:+919876543210"
+                    href={`tel:${settings.phone || '+918051217686'}`}
                     className="px-4 py-2 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5"
                     style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Call Admission Cell</span>
+                    <span>Call {settings.phone || '+91 8051217686'}</span>
                   </a>
                 </div>
               </div>

@@ -1,7 +1,7 @@
-import React from 'react';
-import type { Metadata } from 'next';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import PublicHeader from '@/components/common/PublicHeader';
 import PublicFooter from '@/components/common/PublicFooter';
 import DirectorSection from '@/components/home/DirectorSection';
@@ -10,20 +10,45 @@ import {
   Target,
   Compass,
   CheckCircle2,
-  Users,
-  Award,
-  ArrowRight,
   BookOpen,
   GraduationCap,
 } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'About Us | Success Point School',
-  description:
-    'Learn about Success Point School, our history, educational philosophy, visionary leadership, and commitment to academic excellence.',
-};
-
 export default function AboutPage() {
+  const [settings, setSettings] = useState<any>({
+    aboutPageBadge: 'Success Point School • Established with Purpose',
+    aboutPageTitle: 'Nurturing Minds, Inspiring Character & Shaping Future Leaders',
+    aboutPageSubtitle:
+      'Founded on the ideals of quality education and inclusive growth, Success Point School provides students from Nursery to Senior Secondary with an empowering environment to excel academically and ethically.',
+    aboutVisionTitle: 'Our Vision',
+    aboutVisionDesc:
+      'To be a premier educational institution recognized for scholarly excellence, holistic character development, and technological empowerment — enabling students to become compassionate, knowledgeable, and resilient global citizens.',
+    aboutMissionTitle: 'Our Mission',
+    aboutMissionDesc:
+      'To provide accessible, high-standard education through dedicated pedagogy, qualified faculty, audio-visual smart classrooms, regular assessments, and comprehensive extracurricular platforms that unlock each child’s innate potential.',
+    aboutPhilosophy:
+      'Every initiative, lesson plan, and student activity at Success Point School is rooted in our foundational pillars of discipline, innovation, and character.',
+    statsStudents: '1,400+',
+    statsStudentsSub: 'Nursery to Class 12th',
+    statsFaculty: '35+',
+    statsFacultySub: 'Qualified & Dedicated',
+    statsDistinction: '99.4%',
+    statsDistinctionSub: 'High Academic Standing',
+    statsSmartClasses: '100%',
+    statsSmartClassesSub: 'Digital & Audio-Visual',
+  });
+
+  useEffect(() => {
+    fetch('/api/public/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          setSettings((prev: any) => ({ ...prev, ...data.settings }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const values = [
     {
       title: 'Academic Distinction',
@@ -64,16 +89,16 @@ export default function AboutPage() {
             style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Success Point School • Established with Purpose</span>
+            <span>{settings.aboutPageBadge || 'Success Point School • Established with Purpose'}</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            Nurturing Minds, Inspiring Character & <br className="hidden sm:block" />
-            <span className="text-[#E8B4A8]">Shaping Future Leaders</span>
+            {settings.aboutPageTitle || 'Nurturing Minds, Inspiring Character & Shaping Future Leaders'}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-emerald-100/90 max-w-2xl mx-auto leading-relaxed">
-            Founded on the ideals of quality education and inclusive growth, Success Point School provides students from Nursery to Senior Secondary with an empowering environment to excel academically and ethically.
+            {settings.aboutPageSubtitle ||
+              'Founded on the ideals of quality education and inclusive growth, Success Point School provides students from Nursery to Senior Secondary with an empowering environment to excel academically and ethically.'}
           </p>
         </div>
       </section>
@@ -96,10 +121,11 @@ export default function AboutPage() {
                 <Compass className="w-6 h-6 text-[#E8B4A8]" />
               </div>
               <h2 className="text-2xl font-black tracking-tight" style={{ color: '#214F39' }}>
-                Our Vision
+                {settings.aboutVisionTitle || 'Our Vision'}
               </h2>
               <p className="mt-3 text-sm text-stone-600 leading-relaxed">
-                To be a premier educational institution recognized for scholarly excellence, holistic character development, and technological empowerment — enabling students to become compassionate, knowledgeable, and resilient global citizens.
+                {settings.aboutVisionDesc ||
+                  'To be a premier educational institution recognized for scholarly excellence, holistic character development, and technological empowerment — enabling students to become compassionate, knowledgeable, and resilient global citizens.'}
               </p>
               <ul className="mt-6 space-y-2 text-xs font-semibold text-stone-700">
                 <li className="flex items-center gap-2">
@@ -127,10 +153,11 @@ export default function AboutPage() {
                 <Target className="w-6 h-6 text-[#E8B4A8]" />
               </div>
               <h2 className="text-2xl font-black tracking-tight" style={{ color: '#214F39' }}>
-                Our Mission
+                {settings.aboutMissionTitle || 'Our Mission'}
               </h2>
               <p className="mt-3 text-sm text-stone-600 leading-relaxed">
-                To provide accessible, high-standard education through dedicated pedagogy, qualified faculty, audio-visual smart classrooms, regular assessments, and comprehensive extracurricular platforms that unlock each child&apos;s innate potential.
+                {settings.aboutMissionDesc ||
+                  'To provide accessible, high-standard education through dedicated pedagogy, qualified faculty, audio-visual smart classrooms, regular assessments, and comprehensive extracurricular platforms that unlock each child’s innate potential.'}
               </p>
               <ul className="mt-6 space-y-2 text-xs font-semibold text-stone-700">
                 <li className="flex items-center gap-2">
@@ -168,7 +195,8 @@ export default function AboutPage() {
               The Core Values That Guide Us
             </h2>
             <p className="text-stone-600 text-sm mt-1">
-              Every initiative, lesson plan, and student activity at Success Point School is rooted in our foundational pillars.
+              {settings.aboutPhilosophy ||
+                'Every initiative, lesson plan, and student activity at Success Point School is rooted in our foundational pillars.'}
             </p>
           </div>
 
@@ -212,32 +240,32 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="p-4">
-              <p className="text-3xl sm:text-5xl font-black text-[#E8B4A8]">1,400+</p>
+              <p className="text-3xl sm:text-5xl font-black text-[#E8B4A8]">{settings.statsStudents || '1,400+'}</p>
               <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-100 mt-1">
                 Students Enrolled
               </p>
-              <p className="text-[11px] text-emerald-200/70 mt-0.5">Nursery to Class 12th</p>
+              <p className="text-[11px] text-emerald-200/70 mt-0.5">{settings.statsStudentsSub || 'Nursery to Class 12th'}</p>
             </div>
             <div className="p-4">
-              <p className="text-3xl sm:text-5xl font-black text-white">35+</p>
+              <p className="text-3xl sm:text-5xl font-black text-white">{settings.statsFaculty || '35+'}</p>
               <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-100 mt-1">
                 Expert Faculty
               </p>
-              <p className="text-[11px] text-emerald-200/70 mt-0.5">Qualified & Dedicated</p>
+              <p className="text-[11px] text-emerald-200/70 mt-0.5">{settings.statsFacultySub || 'Qualified & Dedicated'}</p>
             </div>
             <div className="p-4">
-              <p className="text-3xl sm:text-5xl font-black text-[#E8B4A8]">99.4%</p>
+              <p className="text-3xl sm:text-5xl font-black text-[#E8B4A8]">{settings.statsDistinction || '99.4%'}</p>
               <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-100 mt-1">
                 Board Result
               </p>
-              <p className="text-[11px] text-emerald-200/70 mt-0.5">High Academic Standing</p>
+              <p className="text-[11px] text-emerald-200/70 mt-0.5">{settings.statsDistinctionSub || 'High Academic Standing'}</p>
             </div>
             <div className="p-4">
-              <p className="text-3xl sm:text-5xl font-black text-white">100%</p>
+              <p className="text-3xl sm:text-5xl font-black text-white">{settings.statsSmartClasses || '100%'}</p>
               <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-100 mt-1">
                 Smart Classrooms
               </p>
-              <p className="text-[11px] text-emerald-200/70 mt-0.5">Digital & Audio-Visual</p>
+              <p className="text-[11px] text-emerald-200/70 mt-0.5">{settings.statsSmartClassesSub || 'Digital & Audio-Visual'}</p>
             </div>
           </div>
         </div>
