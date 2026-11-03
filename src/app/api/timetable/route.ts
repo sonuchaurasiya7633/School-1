@@ -4,6 +4,8 @@ import { authorizeRoles } from '@/lib/auth';
 import Timetable from '@/models/Timetable';
 import StudentProfile from '@/models/StudentProfile';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();

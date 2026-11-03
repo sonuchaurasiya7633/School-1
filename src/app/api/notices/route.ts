@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
 import Notice from '@/models/Notice';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
@@ -44,12 +47,12 @@ export async function POST(req: NextRequest) {
     }
 
     const newNotice = await Notice.create({
-      title,
-      content,
+      title: title.trim(),
+      content: content.trim(),
       targetRole: targetRole || 'all',
-      class: classId || undefined,
+      class: classId && mongoose.isValidObjectId(classId) ? classId : undefined,
       author: auth.user.id,
-      isPinned: isPinned || false,
+      isPinned: Boolean(isPinned),
       date: new Date().toISOString().split('T')[0],
     });
 

@@ -18,6 +18,7 @@ import {
   UserCheck,
 } from 'lucide-react';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
+import { authFetch } from '@/lib/api';
 
 export default function AdminStudentsPage() {
   const [students, setStudents] = useState<any[]>([]);
@@ -53,8 +54,8 @@ export default function AdminStudentsPage() {
     try {
       setLoading(true);
       const [resStudents, resClasses] = await Promise.all([
-        fetch(`/api/admin/students?search=${encodeURIComponent(search)}&classId=${selectedClass}`),
-        fetch('/api/admin/classes'),
+        authFetch(`/api/admin/students?search=${encodeURIComponent(search)}&classId=${selectedClass}`),
+        authFetch('/api/admin/classes'),
       ]);
 
       const dataStudents = await resStudents.json();
@@ -81,7 +82,7 @@ export default function AdminStudentsPage() {
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/admin/students', {
+      const res = await authFetch('/api/admin/students', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -117,7 +118,7 @@ export default function AdminStudentsPage() {
     e.preventDefault();
     if (!selectedStudent) return;
     try {
-      const res = await fetch('/api/admin/students', {
+      const res = await authFetch('/api/admin/students', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -140,7 +141,7 @@ export default function AdminStudentsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to remove this student record?')) return;
     try {
-      const res = await fetch(`/api/admin/students?id=${id}`, { method: 'DELETE' });
+      const res = await authFetch(`/api/admin/students?id=${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         fetchData();
@@ -152,7 +153,7 @@ export default function AdminStudentsPage() {
 
   const handleToggleActive = async (student: any) => {
     try {
-      await fetch('/api/admin/students', {
+      await authFetch('/api/admin/students', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Bell, Plus, Trash2, Pin, Calendar, Users, X } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import { authFetch } from '@/lib/api';
 
 export default function AdminNoticesPage() {
   const [notices, setNotices] = useState<any[]>([]);
@@ -23,8 +24,8 @@ export default function AdminNoticesPage() {
     try {
       setLoading(true);
       const [resN, resC] = await Promise.all([
-        fetch('/api/notices'),
-        fetch('/api/admin/classes'),
+        authFetch('/api/notices'),
+        authFetch('/api/admin/classes'),
       ]);
       const dataN = await resN.json();
       const dataC = await resC.json();
@@ -45,7 +46,7 @@ export default function AdminNoticesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/notices', {
+      const res = await authFetch('/api/notices', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -67,7 +68,7 @@ export default function AdminNoticesPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to remove this notice?')) return;
     try {
-      await fetch(`/api/notices?id=${id}`, { method: 'DELETE' });
+      await authFetch(`/api/notices?id=${id}`, { method: 'DELETE' });
       fetchData();
     } catch (err) {
       console.error(err);

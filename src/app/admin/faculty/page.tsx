@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
+import { authFetch } from '@/lib/api';
 
 export default function AdminFacultyPage() {
   const [faculty, setFaculty] = useState<any[]>([]);
@@ -43,7 +44,7 @@ export default function AdminFacultyPage() {
   const loadFaculty = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/faculty');
+      const res = await authFetch('/api/admin/faculty');
       const data = await res.json();
       if (data.success && data.faculty) {
         setFaculty(data.faculty);
@@ -96,7 +97,7 @@ export default function AdminFacultyPage() {
       const method = editingItem ? 'PUT' : 'POST';
       const payload = editingItem ? { id: editingItem._id, ...form } : form;
 
-      const res = await fetch('/api/admin/faculty', {
+      const res = await authFetch('/api/admin/faculty', {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -128,7 +129,7 @@ export default function AdminFacultyPage() {
     }
 
     try {
-      const res = await fetch(`/api/admin/faculty?id=${id}`, {
+      const res = await authFetch(`/api/admin/faculty?id=${id}`, {
         method: 'DELETE',
       });
       const data = await res.json();

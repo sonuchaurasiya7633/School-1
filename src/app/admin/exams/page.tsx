@@ -18,6 +18,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
+import { authFetch } from '@/lib/api';
 
 export default function AdminExamsPage() {
   const [exams, setExams] = useState<any[]>([]);
@@ -49,9 +50,9 @@ export default function AdminExamsPage() {
     try {
       setLoading(true);
       const [resE, resC, resS] = await Promise.all([
-        fetch('/api/exams'),
-        fetch('/api/admin/classes'),
-        fetch('/api/admin/subjects'),
+        authFetch('/api/exams'),
+        authFetch('/api/admin/classes'),
+        authFetch('/api/admin/subjects'),
       ]);
 
       const dataE = await resE.json();
@@ -88,7 +89,7 @@ export default function AdminExamsPage() {
         passMarks: 35,
       }));
 
-      const res = await fetch('/api/exams', {
+      const res = await authFetch('/api/exams', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -111,7 +112,7 @@ export default function AdminExamsPage() {
 
   const handleTogglePublish = async (exam: any) => {
     try {
-      await fetch('/api/exams', {
+      await authFetch('/api/exams', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,7 +134,7 @@ export default function AdminExamsPage() {
   const handleAutoGenerateMarksheets = async (exam: any) => {
     try {
       setGenerating(exam._id);
-      const res = await fetch('/api/admin/exams/auto-generate', {
+      const res = await authFetch('/api/admin/exams/auto-generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -160,7 +161,7 @@ export default function AdminExamsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this exam schedule?')) return;
     try {
-      await fetch(`/api/exams?id=${id}`, { method: 'DELETE' });
+      await authFetch(`/api/exams?id=${id}`, { method: 'DELETE' });
       fetchData();
     } catch (err) {
       console.error(err);
@@ -170,7 +171,7 @@ export default function AdminExamsPage() {
   const openMarksReview = async (exam: any) => {
     setSelectedExam(exam);
     try {
-      const res = await fetch(`/api/marks?examId=${exam._id}`);
+      const res = await authFetch(`/api/marks?examId=${exam._id}`);
       const data = await res.json();
       if (data.success) {
         setExamMarks(data.marks);

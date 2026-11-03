@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
 import SchoolClass from '@/models/SchoolClass';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
@@ -39,7 +42,7 @@ export async function POST(req: NextRequest) {
       name,
       grade: Number(grade),
       sections: sections && sections.length > 0 ? sections : ['A'],
-      classTeacher: classTeacher || undefined,
+      classTeacher: classTeacher && mongoose.isValidObjectId(classTeacher) ? classTeacher : undefined,
       tuitionFee: Number(tuitionFee) || 2500,
     });
 
@@ -71,7 +74,7 @@ export async function PUT(req: NextRequest) {
         name,
         grade: Number(grade),
         sections,
-        classTeacher: classTeacher || undefined,
+        classTeacher: classTeacher && mongoose.isValidObjectId(classTeacher) ? classTeacher : undefined,
         tuitionFee: Number(tuitionFee),
       },
       { new: true }

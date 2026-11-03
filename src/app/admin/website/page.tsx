@@ -16,6 +16,8 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import Link from 'next/link';
+import { authFetch } from '@/lib/api';
+import { AvatarUploader } from '@/components/common/AvatarUploader';
 
 export default function AdminWebsiteCMSPage() {
   const [formData, setFormData] = useState({
@@ -43,7 +45,7 @@ export default function AdminWebsiteCMSPage() {
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    fetch('/api/admin/settings')
+    authFetch('/api/admin/settings')
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.settings) {
@@ -64,7 +66,7 @@ export default function AdminWebsiteCMSPage() {
     setErrorMsg('');
 
     try {
-      const res = await fetch('/api/admin/settings', {
+      const res = await authFetch('/api/admin/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -203,19 +205,35 @@ export default function AdminWebsiteCMSPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Profile Photo Path / URL
+              <label className="block text-xs font-bold text-slate-300 mb-2">
+                Director Official Portrait / Photo
               </label>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-slate-950/60 rounded-2xl border border-slate-800 mb-3">
+                <AvatarUploader
+                  currentAvatar={formData.directorImage}
+                  name={formData.directorName || 'Director'}
+                  targetUserId="director"
+                  size="lg"
+                  onSuccess={(url) => {
+                    setFormData((prev) => ({ ...prev, directorImage: url }));
+                    setSuccessMsg('Director photo updated on Cloudinary & live website!');
+                  }}
+                />
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-white">Click Camera to Upload Photo</p>
+                  <p className="text-[11px] text-slate-400">
+                    Upload directly to Cloudinary or specify an image URL below. This photo will appear in the Director's message section on the website.
+                  </p>
+                </div>
+              </div>
               <input
                 type="text"
                 required
                 value={formData.directorImage}
                 onChange={(e) => setFormData({ ...formData, directorImage: e.target.value })}
                 className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:border-purple-500 focus:outline-none"
+                placeholder="Image URL or Cloudinary Link"
               />
-              <span className="text-[11px] text-slate-500 mt-1 block">
-                Current default image is located at <code>/images/director.jpg</code>
-              </span>
             </div>
           </div>
 

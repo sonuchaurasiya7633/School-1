@@ -5,6 +5,8 @@ import User from '@/models/User';
 import StudentProfile from '@/models/StudentProfile';
 import TeacherProfile from '@/models/TeacherProfile';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
@@ -154,9 +156,10 @@ export async function PUT(req: NextRequest) {
     }
 
     const data = await req.json();
-    const { studentId, name, email, phone, address, gender, dateOfBirth, rollNumber, classId, section, parentName, parentPhone, bloodGroup, isActive } = data;
+    const { studentId, id, _id, name, email, phone, address, gender, dateOfBirth, rollNumber, classId, section, parentName, parentPhone, bloodGroup, isActive } = data;
+    const targetStudentId = studentId || id || _id;
 
-    const studentProfile = await StudentProfile.findById(studentId);
+    const studentProfile = await StudentProfile.findById(targetStudentId);
     if (!studentProfile) {
       return NextResponse.json({ success: false, message: 'Student profile not found.' }, { status: 404 });
     }
@@ -181,7 +184,7 @@ export async function PUT(req: NextRequest) {
       await user.save();
     }
 
-    const updated = await StudentProfile.findById(studentId)
+    const updated = await StudentProfile.findById(targetStudentId)
       .populate('user', '-password')
       .populate('class');
 

@@ -4,6 +4,8 @@ import { authorizeRoles } from '@/lib/auth';
 import Faculty from '@/models/Faculty';
 import { FACULTY_MEMBERS } from '@/data/facultyData';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
@@ -80,13 +82,14 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { id, ...updateData } = body;
+    const { id, _id, createdAt, updatedAt, __v, ...updateData } = body;
+    const targetId = id || _id;
 
-    if (!id) {
+    if (!targetId) {
       return NextResponse.json({ success: false, message: 'Faculty ID required.' }, { status: 400 });
     }
 
-    const updated = await Faculty.findByIdAndUpdate(id, updateData, { new: true });
+    const updated = await Faculty.findByIdAndUpdate(targetId, { $set: updateData }, { new: true });
     if (!updated) {
       return NextResponse.json({ success: false, message: 'Faculty not found.' }, { status: 404 });
     }

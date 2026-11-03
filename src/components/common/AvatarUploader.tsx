@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Camera, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { authFetch } from '@/lib/api';
 
 interface AvatarUploaderProps {
   currentAvatar?: string;
@@ -67,7 +68,7 @@ export function AvatarUploader({
         formData.append('targetUserId', targetUserId);
       }
 
-      const res = await fetch('/api/user/avatar', {
+      const res = await authFetch('/api/user/avatar', {
         method: 'POST',
         body: formData,
       });

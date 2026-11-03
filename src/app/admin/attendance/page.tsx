@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { CalendarCheck, Calendar, Filter, Save, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { authFetch } from '@/lib/api';
 
 export default function AdminAttendancePage() {
   const [classes, setClasses] = useState<any[]>([]);
@@ -16,7 +17,7 @@ export default function AdminAttendancePage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch('/api/admin/classes')
+    authFetch('/api/admin/classes')
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.classes?.length > 0) {
@@ -31,8 +32,8 @@ export default function AdminAttendancePage() {
     try {
       setLoading(true);
       const [resAtt, resStudents] = await Promise.all([
-        fetch(`/api/attendance?date=${selectedDate}&classId=${selectedClass}&section=${selectedSection}`),
-        fetch(`/api/admin/students?classId=${selectedClass}&section=${selectedSection}`),
+        authFetch(`/api/attendance?date=${selectedDate}&classId=${selectedClass}&section=${selectedSection}`),
+        authFetch(`/api/admin/students?classId=${selectedClass}&section=${selectedSection}`),
       ]);
 
       const dataAtt = await resAtt.json();
@@ -97,7 +98,7 @@ export default function AdminAttendancePage() {
   const handleSaveAttendance = async () => {
     try {
       setSaving(true);
-      const res = await fetch('/api/attendance', {
+      const res = await authFetch('/api/attendance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

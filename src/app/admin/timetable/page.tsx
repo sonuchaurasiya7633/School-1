@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Calendar, Plus, Save, Clock, BookOpen, User, X } from 'lucide-react';
+import { authFetch } from '@/lib/api';
 
 export default function AdminTimetablePage() {
   const [classes, setClasses] = useState<any[]>([]);
@@ -29,9 +30,9 @@ export default function AdminTimetablePage() {
     try {
       setLoading(true);
       const [resC, resS, resT] = await Promise.all([
-        fetch('/api/admin/classes'),
-        fetch('/api/admin/subjects'),
-        fetch('/api/admin/teachers'),
+        authFetch('/api/admin/classes'),
+        authFetch('/api/admin/subjects'),
+        authFetch('/api/admin/teachers'),
       ]);
 
       const dataC = await resC.json();
@@ -58,7 +59,7 @@ export default function AdminTimetablePage() {
   const fetchTimetable = async () => {
     if (!selectedClass) return;
     try {
-      const res = await fetch(`/api/timetable?classId=${selectedClass}&section=${selectedSection}`);
+      const res = await authFetch(`/api/timetable?classId=${selectedClass}&section=${selectedSection}`);
       const data = await res.json();
       if (data.success && data.timetables) {
         const dayEntry = data.timetables.find((t: any) => t.day === selectedDay);
@@ -106,7 +107,7 @@ export default function AdminTimetablePage() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const res = await fetch('/api/timetable', {
+      const res = await authFetch('/api/timetable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { BookOpen, Plus, Edit2, Trash2, Users, Layers, X } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { authFetch } from '@/lib/api';
 
 export default function AdminClassesPage() {
   const [classes, setClasses] = useState<any[]>([]);
@@ -36,9 +37,9 @@ export default function AdminClassesPage() {
     try {
       setLoading(true);
       const [resC, resS, resT] = await Promise.all([
-        fetch('/api/admin/classes'),
-        fetch('/api/admin/subjects'),
-        fetch('/api/admin/teachers'),
+        authFetch('/api/admin/classes'),
+        authFetch('/api/admin/subjects'),
+        authFetch('/api/admin/teachers'),
       ]);
       const dataC = await resC.json();
       const dataS = await resS.json();
@@ -73,7 +74,7 @@ export default function AdminClassesPage() {
         tuitionFee: Number(classForm.tuitionFee),
       };
 
-      const res = await fetch(url, {
+      const res = await authFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -95,7 +96,7 @@ export default function AdminClassesPage() {
   const handleSubjectSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/admin/subjects', {
+      const res = await authFetch('/api/admin/subjects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(subjectForm),
@@ -116,7 +117,7 @@ export default function AdminClassesPage() {
   const handleDeleteClass = async (id: string) => {
     if (!confirm('Are you sure you want to delete this class?')) return;
     try {
-      await fetch(`/api/admin/classes?id=${id}`, { method: 'DELETE' });
+      await authFetch(`/api/admin/classes?id=${id}`, { method: 'DELETE' });
       fetchData();
     } catch (err) {
       console.error(err);
@@ -126,7 +127,7 @@ export default function AdminClassesPage() {
   const handleDeleteSubject = async (id: string) => {
     if (!confirm('Are you sure you want to delete this subject?')) return;
     try {
-      await fetch(`/api/admin/subjects?id=${id}`, { method: 'DELETE' });
+      await authFetch(`/api/admin/subjects?id=${id}`, { method: 'DELETE' });
       fetchData();
     } catch (err) {
       console.error(err);

@@ -6,6 +6,7 @@ import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/context/AuthContext';
 import { Settings, Save, Lock, RefreshCw, CheckCircle, ShieldAlert, UserCheck } from 'lucide-react';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
+import { authFetch } from '@/lib/api';
 
 export default function AdminSettingsPage() {
   const { user } = useAuth();
@@ -35,7 +36,7 @@ export default function AdminSettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/admin/settings');
+      const res = await authFetch('/api/admin/settings');
       const data = await res.json();
       if (data.success && data.settings) {
         setSettings(data.settings);
@@ -55,7 +56,7 @@ export default function AdminSettingsPage() {
     setErrorMsg('');
     setSavingSettings(true);
     try {
-      const res = await fetch('/api/admin/settings', {
+      const res = await authFetch('/api/admin/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settings),
@@ -85,7 +86,7 @@ export default function AdminSettingsPage() {
 
     setSavingPassword(true);
     try {
-      const res = await fetch('/api/auth/change-password', {
+      const res = await authFetch('/api/auth/change-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -112,7 +113,7 @@ export default function AdminSettingsPage() {
     if (!confirm('Reset database to clean initial state with sample data? This will reseed all tables.')) return;
     setReseedLoading(true);
     try {
-      const res = await fetch('/api/seed', { method: 'POST' });
+      const res = await authFetch('/api/seed', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
         alert('Database successfully reset and reseeded!');

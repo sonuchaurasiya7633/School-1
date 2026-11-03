@@ -3,6 +3,8 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
 import SchoolSetting from '@/models/SchoolSetting';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     await connectToDatabase();
@@ -18,6 +20,18 @@ export async function GET() {
         address: 'Sector 14, Education Zone, SPS Campus',
         academicYear: '2026-2027',
         principalName: 'Dr. A. K. Sharma',
+        directorName: 'Subodh Kumar Sharma',
+        directorDesignation: 'Director',
+        directorQualifications: 'M.A. | D.El.Ed | B.Ed | CTET | STET',
+        directorMessage:
+          'Dedicated to fostering an atmosphere of intellectual curiosity, moral discipline, and comprehensive educational development for every student at Success Point School.',
+        directorImage: '/images/director.jpg',
+        announcement:
+          'Welcome to Success Point School — Admissions Open for Session 2026-2027',
+        admissionsOpen: true,
+        heroTitle: 'Building Knowledge, Character & Academic Brilliance',
+        heroSubtitle:
+          'Welcome to the digital learning campus of Success Point School (S.P.S.). We provide state-of-the-art classroom education, recorded video lectures, continuous evaluation, and dedicated student care.',
       });
     }
 
@@ -36,13 +50,13 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    let settings = await SchoolSetting.findOne();
-    if (!settings) {
-      settings = new SchoolSetting(body);
-    } else {
-      Object.assign(settings, body);
-    }
-    await settings.save();
+    const { _id, createdAt, updatedAt, __v, ...updateData } = body;
+
+    const settings = await SchoolSetting.findOneAndUpdate(
+      {},
+      { $set: updateData },
+      { new: true, upsert: true }
+    );
 
     return NextResponse.json({
       success: true,

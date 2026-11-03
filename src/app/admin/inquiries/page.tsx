@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
+import { authFetch } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import {
   FileText,
@@ -29,7 +30,7 @@ export default function AdminInquiriesPage() {
   const loadInquiries = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/inquiries');
+      const res = await authFetch('/api/admin/inquiries');
       const data = await res.json();
       if (data.success && data.inquiries) {
         setInquiries(data.inquiries);
@@ -47,7 +48,7 @@ export default function AdminInquiriesPage() {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      const res = await fetch('/api/admin/inquiries', {
+      const res = await authFetch('/api/admin/inquiries', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, status: newStatus }),
@@ -66,7 +67,7 @@ export default function AdminInquiriesPage() {
     if (!confirm(`Delete inquiry for "${name}"?`)) return;
 
     try {
-      const res = await fetch(`/api/admin/inquiries?id=${id}`, {
+      const res = await authFetch(`/api/admin/inquiries?id=${id}`, {
         method: 'DELETE',
       });
       const data = await res.json();

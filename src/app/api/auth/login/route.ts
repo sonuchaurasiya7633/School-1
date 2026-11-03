@@ -104,10 +104,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Set HTTP-Only Cookie for seamless Next.js route protection
+    const isLocalhost = req.nextUrl?.origin?.includes('localhost') || req.nextUrl?.origin?.includes('127.0.0.1');
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production' && !isLocalhost,
       sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days

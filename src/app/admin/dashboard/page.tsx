@@ -22,6 +22,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import { authFetch } from '@/lib/api';
 import {
   BarChart,
   Bar,
@@ -41,7 +42,7 @@ export default function AdminDashboardPage() {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/admin/stats');
+      const res = await authFetch('/api/admin/stats');
       const data = await res.json();
       if (data.success) {
         setStats(data.stats);

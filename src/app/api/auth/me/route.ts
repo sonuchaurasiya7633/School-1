@@ -28,8 +28,16 @@ export async function GET(req: NextRequest) {
         .populate('assignedClasses.subject');
     }
 
+    const rawToken =
+      req.cookies.get('token')?.value ||
+      (req.headers.get('authorization')?.startsWith('Bearer ')
+        ? req.headers.get('authorization')?.split(' ')[1]
+        : '') ||
+      req.headers.get('x-auth-token');
+
     return NextResponse.json({
       success: true,
+      token: rawToken,
       user: {
         _id: user._id,
         userId: user.userId,

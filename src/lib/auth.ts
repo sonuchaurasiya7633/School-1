@@ -35,7 +35,7 @@ export function verifyToken(token: string): TokenPayload | null {
 }
 
 export function getUserFromRequest(req: NextRequest): TokenPayload | null {
-  // 1. Check Authorization Header
+  // 1. Check Authorization Header (Bearer token)
   const authHeader = req.headers.get('authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
@@ -43,11 +43,28 @@ export function getUserFromRequest(req: NextRequest): TokenPayload | null {
     if (user) return user;
   }
 
-  // 2. Check Cookie
+  // 2. Check x-auth-token Header
+  const xAuth = req.headers.get('x-auth-token');
+  if (xAuth) {
+    const user = verifyToken(xAuth);
+    if (user) return user;
+  }
+
+  // 3. Check NextRequest Cookie
   const cookie = req.cookies.get('token');
   if (cookie?.value) {
     const user = verifyToken(cookie.value);
     if (user) return user;
+  }
+
+  // 4. Raw Cookie header parsing fallback
+  const rawCookie = req.headers.get('cookie');
+  if (rawCookie) {
+    const match = rawCookie.match(/(?:^|;\s*)token=([^;]+)/);
+    if (match) {
+      const user = verifyToken(decodeURIComponent(match[1]));
+      if (user) return user;
+    }
   }
 
   return null;

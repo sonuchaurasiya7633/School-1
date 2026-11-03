@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import { authFetch } from '@/lib/api';
 
 export default function AdminFeesPage() {
   const [fees, setFees] = useState<any[]>([]);
@@ -52,9 +53,9 @@ export default function AdminFeesPage() {
     try {
       setLoading(true);
       const [resF, resS, resC] = await Promise.all([
-        fetch('/api/fees'),
-        fetch('/api/admin/students'),
-        fetch('/api/admin/classes'),
+        authFetch('/api/fees'),
+        authFetch('/api/admin/students'),
+        authFetch('/api/admin/classes'),
       ]);
 
       const dataF = await resF.json();
@@ -80,7 +81,7 @@ export default function AdminFeesPage() {
     if (!selectedFee) return;
 
     try {
-      const res = await fetch('/api/fees', {
+      const res = await authFetch('/api/fees', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -122,7 +123,7 @@ export default function AdminFeesPage() {
   const handleCreateFeeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/fees', {
+      const res = await authFetch('/api/fees', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

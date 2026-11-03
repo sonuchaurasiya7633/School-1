@@ -5,6 +5,7 @@ import { getUserFromRequest } from '@/lib/auth';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import User from '@/models/User';
 import Faculty from '@/models/Faculty';
+import SchoolSetting from '@/models/SchoolSetting';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -93,6 +94,26 @@ export async function POST(req: NextRequest) {
     let facultyToUpdate: any = null;
 
     if (targetUserId) {
+      // Special handler: Director Image in Website CMS
+      if (targetUserId === 'director' || targetUserId === 'directorImage') {
+        if (tokenUser.role !== 'admin') {
+          return NextResponse.json(
+            { success: false, message: 'Only Administrators can update the Director photo.' },
+            { status: 403 }
+          );
+        }
+        await SchoolSetting.findOneAndUpdate(
+          {},
+          { $set: { directorImage: avatarUrl } },
+          { upsert: true }
+        );
+        return NextResponse.json({
+          success: true,
+          message: 'Director official portrait updated successfully!',
+          avatar: avatarUrl,
+        });
+      }
+
       // Only Super Admin can change another user's avatar
       if (tokenUser.role !== 'admin') {
         return NextResponse.json(

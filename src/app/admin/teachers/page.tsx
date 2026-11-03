@@ -13,6 +13,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
+import { authFetch } from '@/lib/api';
 
 export default function AdminTeachersPage() {
   const [teachers, setTeachers] = useState<any[]>([]);
@@ -42,9 +43,9 @@ export default function AdminTeachersPage() {
     try {
       setLoading(true);
       const [resTeachers, resClasses, resSubjects] = await Promise.all([
-        fetch('/api/admin/teachers'),
-        fetch('/api/admin/classes'),
-        fetch('/api/admin/subjects'),
+        authFetch('/api/admin/teachers'),
+        authFetch('/api/admin/classes'),
+        authFetch('/api/admin/subjects'),
       ]);
 
       const dataTeachers = await resTeachers.json();
@@ -87,7 +88,7 @@ export default function AdminTeachersPage() {
         });
       }
 
-      const res = await fetch('/api/admin/teachers', {
+      const res = await authFetch('/api/admin/teachers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -112,7 +113,7 @@ export default function AdminTeachersPage() {
     e.preventDefault();
     if (!selectedTeacher) return;
     try {
-      const res = await fetch('/api/admin/teachers', {
+      const res = await authFetch('/api/admin/teachers', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -140,7 +141,7 @@ export default function AdminTeachersPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to remove this teacher?')) return;
     try {
-      const res = await fetch(`/api/admin/teachers?id=${id}`, { method: 'DELETE' });
+      const res = await authFetch(`/api/admin/teachers?id=${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) fetchData();
     } catch (err) {
@@ -150,7 +151,7 @@ export default function AdminTeachersPage() {
 
   const handleToggleActive = async (teacher: any) => {
     try {
-      await fetch('/api/admin/teachers', {
+      await authFetch('/api/admin/teachers', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

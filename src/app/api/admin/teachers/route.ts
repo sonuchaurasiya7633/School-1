@@ -4,6 +4,8 @@ import { authorizeRoles, hashPassword } from '@/lib/auth';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
@@ -86,9 +88,10 @@ export async function PUT(req: NextRequest) {
     }
 
     const data = await req.json();
-    const { teacherId, name, email, phone, address, gender, qualification, specialization, assignedClasses, isActive } = data;
+    const { teacherId, id, _id, name, email, phone, address, gender, qualification, specialization, assignedClasses, isActive } = data;
+    const targetTeacherId = teacherId || id || _id;
 
-    const profile = await TeacherProfile.findById(teacherId);
+    const profile = await TeacherProfile.findById(targetTeacherId);
     if (!profile) {
       return NextResponse.json({ success: false, message: 'Teacher profile not found.' }, { status: 404 });
     }
@@ -109,7 +112,7 @@ export async function PUT(req: NextRequest) {
       await user.save();
     }
 
-    const updated = await TeacherProfile.findById(teacherId)
+    const updated = await TeacherProfile.findById(targetTeacherId)
       .populate('user', '-password')
       .populate('assignedClasses.class')
       .populate('assignedClasses.subject');
