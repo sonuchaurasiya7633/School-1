@@ -16,6 +16,9 @@ import {
   Search,
   RefreshCw,
   ExternalLink,
+  BookOpen,
+  Layers,
+  Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
@@ -23,6 +26,8 @@ import { authFetch } from '@/lib/api';
 
 export default function AdminFacultyPage() {
   const [faculty, setFaculty] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,6 +41,7 @@ export default function AdminFacultyPage() {
     category: 'General',
     order: 1,
     isActive: true,
+    assignedClasses: [] as Array<{ class: string; section: string; subject: string }>,
   });
 
   const [saving, setSaving] = useState(false);
@@ -44,10 +50,23 @@ export default function AdminFacultyPage() {
   const loadFaculty = async () => {
     setLoading(true);
     try {
-      const res = await authFetch('/api/admin/faculty');
-      const data = await res.json();
-      if (data.success && data.faculty) {
-        setFaculty(data.faculty);
+      const [resF, resC, resS] = await Promise.all([
+        authFetch('/api/admin/faculty'),
+        authFetch('/api/admin/classes'),
+        authFetch('/api/admin/subjects'),
+      ]);
+      const dataF = await resF.json();
+      const dataC = await resC.json();
+      const dataS = await resS.json();
+
+      if (dataF.success && dataF.faculty) {
+        setFaculty(dataF.faculty);
+      }
+      if (dataC.success && dataC.classes) {
+        setClasses(dataC.classes);
+      }
+      if (dataS.success && dataS.subjects) {
+        setSubjects(dataS.subjects);
       }
     } catch (err: any) {
       console.error(err);
@@ -70,6 +89,7 @@ export default function AdminFacultyPage() {
       category: 'General',
       order: faculty.length + 1,
       isActive: true,
+      assignedClasses: [],
     });
     setModalOpen(true);
   };
@@ -84,8 +104,40 @@ export default function AdminFacultyPage() {
       category: item.category || 'General',
       order: item.order || 1,
       isActive: item.isActive !== false,
+      assignedClasses: (item.assignedClasses || []).map((ac: any) => ({
+        class: ac.class?._id || ac.class || '',
+        section: ac.section || 'A',
+        subject: ac.subject?._id || ac.subject || '',
+      })),
     });
     setModalOpen(true);
+  };
+
+  const addClassAssignment = () => {
+    setForm((prev) => ({
+      ...prev,
+      assignedClasses: [
+        ...prev.assignedClasses,
+        {
+          class: classes[0]?._id || '',
+          section: 'A',
+          subject: subjects[0]?._id || '',
+        },
+      ],
+    }));
+  };
+
+  const updateClassAssignment = (index: number, field: string, value: any) => {
+    const updated = [...form.assignedClasses];
+    updated[index] = { ...updated[index], [field]: value };
+    setForm((prev) => ({ ...prev, assignedClasses: updated }));
+  };
+
+  const removeClassAssignment = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      assignedClasses: prev.assignedClasses.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -108,8 +160,8 @@ export default function AdminFacultyPage() {
         setStatusMsg({
           type: 'success',
           text: editingItem
-            ? 'Faculty member updated successfully!'
-            : 'New faculty member added successfully!',
+            ? 'Teacher details and class/subject allocations updated successfully!'
+            : 'New teacher added to directory and assigned to classes successfully!',
         });
         setModalOpen(false);
         loadFaculty();
@@ -235,8 +287,8 @@ export default function AdminFacultyPage() {
                 <tr>
                   <th className="py-4 px-6">Faculty Name</th>
                   <th className="py-4 px-6">Qualification</th>
+                  <th className="py-4 px-6">Assigned Class & Subject</th>
                   <th className="py-4 px-6">University / Board</th>
-                  <th className="py-4 px-6">Additional Info</th>
                   <th className="py-4 px-6">Status</th>
                   <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
@@ -269,18 +321,28 @@ export default function AdminFacultyPage() {
                     </td>
 
                     <td className="py-4 px-6">
-                      {item.university ? (
-                        <span className="text-slate-300 font-medium">{item.university}</span>
+                      {item.assignedClasses?.length > 0 ? (
+                        <div className="flex flex-wrap gap-1 max-w-xs">
+                          {item.assignedClasses.map((ac: any, idx: number) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold"
+                            >
+                              <BookOpen className="w-3 h-3 text-emerald-400" />
+                              <span>
+                                {ac.class?.name || 'Class'} (Sec {ac.section || 'A'}) — {ac.subject?.name || 'Subject'}
+                              </span>
+                            </span>
+                          ))}
+                        </div>
                       ) : (
-                        <span className="text-slate-600">—</span>
+                        <span className="text-slate-500 text-[11px] italic">Unassigned</span>
                       )}
                     </td>
 
                     <td className="py-4 px-6">
-                      {item.additional ? (
-                        <span className="text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-medium">
-                          {item.additional}
-                        </span>
+                      {item.university ? (
+                        <span className="text-slate-300 font-medium">{item.university}</span>
                       ) : (
                         <span className="text-slate-600">—</span>
                       )}
@@ -300,6 +362,14 @@ export default function AdminFacultyPage() {
 
                     <td className="py-4 px-6 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 text-xs font-bold flex items-center gap-1 transition"
+                          title="Assign Classes & Subjects"
+                        >
+                          <BookOpen className="w-3.5 h-3.5" />
+                          <span>Assign</span>
+                        </button>
                         <button
                           onClick={() => openEditModal(item)}
                           className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
@@ -326,7 +396,7 @@ export default function AdminFacultyPage() {
         {/* Modal for Add / Edit */}
         {modalOpen && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 shadow-2xl relative">
               <button
                 onClick={() => setModalOpen(false)}
                 className="absolute top-5 right-5 text-slate-400 hover:text-white"
@@ -402,6 +472,94 @@ export default function AdminFacultyPage() {
                     placeholder="e.g. L.N.M.U, Darbhanga"
                     className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:border-purple-500 focus:outline-none"
                   />
+                </div>
+
+                {/* Class & Subject Allocations */}
+                <div className="pt-3 border-t border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Assign Classes & Subjects</span>
+                      </label>
+                      <p className="text-[11px] text-slate-400">Map this teacher to specific class standards, sections & subjects</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addClassAssignment}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition flex items-center gap-1 shadow-xs"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>+ Add Assignment</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    {form.assignedClasses?.map((ac, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center gap-2 text-xs"
+                      >
+                        <div className="flex-1 w-full">
+                          <label className="text-[10px] text-slate-400 block mb-0.5">Class</label>
+                          <select
+                            value={ac.class}
+                            onChange={(e) => updateClassAssignment(idx, 'class', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white font-medium"
+                          >
+                            <option value="">Select Class</option>
+                            {classes.map((c) => (
+                              <option key={c._id} value={c._id}>
+                                {c.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="w-full sm:w-24">
+                          <label className="text-[10px] text-slate-400 block mb-0.5">Section</label>
+                          <input
+                            type="text"
+                            value={ac.section}
+                            onChange={(e) => updateClassAssignment(idx, 'section', e.target.value.toUpperCase())}
+                            placeholder="A"
+                            className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white text-center font-bold"
+                          />
+                        </div>
+
+                        <div className="flex-1 w-full">
+                          <label className="text-[10px] text-slate-400 block mb-0.5">Subject</label>
+                          <select
+                            value={ac.subject}
+                            onChange={(e) => updateClassAssignment(idx, 'subject', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white font-medium"
+                          >
+                            <option value="">Select Subject</option>
+                            {subjects.map((s) => (
+                              <option key={s._id} value={s._id}>
+                                {s.name} ({s.code})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => removeClassAssignment(idx)}
+                          className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition self-end sm:self-center mt-1 sm:mt-4"
+                          title="Remove assignment"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+
+                    {form.assignedClasses?.length === 0 && (
+                      <p className="text-[11px] text-slate-500 italic bg-slate-950/40 p-3 rounded-xl border border-dashed border-slate-800 text-center">
+                        No classes assigned yet. Click &quot;+ Add Assignment&quot; to map this teacher to a class & subject.
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">

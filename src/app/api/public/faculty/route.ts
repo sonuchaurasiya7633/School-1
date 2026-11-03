@@ -9,7 +9,10 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-    let list = await Faculty.find({ isActive: true }).sort({ order: 1, createdAt: 1 });
+    let list = await Faculty.find({ isActive: true })
+      .populate('assignedClasses.class', 'name grade sections')
+      .populate('assignedClasses.subject', 'name code')
+      .sort({ order: 1, createdAt: 1 });
 
     // Auto-seed if database collection is empty
     if (list.length === 0) {

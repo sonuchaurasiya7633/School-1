@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
 import SchoolClass from '@/models/SchoolClass';
+import Faculty from '@/models/Faculty';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +17,32 @@ export async function GET(req: NextRequest) {
 
     const classes = await SchoolClass.find()
       .populate('classTeacher', 'name email userId')
-      .sort({ grade: 1 });
+      .sort({ grade: 1 })
+      .lean();
+
+    // If classTeacher is a Faculty member ID, populate from Faculty collection
+    const unpopulatedTeacherIds = classes
+      .filter((c: any) => c.classTeacher && !c.classTeacher.name)
+      .map((c: any) => c.classTeacher);
+
+    if (unpopulatedTeacherIds.length > 0) {
+      const facultyDocs = await Faculty.find({ _id: { $in: unpopulatedTeacherIds } }).lean();
+      const facultyMap = new Map(facultyDocs.map((f: any) => [String(f._id), f]));
+
+      classes.forEach((c: any) => {
+        if (c.classTeacher && !c.classTeacher.name) {
+          const fac = facultyMap.get(String(c.classTeacher));
+          if (fac) {
+            c.classTeacher = {
+              _id: fac._id,
+              name: fac.name,
+              email: 'Teacher Directory',
+              userId: 'FAC',
+            };
+          }
+        }
+      });
+    }
 
     return NextResponse.json({ success: true, classes });
   } catch (err: any) {

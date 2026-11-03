@@ -6,6 +6,7 @@ export interface FacultyMember {
   additional?: string;
   tags?: string[];
   avatar?: string;
+  assignedClasses?: any[];
 }
 
 export const FACULTY_MEMBERS: FacultyMember[] = [

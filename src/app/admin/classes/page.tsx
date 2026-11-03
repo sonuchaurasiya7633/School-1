@@ -10,6 +10,7 @@ export default function AdminClassesPage() {
   const [classes, setClasses] = useState<any[]>([]);
   const [subjects, setSubjects] = useState<any[]>([]);
   const [teachers, setTeachers] = useState<any[]>([]);
+  const [faculty, setFaculty] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Modals
@@ -36,18 +37,21 @@ export default function AdminClassesPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [resC, resS, resT] = await Promise.all([
+      const [resC, resS, resT, resF] = await Promise.all([
         authFetch('/api/admin/classes'),
         authFetch('/api/admin/subjects'),
         authFetch('/api/admin/teachers'),
+        authFetch('/api/admin/faculty'),
       ]);
       const dataC = await resC.json();
       const dataS = await resS.json();
       const dataT = await resT.json();
+      const dataF = await resF.json();
 
       if (dataC.success) setClasses(dataC.classes);
       if (dataS.success) setSubjects(dataS.subjects);
       if (dataT.success) setTeachers(dataT.teachers);
+      if (dataF.success) setFaculty(dataF.faculty);
     } catch (err) {
       console.error(err);
     } finally {
@@ -222,26 +226,47 @@ export default function AdminClassesPage() {
                       {(() => {
                         const classTeachers = teachers.filter((t) =>
                           t.assignedClasses?.some((ac: any) => (ac.class?._id || ac.class) === c._id)
-                        );
-                        if (classTeachers.length === 0) {
+                        ).map((t) => ({
+                          id: t._id,
+                          name: t.user?.name || 'Teacher',
+                          subjects: t.assignedClasses
+                            ?.filter((ac: any) => (ac.class?._id || ac.class) === c._id)
+                            .map((ac: any) => ac.subject?.name || 'Subject')
+                            .join(', '),
+                        }));
+
+                        const facultyEducators = faculty.filter((f) =>
+                          f.assignedClasses?.some((ac: any) => (ac.class?._id || ac.class) === c._id)
+                        ).map((f) => ({
+                          id: f._id,
+                          name: f.name,
+                          subjects: f.assignedClasses
+                            ?.filter((ac: any) => (ac.class?._id || ac.class) === c._id)
+                            .map((ac: any) => ac.subject?.name || 'Subject')
+                            .join(', '),
+                        }));
+
+                        // Merge without duplicate names
+                        const combined = [...classTeachers];
+                        facultyEducators.forEach((fe) => {
+                          if (!combined.some((t) => t.name.toLowerCase() === fe.name.toLowerCase())) {
+                            combined.push(fe);
+                          }
+                        });
+
+                        if (combined.length === 0) {
                           return <span className="text-slate-400 text-[11px] italic">No teachers assigned yet</span>;
                         }
                         return (
                           <div className="flex flex-wrap gap-1">
-                            {classTeachers.map((t) => {
-                              const mySubjects = t.assignedClasses
-                                ?.filter((ac: any) => (ac.class?._id || ac.class) === c._id)
-                                .map((ac: any) => ac.subject?.name || 'Subject')
-                                .join(', ');
-                              return (
-                                <span
-                                  key={t._id}
-                                  className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold"
-                                >
-                                  {t.user?.name} ({mySubjects})
-                                </span>
-                              );
-                            })}
+                            {combined.map((t) => (
+                              <span
+                                key={t.id}
+                                className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold"
+                              >
+                                {t.name} ({t.subjects})
+                              </span>
+                            ))}
                           </div>
                         );
                       })()}
@@ -363,18 +388,29 @@ export default function AdminClassesPage() {
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700">Class Teacher</label>
+                <label className="font-semibold text-slate-700">Class Teacher (Teacher Directory & Faculty)</label>
                 <select
                   value={classForm.classTeacher}
                   onChange={(e) => setClassForm({ ...classForm, classTeacher: e.target.value })}
-                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg"
+                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg text-slate-900 font-medium"
                 >
-                  <option value="">Select Faculty Teacher</option>
-                  {teachers.map((t) => (
-                    <option key={t.user?._id} value={t.user?._id}>
-                      {t.user?.name}
-                    </option>
-                  ))}
+                  <option value="">Select Faculty Teacher / Class Teacher</option>
+                  <optgroup label="Teacher Directory & Faculty Members">
+                    {faculty.map((f) => (
+                      <option key={f._id} value={f._id}>
+                        {f.name} — {f.qualification}
+                      </option>
+                    ))}
+                  </optgroup>
+                  {teachers.length > 0 && (
+                    <optgroup label="Portal Teacher Accounts">
+                      {teachers.map((t) => (
+                        <option key={t.user?._id} value={t.user?._id}>
+                          {t.user?.name} ({t.user?.userId || 'Portal'})
+                        </option>
+                      ))}
+                    </optgroup>
+                  )}
                 </select>
               </div>
 

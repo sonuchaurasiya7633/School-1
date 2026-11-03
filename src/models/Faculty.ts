@@ -1,5 +1,11 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
+export interface IFacultyAssignedClass {
+  class: mongoose.Types.ObjectId;
+  section: string;
+  subject: mongoose.Types.ObjectId;
+}
+
 export interface IFacultyDocument extends Document {
   name: string;
   qualification: string;
@@ -9,6 +15,7 @@ export interface IFacultyDocument extends Document {
   order: number;
   isActive: boolean;
   avatar?: string;
+  assignedClasses?: IFacultyAssignedClass[];
 }
 
 const FacultySchema = new Schema<IFacultyDocument>(
@@ -21,6 +28,13 @@ const FacultySchema = new Schema<IFacultyDocument>(
     order: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
     avatar: { type: String, default: '' },
+    assignedClasses: [
+      {
+        class: { type: Schema.Types.ObjectId, ref: 'SchoolClass', required: true },
+        section: { type: String, default: 'A' },
+        subject: { type: Schema.Types.ObjectId, ref: 'Subject', required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FacultyMember } from '@/data/facultyData';
-import { GraduationCap, Building2, Award, User, Sparkles } from 'lucide-react';
+import { GraduationCap, Building2, Award, User, Sparkles, BookOpen } from 'lucide-react';
 
 interface FacultyCardProps {
   member: FacultyMember;
@@ -165,6 +165,35 @@ export default function FacultyCard({ member }: FacultyCardProps) {
                 >
                   {member.additional}
                 </span>
+              </div>
+            </div>
+          )}
+          {/* Assigned Classes & Subjects (Where available) */}
+          {member.assignedClasses && member.assignedClasses.length > 0 && (
+            <div className="flex items-start gap-2.5 text-left pt-2 border-t border-stone-100">
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+                style={{
+                  backgroundColor: 'rgba(33, 79, 57, 0.08)',
+                  color: '#214F39',
+                }}
+              >
+                <BookOpen className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">
+                  Assigned Classes
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {member.assignedClasses.map((ac: any, idx: number) => (
+                    <span
+                      key={idx}
+                      className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded font-semibold"
+                    >
+                      {ac.class?.name || 'Class'} (Sec {ac.section || 'A'}) — {ac.subject?.name || 'Subject'}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           )}
