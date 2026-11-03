@@ -107,58 +107,33 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
   return (
     <>
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-xs border-b border-stone-200">
-      {/* 1. TOP ANNOUNCEMENT TICKER */}
-      <div className="bg-[#214F39] text-[#FAF8F5] text-xs py-2 px-4 border-b border-emerald-950">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2 text-center sm:text-left">
-            <span
-              className="font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shadow-2xs shrink-0"
-              style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
-            >
-              NOTICE
-            </span>
-            <span className="truncate max-w-md sm:max-w-xl text-[11px] font-medium text-emerald-100">
-              {settings.announcement}
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-[11px] font-medium text-emerald-200">
-            <span className="flex items-center gap-1">
-              <Phone className="w-3 h-3 text-[#E8B4A8]" /> {settings.phone}
-            </span>
-            <span className="hidden md:flex items-center gap-1">
-              <Mail className="w-3 h-3 text-[#E8B4A8]" /> {settings.email}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. MAIN NAVIGATION */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* School Brand / Logo */}
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white p-1 border-2 border-[#214F39]/20 shadow-sm group-hover:scale-105 transition-transform overflow-hidden flex items-center justify-center shrink-0">
-              <Image
-                src="/images/logo.jpeg"
-                alt="Success Point School"
-                width={56}
-                height={56}
-                className="object-contain w-full h-full"
-                priority
-              />
-            </div>
-            <div>
-              <span
-                className="block font-black text-lg sm:text-xl md:text-2xl tracking-tight transition"
-                style={{ color: '#214F39' }}
-              >
-                {settings.schoolName.toUpperCase()}
-              </span>
-              <span className="block text-[10px] sm:text-[11px] font-bold text-stone-500 tracking-wider uppercase">
-                {settings.tagline}
-              </span>
-            </div>
-          </Link>
+        {/* MAIN NAVIGATION BAR */}
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20">
+            {/* School Brand / Logo */}
+            <Link href="/" className="flex items-center gap-2.5 sm:gap-3.5 group min-w-0 mr-2">
+              <div className="w-10 h-10 sm:w-13 sm:h-13 rounded-xl sm:rounded-2xl bg-white p-1 border-2 border-[#214F39]/20 shadow-xs group-hover:scale-105 transition-transform overflow-hidden flex items-center justify-center shrink-0">
+                <Image
+                  src="/images/logo.jpeg"
+                  alt="Success Point School"
+                  width={52}
+                  height={52}
+                  className="object-contain w-full h-full"
+                  priority
+                />
+              </div>
+              <div className="min-w-0">
+                <span
+                  className="block font-black text-sm sm:text-lg md:text-xl tracking-tight transition truncate"
+                  style={{ color: '#214F39' }}
+                >
+                  {settings.schoolName.toUpperCase()}
+                </span>
+                <span className="block text-[9px] sm:text-[11px] font-bold text-stone-500 tracking-wider uppercase truncate">
+                  {settings.tagline}
+                </span>
+              </div>
+            </Link>
 
           {/* Desktop Navigation Links (XL Screens) */}
           <nav className="hidden xl:flex items-center gap-5 2xl:gap-6 text-[13px] font-bold text-stone-600">

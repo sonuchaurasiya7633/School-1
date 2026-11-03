@@ -140,32 +140,32 @@ export default function HomePage() {
       <PublicHeader activePage="home" />
 
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#214F39] via-[#1a3f2d] to-emerald-950 text-white py-20 sm:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#214F39] via-[#1a3f2d] to-emerald-950 text-white py-14 sm:py-24 md:py-28">
         <div className="absolute inset-0 bg-[radial-gradient(#E8B4A8_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-emerald-500/10 blur-3xl pointer-events-none rounded-full" />
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-6 shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold mb-5 sm:mb-6 shadow-sm max-w-full"
             style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#214F39]" />
-            <span>Success Point School • Empowering Future Leaders</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#214F39] shrink-0" />
+            <span className="truncate">Success Point School • Empowering Future Leaders</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
             {settings.heroTitle}
           </h1>
 
-          <p className="mt-6 text-sm sm:text-base md:text-lg text-emerald-100 max-w-3xl mx-auto leading-relaxed">
+          <p className="mt-4 sm:mt-6 text-xs sm:text-base md:text-lg text-emerald-100 max-w-3xl mx-auto leading-relaxed">
             {settings.heroSubtitle}
           </p>
 
           {/* Quick CTA Buttons */}
-          <div className="mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
             <Link
               href="/admissions"
-              className="w-full sm:w-auto px-6 py-3.5 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg flex items-center justify-center gap-2 hover:opacity-95 text-center"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg flex items-center justify-center gap-2 hover:opacity-95 text-center"
               style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
             >
               <Award className="w-4 h-4 shrink-0" />
@@ -173,14 +173,14 @@ export default function HomePage() {
             </Link>
             <Link
               href="/academics"
-              className="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center justify-center gap-2 text-center"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center justify-center gap-2 text-center"
             >
               <BookOpen className="w-4 h-4 text-[#E8B4A8] shrink-0" />
               <span>Explore Programs & Streams</span>
             </Link>
             <Link
               href="/login"
-              className="w-full sm:w-auto px-6 py-3.5 bg-emerald-900/80 hover:bg-emerald-900 text-emerald-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-emerald-700/60 transition flex items-center justify-center gap-2 text-center"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-emerald-900/80 hover:bg-emerald-900 text-emerald-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-emerald-700/60 transition flex items-center justify-center gap-2 text-center"
             >
               <GraduationCap className="w-4 h-4 text-[#E8B4A8] shrink-0" />
               <span>Student & Faculty Portal</span>
@@ -190,36 +190,36 @@ export default function HomePage() {
       </section>
 
       {/* 2. KEY STATS RIBBON */}
-      <section className="bg-white border-b border-stone-200 py-8 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="p-3">
-              <p className="text-3xl sm:text-4xl font-black text-[#214F39] tracking-tight">1,400+</p>
-              <p className="text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
+      <section className="bg-white border-b border-stone-200 py-6 sm:py-8 shadow-xs">
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
+            <div className="p-2 sm:p-3">
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">1,400+</p>
+              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Enrolled Students
               </p>
-              <p className="text-[11px] text-stone-400 mt-0.5">Nursery to Class 12th</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">Nursery to Class 12th</p>
             </div>
-            <div className="p-3">
-              <p className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">35+</p>
-              <p className="text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
+            <div className="p-2 sm:p-3">
+              <p className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">35+</p>
+              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Qualified Faculty
               </p>
-              <p className="text-[11px] text-stone-400 mt-0.5">B.Ed / D.El.Ed / M.Sc Certified</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">B.Ed / D.El.Ed Certified</p>
             </div>
-            <div className="p-3">
-              <p className="text-3xl sm:text-4xl font-black text-[#214F39] tracking-tight">100%</p>
-              <p className="text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
+            <div className="p-2 sm:p-3">
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">100%</p>
+              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Smart Classrooms
               </p>
-              <p className="text-[11px] text-stone-400 mt-0.5">Equipped with Audio/Video</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">Audio/Video Enabled</p>
             </div>
-            <div className="p-3">
-              <p className="text-3xl sm:text-4xl font-black text-[#214F39] tracking-tight">99.4%</p>
-              <p className="text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
+            <div className="p-2 sm:p-3">
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">99.4%</p>
+              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
                 Board Distinction
               </p>
-              <p className="text-[11px] text-stone-400 mt-0.5">Consistent Top Ranks</p>
+              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">Consistent Top Ranks</p>
             </div>
           </div>
         </div>
