@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import PublicHeader from '@/components/common/PublicHeader';
 import PublicFooter from '@/components/common/PublicFooter';
 import {
@@ -44,7 +43,6 @@ export default function AcademicsPage() {
     {
       level: 'Foundational Stage',
       classes: 'Nursery, LKG & UKG',
-      image: '/images/classroom.jpg',
       description:
         'Activity-based play and learn pedagogy nurturing sensory motor skills, basic vocabulary, numbers, moral stories, and creative curiosity in a loving atmosphere.',
       highlights: ['Activity-based learning', 'Phonics & Basic Math', 'Creative Arts & Motor Skills'],
@@ -52,7 +50,6 @@ export default function AcademicsPage() {
     {
       level: 'Primary Wing',
       classes: 'Class 1st to 5th',
-      image: '/images/students-group.jpg',
       description:
         'Building strong foundational clarity in English, Hindi, Mathematics, Environmental Studies, General Knowledge, and Computer basics with regular worksheets.',
       highlights: ['Language fluency', 'Logical reasoning', 'Interactive smart classroom sessions'],
@@ -60,7 +57,6 @@ export default function AcademicsPage() {
     {
       level: 'Middle School',
       classes: 'Class 6th to 8th',
-      image: '/images/computer-lab.jpg',
       description:
         'Transitioning into structured academic disciplines: Science (Physics, Chemistry, Biology), Social Sciences, Advanced Mathematics, and Computer Applications.',
       highlights: ['Hands-on science experiments', 'Project-based assignments', 'Analytical thinking'],
@@ -68,7 +64,6 @@ export default function AcademicsPage() {
     {
       level: 'Secondary School',
       classes: 'Class 9th & 10th',
-      image: '/images/science-lab.jpg',
       description:
         'Rigorous curriculum mapped to board standards. Intensive problem-solving, recorded lecture revisions, chapter test series, and board preparation.',
       highlights: ['Board exam preparation', 'Pre-board diagnostic tests', 'Comprehensive study notes'],
@@ -76,7 +71,6 @@ export default function AcademicsPage() {
     {
       level: 'Senior Secondary',
       classes: 'Class 11th & 12th',
-      image: '/images/library.jpg',
       description:
         'Specialized academic streams with dedicated faculty guidance, laboratory practicals, competitive exam orientation, and career counseling.',
       highlights: ['Science, Commerce & Arts streams', 'Advanced lab experiments', 'Career guidance'],
@@ -162,65 +156,49 @@ export default function AcademicsPage() {
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {levels.map((lvl, idx) => (
               <div
                 key={lvl.level}
-                className="bg-[#FAF8F5] dark:bg-stone-900 rounded-3xl border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 group"
+                className="bg-[#FAF8F5] p-6 sm:p-8 rounded-3xl border border-stone-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-6"
               >
-                {/* Level Image */}
-                <div className="lg:col-span-4 relative h-56 sm:h-64 lg:h-auto overflow-hidden bg-stone-100 dark:bg-stone-800">
-                  <Image
-                    src={lvl.image}
-                    alt={lvl.level}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 w-8 h-8 rounded-xl bg-[#5B45B2] text-white flex items-center justify-center font-black text-xs shadow-md">
-                    0{idx + 1}
-                  </div>
-                </div>
-
-                {/* Level Content */}
-                <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-3">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                      <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 text-[#5B45B2] dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                        {lvl.classes}
-                      </span>
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
+                <div className="lg:max-w-2xl space-y-2">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs"
+                      style={{ backgroundColor: '#214F39', color: '#FFFFFF' }}
+                    >
+                      {idx + 1}
+                    </span>
+                    <h3 className="text-xl font-black tracking-tight" style={{ color: '#214F39' }}>
                       {lvl.level}
                     </h3>
-                    <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed mt-2.5">
-                      {lvl.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-2">
-                    <Link
-                      href="/admissions"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline group"
+                    <span
+                      className="text-xs font-bold px-2.5 py-0.5 rounded-full border"
+                      style={{
+                        backgroundColor: '#FFFFFF',
+                        borderColor: '#E8B4A8',
+                        color: '#214F39',
+                      }}
                     >
-                      <span>Enroll in {lvl.level}</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                      {lvl.classes}
+                    </span>
                   </div>
+                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed pt-1">
+                    {lvl.description}
+                  </p>
                 </div>
 
-                {/* Level Highlights */}
-                <div className="lg:col-span-3 p-6 sm:p-8 bg-white dark:bg-stone-850 border-t lg:border-t-0 lg:border-l border-stone-200/80 dark:border-stone-800 flex flex-col justify-center space-y-3">
-                  <span className="block text-[11px] font-black uppercase tracking-wider text-stone-400">
-                    Stage Highlights:
+                <div className="lg:w-80 shrink-0 bg-white p-4 rounded-2xl border border-stone-200/80 space-y-2">
+                  <span className="block text-[11px] font-bold uppercase tracking-wider text-stone-500">
+                    Key Highlights:
                   </span>
-                  <div className="space-y-2.5">
-                    {lvl.highlights.map((h, i) => (
-                      <div key={i} className="flex items-start gap-2.5 text-xs font-semibold text-stone-700 dark:text-stone-200">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{h}</span>
-                      </div>
-                    ))}
-                  </div>
+                  {lvl.highlights.map((h, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs font-medium text-stone-700">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#214F39] shrink-0" />
+                      <span>{h}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}

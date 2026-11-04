@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import PublicHeader from '@/components/common/PublicHeader';
 import PublicFooter from '@/components/common/PublicFooter';
 import DirectorSection from '@/components/home/DirectorSection';
@@ -170,67 +169,6 @@ export default function AboutPage() {
                   Seamless blend of traditional ethics and modern e-learning
                 </li>
               </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Campus Life & Academic Atmosphere Showcase */}
-      <section className="py-16 bg-[#FAF9F6] dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 text-[#5B45B2] dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-              Campus Environment
-            </span>
-            <h2 className="text-3xl font-black text-stone-900 dark:text-white tracking-tight mt-2">
-              A Vibrant Learning Community
-            </h2>
-            <p className="text-stone-600 dark:text-stone-300 text-sm mt-1">
-              State-of-the-art campus designed for student discovery, safety, and holistic growth.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="relative rounded-3xl overflow-hidden shadow-lg h-64 group border-2 border-white dark:border-stone-800">
-              <Image
-                src="/images/campus-building.jpg"
-                alt="School Campus Building"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <p className="font-bold text-sm">Spacious Modern Campus</p>
-                <p className="text-[11px] text-stone-300">Well-ventilated audio-visual equipped buildings</p>
-              </div>
-            </div>
-
-            <div className="relative rounded-3xl overflow-hidden shadow-lg h-64 group border-2 border-white dark:border-stone-800">
-              <Image
-                src="/images/classroom.jpg"
-                alt="Interactive Classroom"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <p className="font-bold text-sm">Smart Classrooms</p>
-                <p className="text-[11px] text-stone-300">Digital interactive teaching and personalized care</p>
-              </div>
-            </div>
-
-            <div className="relative rounded-3xl overflow-hidden shadow-lg h-64 group border-2 border-white dark:border-stone-800">
-              <Image
-                src="/images/sports-field.jpg"
-                alt="Sports & Activities"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <p className="font-bold text-sm">Sports & Physical Fitness</p>
-                <p className="text-[11px] text-stone-300">Football, cricket, athletics and yoga instruction</p>
-              </div>
             </div>
           </div>
         </div>

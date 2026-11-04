@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
-import '@/models/SchoolClass';
-import '@/models/Subject';
 import Faculty from '@/models/Faculty';
 import { FACULTY_MEMBERS } from '@/data/facultyData';
 
