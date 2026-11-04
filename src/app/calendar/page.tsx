@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import PublicHeader from '@/components/common/PublicHeader';
 import PublicFooter from '@/components/common/PublicFooter';
 import {
@@ -108,6 +109,60 @@ export default function CalendarPage() {
       .filter((ev) => ev.date >= refDate && ev.isApproved && ev.schoolStatus === 'closed')
       .slice(0, 5);
   }, [events]);
+
+  // Group events by month (0 = Jan ... 11 = Dec) for printable PDF
+  const eventsByMonth = useMemo(() => {
+    const map: Record<number, ISchoolCalendarEvent[]> = {};
+    for (let m = 0; m < 12; m++) map[m] = [];
+    const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+    sorted.forEach((ev) => {
+      const parts = ev.date.split('-');
+      if (parts.length === 3) {
+        const m = parseInt(parts[1], 10) - 1;
+        if (m >= 0 && m < 12) {
+          map[m].push(ev);
+        }
+      }
+    });
+    return map;
+  }, [events]);
+
+  const formatPrintDate = (dStr: string) => {
+    const parts = dStr.split('-');
+    if (parts.length !== 3) return dStr;
+    const year = parts[0];
+    const m = parseInt(parts[1], 10) - 1;
+    const day = parts[2];
+    const d = new Date(parseInt(year, 10), m, parseInt(day, 10));
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayName = dayNames[d.getDay()] || '';
+    const monthName = MONTH_NAMES[m]?.slice(0, 3) || parts[1];
+    return `${day} ${monthName} ${year} (${dayName})`;
+  };
+
+  const getCategoryPrintBadge = (cat: string) => {
+    switch (cat) {
+      case 'general':
+        return 'General Holiday';
+      case 'public':
+        return 'Public Holiday';
+      case 'optional':
+        return 'Optional Holiday';
+      case 'school':
+        return 'School Vacation / Event';
+      case 'exam':
+        return 'Examination';
+      default:
+        return 'Academic Event';
+    }
+  };
+
+  const getStatusPrintLabel = (status: string, isOptional?: boolean) => {
+    if (status === 'closed') return 'School Closed';
+    if (status === 'half_day') return 'Half Working Day';
+    if (isOptional) return 'Optional (School Open)';
+    return 'School Open';
+  };
 
   // Month navigation helpers
   const handlePrevMonth = () => {
@@ -234,7 +289,9 @@ export default function CalendarPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F6] dark:bg-stone-950 text-stone-800 dark:text-stone-100 antialiased font-sans transition-colors">
-      <PublicHeader />
+      {/* SCREEN UI (Hidden during Print / PDF Export) */}
+      <div className="print:hidden flex-1 flex flex-col">
+        <PublicHeader />
 
       <main className="flex-1 pb-16">
         {/* HERO BANNER SECTION */}
@@ -944,6 +1001,277 @@ export default function CalendarPage() {
       )}
 
       <PublicFooter />
+      </div>
+
+      {/* =========================================================================
+          DEDICATED OFFICIAL PRINTABLE CALENDAR (Visible in Print / PDF Only)
+          ========================================================================= */}
+      <div id="printable-calendar" className="hidden print:block text-slate-900 bg-white">
+        {/* 1. Official School Header / Letterhead */}
+        <div className="border-b-2 border-[#214F39] pb-4 mb-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-16 h-16 relative shrink-0">
+                <Image
+                  src="/images/logo.jpeg"
+                  alt="Success Point School Logo"
+                  width={64}
+                  height={64}
+                  className="object-contain w-full h-full"
+                  priority
+                />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-[#214F39] tracking-tight uppercase">
+                  SUCCESS POINT SCHOOL (S.P.S.)
+                </h1>
+                <p className="text-xs font-bold text-slate-700 tracking-wide uppercase">
+                  Academic Calendar &amp; Official Holiday Schedule — Year 2027
+                </p>
+                <p className="text-[11px] text-slate-500 font-medium">
+                  Affiliated to CBSE / Bihar State Secondary Education Guidelines • Best Education, Good Results
+                </p>
+              </div>
+            </div>
+
+            <div className="text-right text-[11px] text-slate-600 space-y-0.5 shrink-0">
+              <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-bold text-[10px]">
+                OFFICIAL NOTIFICATION
+              </span>
+              <p className="font-bold text-slate-800">Academic Session: 2026-2027</p>
+              <p>Helpline: +91 80512 17686</p>
+              <p>Email: info@successpointschool.edu</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. Schedule Rules & Working Days Statistics Box */}
+        <div className="border border-slate-300 rounded-xl p-3.5 mb-4 bg-slate-50 print-avoid-break">
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
+            <div>
+              <span className="text-xs font-black text-[#214F39] uppercase tracking-wider">
+                Weekly School Schedule Rules (2027):
+              </span>
+              <span className="text-xs text-slate-700 ml-2 font-medium">
+                • <strong>Sunday to Thursday:</strong> Full Working Day (8:00 AM – 2:00 PM)
+                &nbsp;|&nbsp;
+                • <strong>Friday:</strong> Half Working Day (Dismissal at 12:30 PM)
+                &nbsp;|&nbsp;
+                • <strong>Saturday:</strong> Weekly Off (School Closed)
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-6 gap-2 text-center text-xs">
+            <div className="bg-white p-2 rounded-lg border border-slate-200">
+              <span className="block font-black text-slate-800 text-base">{stats.totalCalendarDays}</span>
+              <span className="text-[10px] text-slate-500 font-bold uppercase">Total Days</span>
+            </div>
+            <div className="bg-white p-2 rounded-lg border border-emerald-200">
+              <span className="block font-black text-emerald-800 text-base">{stats.totalWorkingDays}</span>
+              <span className="text-[10px] text-emerald-700 font-bold uppercase">Working Days</span>
+            </div>
+            <div className="bg-white p-2 rounded-lg border border-slate-200">
+              <span className="block font-black text-slate-800 text-base">{stats.totalFullWorkingDays}</span>
+              <span className="text-[10px] text-slate-500 font-bold uppercase">Full Days (Sun–Thu)</span>
+            </div>
+            <div className="bg-white p-2 rounded-lg border border-amber-200">
+              <span className="block font-black text-amber-800 text-base">{stats.totalFridayHalfDays}</span>
+              <span className="text-[10px] text-amber-700 font-bold uppercase">Friday Half Days</span>
+            </div>
+            <div className="bg-white p-2 rounded-lg border border-rose-200">
+              <span className="block font-black text-rose-800 text-base">{stats.totalApprovedHolidays}</span>
+              <span className="text-[10px] text-rose-700 font-bold uppercase">Approved Holidays</span>
+            </div>
+            <div className="bg-white p-2 rounded-lg border border-rose-200">
+              <span className="block font-black text-rose-700 text-base">{stats.totalWeekendDays}</span>
+              <span className="text-[10px] text-rose-600 font-bold uppercase">Saturday Offs</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Selected Month Calendar Grid */}
+        <div className="mb-5 print-avoid-break">
+          <div className="flex items-center justify-between pb-1 mb-2 border-b border-slate-200">
+            <h2 className="text-sm font-black text-[#214F39] uppercase tracking-wide">
+              {MONTH_NAMES[selectedMonth].toUpperCase()} 2027 — MONTHLY CALENDAR GRID
+            </h2>
+            <span className="text-[11px] font-semibold text-slate-500">
+              Weekly Timetable: Sunday Open • Friday Half Day • Saturday Closed
+            </span>
+          </div>
+
+          <table className="w-full border-collapse border border-slate-300 text-xs">
+            <thead>
+              <tr className="bg-[#214F39] text-white">
+                {WEEKDAYS.map((wd, wIdx) => (
+                  <th key={wIdx} className="border border-slate-300 py-1.5 px-2 text-center font-bold">
+                    {wd}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: Math.ceil(monthGridDays.length / 7) }).map((_, rIdx) => (
+                <tr key={rIdx} className="h-14">
+                  {Array.from({ length: 7 }).map((_, cIdx) => {
+                    const day = monthGridDays[rIdx * 7 + cIdx];
+                    if (!day) {
+                      return <td key={cIdx} className="border border-slate-200 bg-slate-50/50" />;
+                    }
+                    const isSaturday = day.dayOfWeek === 6;
+                    const isFriday = day.dayOfWeek === 5;
+                    const isHoliday = day.holidayName && day.effectiveStatus === 'closed';
+
+                    return (
+                      <td
+                        key={cIdx}
+                        className={`border border-slate-200 p-1.5 align-top ${
+                          isHoliday
+                            ? 'bg-rose-50 text-rose-950'
+                            : isSaturday
+                            ? 'bg-rose-50/50 text-rose-900 font-semibold'
+                            : isFriday
+                            ? 'bg-amber-50/60 text-amber-950 font-semibold'
+                            : 'bg-white text-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-extrabold text-xs">
+                            {parseInt(day.date.split('-')[2], 10)}
+                          </span>
+                          {isSaturday && (
+                            <span className="text-[8px] px-1 py-0.2 bg-rose-200 text-rose-900 rounded font-bold">
+                              OFF
+                            </span>
+                          )}
+                          {isFriday && !isHoliday && (
+                            <span className="text-[8px] px-1 py-0.2 bg-amber-200 text-amber-900 rounded font-bold">
+                              HALF
+                            </span>
+                          )}
+                          {isHoliday && (
+                            <span className="text-[8px] px-1 py-0.2 bg-rose-600 text-white rounded font-bold">
+                              HOLIDAY
+                            </span>
+                          )}
+                        </div>
+                        {day.holidayName && (
+                          <p className="text-[9px] font-bold mt-1 line-clamp-2 leading-tight">
+                            {day.holidayName}
+                          </p>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* 4. Complete 12-Month Official Holiday & Event List */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between pb-1 border-b-2 border-slate-300">
+            <h2 className="text-sm font-black text-[#214F39] uppercase tracking-wide">
+              COMPLETE 2027 OFFICIAL SCHOOL HOLIDAYS &amp; VACATIONS LIST (JANUARY – DECEMBER 2027)
+            </h2>
+            <span className="text-[11px] font-bold text-slate-600">
+              Gazetted Holidays &amp; School Approved Closures
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {MONTH_NAMES.map((mName, mIdx) => {
+              const mEvents = eventsByMonth[mIdx] || [];
+              if (mEvents.length === 0) return null;
+
+              return (
+                <div key={mIdx} className="border border-slate-200 rounded-lg overflow-hidden print-avoid-break">
+                  <div className="bg-slate-100 px-3 py-1.5 flex items-center justify-between border-b border-slate-200">
+                    <span className="font-black text-xs text-[#214F39] uppercase">
+                      {mName} 2027
+                    </span>
+                    <span className="text-[10px] font-bold text-slate-500">
+                      {mEvents.length} {mEvents.length === 1 ? 'Event / Holiday' : 'Events / Holidays'}
+                    </span>
+                  </div>
+
+                  <table className="w-full text-[11px] border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 text-slate-700 border-b border-slate-200 font-bold">
+                        <th className="py-1 px-2 text-left w-36">Date &amp; Day</th>
+                        <th className="py-1 px-2 text-left">Holiday / Event Name</th>
+                        <th className="py-1 px-2 text-left w-36">Category</th>
+                        <th className="py-1 px-2 text-center w-28">School Status</th>
+                        <th className="py-1 px-2 text-left">Remarks / Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {mEvents.map((ev, eIdx) => (
+                        <tr key={eIdx} className={eIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}>
+                          <td className="py-1.5 px-2 font-bold text-slate-800 whitespace-nowrap">
+                            {formatPrintDate(ev.date)}
+                          </td>
+                          <td className="py-1.5 px-2 font-bold text-[#214F39]">
+                            {ev.title}
+                          </td>
+                          <td className="py-1.5 px-2 text-slate-600">
+                            {getCategoryPrintBadge(ev.category)}
+                          </td>
+                          <td className="py-1.5 px-2 text-center">
+                            <span
+                              className={`inline-block px-2 py-0.5 rounded text-[9px] font-bold ${
+                                ev.schoolStatus === 'closed'
+                                  ? 'bg-rose-100 text-rose-800'
+                                  : ev.schoolStatus === 'half_day'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : 'bg-emerald-100 text-emerald-800'
+                              }`}
+                            >
+                              {getStatusPrintLabel(ev.schoolStatus, ev.isOptional)}
+                            </span>
+                          </td>
+                          <td className="py-1.5 px-2 text-slate-600 text-[10px]">
+                            {ev.description || '—'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 5. Official Verification & Stamp Section */}
+        <div className="mt-8 pt-6 border-t-2 border-slate-300 print-avoid-break">
+          <p className="text-[10px] text-slate-500 italic text-center mb-6">
+            Certified that the above calendar for the Academic Year 2027 has been reviewed, approved, and officially
+            promulgated for Success Point School by order of the Principal and Academic Council.
+          </p>
+
+          <div className="flex items-end justify-between px-8 text-center text-xs">
+            <div>
+              <div className="w-36 border-b border-slate-400 mb-1 mx-auto" />
+              <p className="font-bold text-slate-800">Academic Coordinator</p>
+              <p className="text-[10px] text-slate-500">Success Point School</p>
+            </div>
+            <div>
+              <div className="w-24 h-24 border-2 border-dashed border-slate-300 rounded-full flex items-center justify-center mx-auto mb-1 text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                Official Seal
+              </div>
+              <p className="text-[10px] text-slate-500">Verified Stamp</p>
+            </div>
+            <div>
+              <div className="w-36 border-b border-slate-400 mb-1 mx-auto" />
+              <p className="font-bold text-slate-800">Principal / Director</p>
+              <p className="text-[10px] text-slate-500">Success Point School</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

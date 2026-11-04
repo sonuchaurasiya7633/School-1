@@ -309,17 +309,27 @@
     visibility: hidden;
   }
   #printable-receipt, #printable-receipt *,
-  #printable-report, #printable-report * {
+  #printable-report, #printable-report *,
+  #printable-calendar, #printable-calendar * {
     visibility: visible;
   }
-  #printable-receipt, #printable-report {
+  #printable-receipt, #printable-report, #printable-calendar {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     margin: 0;
-    padding: 20px;
-    background: white;
+    padding: 16px;
+    background: white !important;
+    color: #111827 !important;
+  }
+  .print-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  .no-print,
+  .print\:hidden {
+    display: none !important;
   }
 }
 
