@@ -98,7 +98,7 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
       .catch(() => {});
   }, []);
 
-  const { theme, toggleTheme, language, toggleLanguage, t } = usePublicThemeLanguage();
+  const { theme, toggleTheme, language, setLanguage, toggleLanguage, t } = usePublicThemeLanguage();
 
   const navLinks = [
     { label: t('nav.home', 'Home'), href: '/', icon: Home },
@@ -180,20 +180,37 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
           {/* Desktop Action Buttons */}
           <div className="hidden xl:flex items-center gap-2">
             {/* Language Switcher Pill */}
-            <button
-              onClick={toggleLanguage}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 text-xs font-bold hover:border-[#214F39] transition active:scale-95"
+            <div
+              className="inline-flex items-center gap-1 p-1 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-xs font-bold shadow-xs select-none"
               title="Switch Language: English / हिन्दी"
             >
-              <Globe className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span className={language === 'en' ? 'text-[#214F39] dark:text-emerald-400 font-black' : 'text-stone-400'}>
+              <Globe className="w-4 h-4 ml-1.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <button
+                type="button"
+                onClick={() => setLanguage('en')}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  language === 'en'
+                    ? 'bg-[#214F39] text-white shadow-xs font-black'
+                    : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
+                }`}
+                title="Switch to English"
+              >
                 EN
-              </span>
-              <span className="text-stone-300 dark:text-stone-600">|</span>
-              <span className={language === 'hi' ? 'text-[#214F39] dark:text-emerald-400 font-black' : 'text-stone-400'}>
+              </button>
+              <span className="text-stone-300 dark:text-stone-600 font-light">|</span>
+              <button
+                type="button"
+                onClick={() => setLanguage('hi')}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  language === 'hi'
+                    ? 'bg-[#214F39] text-white shadow-xs font-black'
+                    : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
+                }`}
+                title="हिन्दी में अनुवाद करें"
+              >
                 हिन्दी
-              </span>
-            </button>
+              </button>
+            </div>
 
             {/* Dark / Light Mode Toggle Button */}
             <button
@@ -239,14 +256,32 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
           {/* Mobile Right Controls: Language + Theme + Hamburger Menu */}
           <div className="flex xl:hidden items-center gap-1.5 sm:gap-2">
             {/* Language Switcher Mobile */}
-            <button
-              onClick={toggleLanguage}
-              className="px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 text-xs font-bold flex items-center gap-1 hover:border-[#214F39] transition"
-              title="Toggle English / हिन्दी"
-            >
-              <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>{language === 'en' ? 'हिन्दी' : 'EN'}</span>
-            </button>
+            <div className="flex items-center p-0.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-xs font-bold select-none">
+              <button
+                type="button"
+                onClick={() => setLanguage('en')}
+                className={`px-2 py-1 rounded-lg transition text-[11px] ${
+                  language === 'en'
+                    ? 'bg-[#214F39] text-white font-black shadow-2xs'
+                    : 'text-stone-500 dark:text-stone-400'
+                }`}
+                title="English"
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => setLanguage('hi')}
+                className={`px-2 py-1 rounded-lg transition text-[11px] ${
+                  language === 'hi'
+                    ? 'bg-[#214F39] text-white font-black shadow-2xs'
+                    : 'text-stone-500 dark:text-stone-400'
+                }`}
+                title="हिन्दी"
+              >
+                हिन्दी
+              </button>
+            </div>
 
             {/* Dark / Light Mode Toggle Mobile */}
             <button
@@ -353,10 +388,32 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                   </div>
                   <div className="flex items-center gap-1.5">
                     <button
-                      onClick={toggleLanguage}
-                      className="px-2.5 py-1 rounded-lg text-xs font-bold bg-stone-100 dark:bg-stone-700 text-stone-800 dark:text-stone-200 hover:border-emerald-500 border border-stone-300 dark:border-stone-600 transition"
+                      type="button"
+                      onClick={() => {
+                        setLanguage('en');
+                        setMobileNavOpen(false);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                        language === 'en'
+                          ? 'bg-[#214F39] text-white shadow-xs'
+                          : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-600'
+                      }`}
                     >
-                      {language === 'en' ? 'Switch to हिन्दी' : 'Switch to English'}
+                      English
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLanguage('hi');
+                        setMobileNavOpen(false);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                        language === 'hi'
+                          ? 'bg-[#214F39] text-white shadow-xs'
+                          : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-600'
+                      }`}
+                    >
+                      हिन्दी
                     </button>
                   </div>
                 </div>
