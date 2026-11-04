@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
 import Faculty from '@/models/Faculty';
@@ -22,6 +23,45 @@ function generateCleanEmail(name: string, index = 1): string {
     : `${base}${index}@successpoint.edu.in`;
 }
 
+async function getNextTeacherUserId(): Promise<string> {
+  const users = await User.find({ role: 'teacher' }, 'userId').lean();
+  let maxNum = 0;
+  for (const u of users) {
+    if (u.userId && u.userId.startsWith('TCH')) {
+      const parsed = parseInt(u.userId.replace('TCH', ''), 10);
+      if (!isNaN(parsed) && parsed > maxNum) maxNum = parsed;
+    }
+  }
+
+  let next = maxNum + 1;
+  while (await User.findOne({ userId: `TCH${String(next).padStart(3, '0')}` })) {
+    next++;
+  }
+  return `TCH${String(next).padStart(3, '0')}`;
+}
+
+/**
+ * Normalizes assigned classes array ensuring only valid ObjectIds are saved to prevent CastErrors
+ */
+function normalizeAssignedClasses(assigned: any[] = []): any[] {
+  return assigned
+    .filter((ac: any) => {
+      const cId = ac.class?._id || ac.class;
+      const sId = ac.subject?._id || ac.subject;
+      return (
+        cId &&
+        mongoose.isValidObjectId(String(cId)) &&
+        sId &&
+        mongoose.isValidObjectId(String(sId))
+      );
+    })
+    .map((ac: any) => ({
+      class: new mongoose.Types.ObjectId(String(ac.class?._id || ac.class)),
+      section: (ac.section || 'A').toUpperCase().trim(),
+      subject: new mongoose.Types.ObjectId(String(ac.subject?._id || ac.subject)),
+    }));
+}
+
 /**
  * Ensures a Faculty Directory member has a corresponding User and TeacherProfile with matching assignedClasses
  */
@@ -32,7 +72,7 @@ export async function syncFacultyMemberToTeacherProfile(facultyDoc: any) {
     let user = null;
 
     // 1. Try finding by linked user ID
-    if (facultyDoc.user) {
+    if (facultyDoc.user && mongoose.isValidObjectId(String(facultyDoc.user))) {
       user = await User.findById(facultyDoc.user);
     }
 
@@ -46,8 +86,7 @@ export async function syncFacultyMemberToTeacherProfile(facultyDoc: any) {
 
     // 3. If User doesn't exist, create one so teacher can log in & appear in Faculty & Teachers
     if (!user) {
-      const teacherCount = await User.countDocuments({ role: 'teacher' });
-      const userId = `TCH${String(teacherCount + 1).padStart(3, '0')}`;
+      const userId = await getNextTeacherUserId();
       const hashedPassword = await hashPassword('password123');
 
       let email = generateCleanEmail(facultyDoc.name);
@@ -78,12 +117,8 @@ export async function syncFacultyMemberToTeacherProfile(facultyDoc: any) {
       }
     }
 
-    // 4. Normalize assignedClasses
-    const assignedClasses = (facultyDoc.assignedClasses || []).map((ac: any) => ({
-      class: ac.class?._id || ac.class,
-      section: ac.section || 'A',
-      subject: ac.subject?._id || ac.subject,
-    }));
+    // 4. Normalize and validate assignedClasses
+    const validAssignedClasses = normalizeAssignedClasses(facultyDoc.assignedClasses);
 
     // 5. Upsert TeacherProfile
     const profile = await TeacherProfile.findOneAndUpdate(
@@ -92,7 +127,7 @@ export async function syncFacultyMemberToTeacherProfile(facultyDoc: any) {
         $set: {
           qualification: facultyDoc.qualification || 'Educator',
           specialization: facultyDoc.category || 'General',
-          assignedClasses,
+          assignedClasses: validAssignedClasses,
         },
       },
       { upsert: true, new: true }
@@ -112,11 +147,7 @@ export async function syncTeacherProfileToFaculty(profileDoc: any, userDoc: any)
   if (!profileDoc || !userDoc) return;
 
   try {
-    const assignedClasses = (profileDoc.assignedClasses || []).map((ac: any) => ({
-      class: ac.class?._id || ac.class,
-      section: ac.section || 'A',
-      subject: ac.subject?._id || ac.subject,
-    }));
+    const validAssignedClasses = normalizeAssignedClasses(profileDoc.assignedClasses);
 
     // Find matching Faculty by user ID or name
     let faculty = await Faculty.findOne({ user: userDoc._id });
@@ -128,7 +159,7 @@ export async function syncTeacherProfileToFaculty(profileDoc: any, userDoc: any)
 
     if (faculty) {
       faculty.user = userDoc._id;
-      faculty.assignedClasses = assignedClasses;
+      faculty.assignedClasses = validAssignedClasses;
       if (userDoc.avatar && !faculty.avatar) {
         faculty.avatar = userDoc.avatar;
       }
@@ -147,6 +178,15 @@ export async function reconcileAllFacultyWithTeachers() {
     const allFaculty = await Faculty.find();
     for (const fac of allFaculty) {
       await syncFacultyMemberToTeacherProfile(fac);
+    }
+
+    // Clean up any TeacherProfiles with non-existent users
+    const allProfiles = await TeacherProfile.find();
+    for (const p of allProfiles) {
+      const userExists = await User.findById(p.user);
+      if (!userExists) {
+        await TeacherProfile.findByIdAndDelete(p._id);
+      }
     }
   } catch (err) {
     console.error('Error reconciling all faculty:', err);

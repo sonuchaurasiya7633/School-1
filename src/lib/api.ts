@@ -33,8 +33,12 @@ export async function authFetch(url: string, options: RequestInit = {}): Promise
   if (token && !headers.has('x-auth-token')) {
     headers.set('x-auth-token', token);
   }
+  if (!headers.has('Cache-Control')) {
+    headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  }
 
   return fetch(url, {
+    cache: 'no-store',
     ...options,
     headers,
     credentials: options.credentials || 'include',

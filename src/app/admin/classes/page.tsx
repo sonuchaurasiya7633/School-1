@@ -225,23 +225,23 @@ export default function AdminClassesPage() {
                       </span>
                       {(() => {
                         const classTeachers = teachers.filter((t) =>
-                          t.assignedClasses?.some((ac: any) => (ac.class?._id || ac.class) === c._id)
+                          t.assignedClasses?.some((ac: any) => String(ac.class?._id || ac.class) === String(c._id))
                         ).map((t) => ({
                           id: t._id,
                           name: t.user?.name || 'Teacher',
                           subjects: t.assignedClasses
-                            ?.filter((ac: any) => (ac.class?._id || ac.class) === c._id)
+                            ?.filter((ac: any) => String(ac.class?._id || ac.class) === String(c._id))
                             .map((ac: any) => ac.subject?.name || 'Subject')
                             .join(', '),
                         }));
 
                         const facultyEducators = faculty.filter((f) =>
-                          f.assignedClasses?.some((ac: any) => (ac.class?._id || ac.class) === c._id)
+                          f.assignedClasses?.some((ac: any) => String(ac.class?._id || ac.class) === String(c._id))
                         ).map((f) => ({
                           id: f._id,
                           name: f.name,
                           subjects: f.assignedClasses
-                            ?.filter((ac: any) => (ac.class?._id || ac.class) === c._id)
+                            ?.filter((ac: any) => String(ac.class?._id || ac.class) === String(c._id))
                             .map((ac: any) => ac.subject?.name || 'Subject')
                             .join(', '),
                         }));

@@ -18,6 +18,7 @@ import {
   Users,
 } from 'lucide-react';
 import { IFooterSettings, DEFAULT_FOOTER_SETTINGS } from '@/types/footer';
+import FloatingContactButtons from '@/components/common/FloatingContactButtons';
 
 interface PublicFooterProps {
   initialData?: IFooterSettings;
@@ -394,6 +395,13 @@ export default function PublicFooter({ initialData, previewMode = false }: Publi
           )}
         </div>
       </div>
+
+      {!previewMode && (
+        <FloatingContactButtons
+          phone={footerData.campusInfo?.phonePrimary || '+918051217686'}
+          whatsappNumber={footerData.campusInfo?.phonePrimary || '918051217686'}
+        />
+      )}
     </footer>
   );
 }

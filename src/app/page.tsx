@@ -7,6 +7,7 @@ import PublicHeader from '@/components/common/PublicHeader';
 import PublicFooter from '@/components/common/PublicFooter';
 import DirectorSection from '@/components/home/DirectorSection';
 import FacultySection from '@/components/home/FacultySection';
+import { usePublicThemeLanguage } from '@/context/PublicThemeLanguageContext';
 import { formatDate } from '@/lib/utils';
 import {
   Sparkles,
@@ -30,6 +31,7 @@ import {
 } from 'lucide-react';
 
 export default function HomePage() {
+  const { language, t } = usePublicThemeLanguage();
   const [notices, setNotices] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>({
     schoolName: 'Success Point School',
@@ -166,7 +168,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-[#214F39] selection:text-white">
+    <div className="min-h-screen bg-[#FAF8F5] dark:bg-stone-950 text-stone-800 dark:text-stone-100 flex flex-col font-sans selection:bg-[#214F39] selection:text-white transition-colors">
       <PublicHeader activePage="home" />
 
       {/* 1. HERO SECTION */}
@@ -180,15 +182,23 @@ export default function HomePage() {
             style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
           >
             <Sparkles className="w-3.5 h-3.5 text-[#214F39] shrink-0" />
-            <span className="truncate">{settings.heroBadge || 'Success Point School • Empowering Future Leaders'}</span>
+            <span className="truncate">
+              {language === 'hi'
+                ? t('hero.badge', 'भविष्य के कर्णधारों का निर्माण')
+                : settings.heroBadge || 'Success Point School • Empowering Future Leaders'}
+            </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-            {settings.heroTitle}
+            {language === 'hi'
+              ? t('hero.title', 'ज्ञान, संस्कार एवं शैक्षणिक उत्कृष्टता का संगम')
+              : settings.heroTitle}
           </h1>
 
           <p className="mt-4 sm:mt-6 text-xs sm:text-base md:text-lg text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            {settings.heroSubtitle}
+            {language === 'hi'
+              ? t('hero.subtitle', 'सक्सेस पॉइंट स्कूल (S.P.S.) के डिजिटल परिसर में आपका स्वागत है। आधुनिक स्मार्ट शिक्षा, सतत मूल्यांकन और उत्कृष्ट संस्कार।')
+              : settings.heroSubtitle}
           </p>
 
           {/* Quick CTA Buttons */}
@@ -199,43 +209,43 @@ export default function HomePage() {
               style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
             >
               <Award className="w-4 h-4 shrink-0" />
-              <span>{settings.heroCta1Text || 'Apply for Admission 2026-27'}</span>
+              <span>{language === 'hi' ? t('hero.cta_apply', 'प्रवेश हेतु आवेदन करें') : settings.heroCta1Text || 'Apply for Admission 2026-27'}</span>
             </Link>
             <Link
               href={settings.heroCta2Link || '/academics'}
               className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center justify-center gap-2 text-center"
             >
               <BookOpen className="w-4 h-4 text-[#E8B4A8] shrink-0" />
-              <span>{settings.heroCta2Text || 'Explore Programs & Streams'}</span>
+              <span>{language === 'hi' ? t('hero.cta_programs', 'पाठ्यक्रम एवं कक्षाएं') : settings.heroCta2Text || 'Explore Programs & Streams'}</span>
             </Link>
             <Link
               href="/login"
               className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-emerald-900/80 hover:bg-emerald-900 text-emerald-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-emerald-700/60 transition flex items-center justify-center gap-2 text-center"
             >
               <GraduationCap className="w-4 h-4 text-[#E8B4A8] shrink-0" />
-              <span>Student & Faculty Portal</span>
+              <span>{language === 'hi' ? t('hero.cta_portal', 'छात्र एवं शिक्षक पोर्टल') : 'Student & Faculty Portal'}</span>
             </Link>
           </div>
         </div>
       </section>
 
       {/* 2. KEY STATS RIBBON */}
-      <section className="bg-white border-b border-stone-200 py-6 sm:py-8 shadow-xs">
+      <section className="bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 py-6 sm:py-8 shadow-xs transition-colors">
         <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">
+              <p className="text-2xl sm:text-4xl font-black text-[#214F39] dark:text-emerald-400 tracking-tight">
                 {settings.statsStudents || '1,400+'}
               </p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
-                Enrolled Students
+              <p className="text-[11px] sm:text-xs font-bold text-stone-600 dark:text-stone-300 uppercase tracking-wider mt-1">
+                {language === 'hi' ? t('stats.students', 'नामांकित छात्र') : 'Enrolled Students'}
               </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+              <p className="text-[10px] sm:text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">
                 {settings.statsStudentsSub || 'Nursery to Class 12th'}
               </p>
             </div>
             <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
+              <p className="text-2xl sm:text-4xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
                 {settings.statsFaculty || '35+'}
               </p>
               <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">

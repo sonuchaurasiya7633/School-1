@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
+import { PublicThemeLanguageProvider } from '@/context/PublicThemeLanguageContext';
 
 export const metadata: Metadata = {
   title: 'Success Point School — Management System',
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <PublicThemeLanguageProvider>{children}</PublicThemeLanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );

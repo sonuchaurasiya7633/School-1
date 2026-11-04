@@ -344,14 +344,24 @@ export default function AdminTeachersPage() {
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {t.assignedClasses?.length > 0 ? (
-                    t.assignedClasses.map((ac: any, idx: number) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 bg-slate-100 text-slate-700 rounded-md text-[11px] font-medium border border-slate-200"
-                      >
-                        {ac.class?.name || 'Class'} ({ac.section}) — {ac.subject?.name || 'Subject'}
-                      </span>
-                    ))
+                    t.assignedClasses.map((ac: any, idx: number) => {
+                      const className =
+                        ac.class?.name ||
+                        classes.find((c) => String(c._id) === String(ac.class?._id || ac.class))?.name ||
+                        'Class';
+                      const subjectName =
+                        ac.subject?.name ||
+                        subjects.find((s) => String(s._id) === String(ac.subject?._id || ac.subject))?.name ||
+                        'Subject';
+                      return (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 bg-emerald-50 text-emerald-800 rounded-md text-[11px] font-semibold border border-emerald-200"
+                        >
+                          {className} (Sec {ac.section || 'A'}) — {subjectName}
+                        </span>
+                      );
+                    })
                   ) : (
                     <span className="text-xs text-slate-400 italic">No classes assigned yet</span>
                   )}
