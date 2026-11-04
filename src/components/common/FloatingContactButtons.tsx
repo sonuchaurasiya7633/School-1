@@ -30,7 +30,7 @@ export default function FloatingContactButtons({
 
   return (
     <div
-      className="fixed bottom-6 right-5 sm:bottom-8 sm:right-7 z-50 flex flex-col items-center gap-3 select-none"
+      className="fixed bottom-5 right-4 sm:bottom-8 sm:right-7 z-50 flex flex-col items-center gap-3.5 select-none"
       aria-label="Direct Communication Actions"
     >
       {/* WHATSAPP ACTION BUTTON */}
@@ -53,7 +53,7 @@ export default function FloatingContactButtons({
           rel="noopener noreferrer"
           onMouseEnter={() => setHoveredBtn('whatsapp')}
           onMouseLeave={() => setHoveredBtn(null)}
-          className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-108 active:scale-95 transition-all duration-200 relative group overflow-hidden"
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-200 relative group overflow-hidden border-2 border-white/60 shrink-0"
           title="Chat with Success Point School on WhatsApp"
         >
           {/* Subtle pulse ring */}
@@ -61,7 +61,7 @@ export default function FloatingContactButtons({
 
           {/* Official WhatsApp SVG Icon */}
           <svg
-            className="w-7 h-7 fill-white relative z-10"
+            className="w-8 h-8 sm:w-9 sm:h-9 fill-white relative z-10 shrink-0"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -88,14 +88,14 @@ export default function FloatingContactButtons({
           href={`tel:${cleanPhone}`}
           onMouseEnter={() => setHoveredBtn('call')}
           onMouseLeave={() => setHoveredBtn(null)}
-          className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#FFF1ED] text-[#214F39] border-2 border-[#E8B4A8] flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-108 active:scale-95 transition-all duration-200 relative group overflow-hidden"
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#FFF1ED] text-[#214F39] border-2 border-[#E8B4A8] flex items-center justify-center shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-200 relative group overflow-hidden shrink-0"
           title={`Call Success Point School: ${phone}`}
         >
           {/* Subtle pulse ring */}
           <span className="absolute inset-0 rounded-full bg-[#E8B4A8] animate-ping opacity-20 group-hover:opacity-35" />
 
           {/* Telephone Icon */}
-          <Phone className="w-6 h-6 stroke-[2.2] text-[#214F39] relative z-10 transition-transform group-hover:rotate-12" />
+          <Phone className="w-7 h-7 sm:w-8 sm:h-8 stroke-[2.3] text-[#214F39] relative z-10 transition-transform group-hover:rotate-12 shrink-0" />
         </a>
       </div>
     </div>
