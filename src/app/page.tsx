@@ -95,57 +95,6 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
-  const portals = [
-    {
-      role: 'student',
-      title: 'Student E-Learning Portal',
-      subtitle: 'Recorded Lectures, Homework & Notes',
-      badge: 'Student Sign-In',
-      color: 'from-emerald-600 to-teal-700',
-      iconBg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      icon: GraduationCap,
-      features: [
-        'Watch recorded video lectures by teachers',
-        'Submit daily homework & view grades',
-        'Check monthly attendance logs',
-        'Access term examination report card & marks',
-      ],
-      target: '/login?role=student',
-    },
-    {
-      role: 'teacher',
-      title: 'Teacher & Faculty Portal',
-      subtitle: 'Lecture Uploads & Homework Grading',
-      badge: 'Faculty Sign-In',
-      color: 'from-blue-600 to-indigo-700',
-      iconBg: 'bg-blue-50 text-blue-700 border-blue-200',
-      icon: Users,
-      features: [
-        'Upload recorded video lectures & PDF study notes',
-        'Assign homework & grade student submissions',
-        'Mark daily class attendance',
-        'Enter student exam marks & generate marksheet',
-      ],
-      target: '/login?role=teacher',
-    },
-    {
-      role: 'admin',
-      title: 'Super Admin Console',
-      subtitle: 'School Operations & Web CMS',
-      badge: 'Restricted Administration',
-      color: 'from-purple-600 to-pink-700',
-      iconBg: 'bg-purple-50 text-purple-700 border-purple-200',
-      icon: ShieldCheck,
-      features: [
-        'Manage website content, notices & faculty directory',
-        'Automated class marksheet generation',
-        'Fee collection, receipts & admission inquiries',
-        'Complete student, teacher & class management',
-      ],
-      target: '/admin',
-    },
-  ];
-
   const testimonials = [
     {
       name: 'Rameshwar Roy',
@@ -256,9 +205,7 @@ export default function HomePage() {
               >
                 <GraduationCap className="w-4 h-4 text-[#E8B4A8] shrink-0" />
                 <span>
-                  {language === 'hi'
-                    ? t('hero.cta_portal', 'छात्र एवं शिक्षक पोर्टल')
-                    : 'Portal Login'}
+                  {language === 'hi' ? 'डैशबोर्ड लॉगिन' : 'Go to Dashboard'}
                 </span>
               </Link>
             </div>
@@ -819,74 +766,6 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 10. DIGITAL PORTALS UNIFIED ACCESS (Ref: Image 2 & 3 Role Cards) */}
-      <section id="portals" className="py-20 sm:py-24 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full border shadow-2xs bg-[#FAF8F5] dark:bg-stone-800 text-[#214F39] dark:text-emerald-400 border-[#E8B4A8] dark:border-stone-700">
-              One Unified Access Point
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-stone-100 mt-3 tracking-tight">
-              Role-Based Digital Portals
-            </h2>
-            <p className="text-sm sm:text-base text-stone-600 dark:text-stone-300 mt-2">
-              Dedicated interfaces designed for students, teachers, and school administration.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {portals.map((portal) => {
-              const Icon = portal.icon;
-              return (
-                <div
-                  key={portal.role}
-                  className="glass-panel glass-card-hover rounded-3xl border border-stone-200/80 dark:border-stone-800 p-7 shadow-md flex flex-col justify-between group"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-5">
-                      <div
-                        className={`w-14 h-14 rounded-2xl border ${portal.iconBg} flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform duration-300`}
-                      >
-                        <Icon className="w-7 h-7" />
-                      </div>
-                      <span className="text-[11px] font-extrabold px-3 py-1 bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-full border border-stone-200 dark:border-stone-700 shadow-2xs">
-                        {portal.badge}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-black text-stone-900 dark:text-stone-100 group-hover:text-[#214F39] dark:group-hover:text-emerald-400 transition-colors">
-                      {portal.title}
-                    </h3>
-                    <p className="text-xs font-bold text-stone-500 dark:text-stone-400 mt-0.5">
-                      {portal.subtitle}
-                    </p>
-
-                    <div className="mt-6 space-y-2.5">
-                      {portal.features.map((feat, fidx) => (
-                        <div key={fidx} className="flex items-center gap-2 text-xs font-medium text-stone-700 dark:text-stone-300">
-                          <CheckCircle2 className="w-4 h-4 text-[#214F39] dark:text-emerald-400 shrink-0" />
-                          <span>{feat}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-8 pt-5 border-t border-stone-100 dark:border-stone-800">
-                    <Link
-                      href={portal.target}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-stone-900 dark:bg-stone-800 hover:bg-[#214F39] dark:hover:bg-[#214F39] text-white rounded-xl text-xs font-bold transition-all shadow-md group-hover:shadow-lg"
-                    >
-                      <span>Sign In to {portal.title}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

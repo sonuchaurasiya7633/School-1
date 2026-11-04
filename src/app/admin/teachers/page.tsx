@@ -797,14 +797,14 @@ export default function AdminTeachersPage() {
             </div>
 
             <p className="text-[11px] text-slate-500 leading-relaxed">
-              Ye login credentials teacher ko de dijiye. Teacher <strong className="text-slate-800">/login</strong> par ja kar apna <strong>Email ya User ID</strong> aur <strong>Password</strong> enter kar ke dashboard access kar sakte hain.
+              Ye login credentials teacher ko de dijiye. Teacher <strong className="text-slate-800">/teacher/login</strong> par ja kar apna <strong>Email ya User ID</strong> aur <strong>Password</strong> enter kar ke dashboard access kar sakte hain.
             </p>
 
             <div className="flex items-center gap-3 pt-1">
               <button
                 type="button"
                 onClick={() => {
-                  const text = `Success Point School - Teacher Faculty Credentials\nName: ${createdCredentials.name}\nTeacher ID: ${createdCredentials.userId}\nLogin Email: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/login?role=teacher`;
+                  const text = `Success Point School - Teacher Faculty Credentials\nName: ${createdCredentials.name}\nTeacher ID: ${createdCredentials.userId}\nLogin Email: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/teacher/login`;
                   navigator.clipboard.writeText(text);
                   setCopied(true);
                   setTimeout(() => setCopied(false), 3000);

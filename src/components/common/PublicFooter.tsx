@@ -189,7 +189,7 @@ export default function PublicFooter({ initialData, previewMode = false }: Publi
             </div>
           </div>
 
-          {/* ================= COLUMN 3: DIGITAL PORTALS & ADMISSIONS ================= */}
+          {/* ================= COLUMN 3: STUDENT SERVICES & ACADEMICS ================= */}
           <div className="border-t border-emerald-800/40 pt-4 md:border-none md:pt-0">
             {/* Mobile Accordion Header */}
             <button
@@ -199,7 +199,7 @@ export default function PublicFooter({ initialData, previewMode = false }: Publi
               aria-expanded={openAccordions.portals}
             >
               <h4 className="text-xs font-black uppercase tracking-wider text-[#E8B4A8]">
-                Digital Portals & Admissions
+                Student Services & Academics
               </h4>
               <ChevronDown
                 className={`w-4 h-4 text-[#E8B4A8] transition-transform duration-200 ${
@@ -210,46 +210,40 @@ export default function PublicFooter({ initialData, previewMode = false }: Publi
 
             {/* Desktop Header */}
             <h4 className="hidden md:block text-xs font-black uppercase tracking-wider text-[#E8B4A8] mb-4">
-              Digital Portals
+              Student Services
             </h4>
 
             {/* Content Container */}
             <div className={`${openAccordions.portals ? 'block pt-2' : 'hidden'} md:block`}>
               <ul className="space-y-2.5 text-xs text-emerald-100/80">
-                {footerData.portals?.filter((p) => p.enabled)?.map((portal) => {
-                  const isAdmin = portal.url?.includes('/admin') || portal.badge?.toLowerCase().includes('admin');
-                  const isTeacher = portal.url?.includes('teacher');
-                  const isStudent = portal.url?.includes('student');
-
-                  return (
-                    <li key={portal.id || portal.label}>
-                      <Link
-                        href={portal.url}
-                        target={portal.target || '_self'}
-                        rel={portal.target === '_blank' ? 'noopener noreferrer' : undefined}
-                        className={`transition flex items-center gap-1.5 group ${
-                          isAdmin
-                            ? 'text-purple-300 hover:text-white font-semibold'
-                            : 'hover:text-white font-medium'
-                        }`}
-                      >
-                        {isAdmin ? (
-                          <ShieldCheck className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform" />
-                        ) : isTeacher ? (
-                          <Users className="w-3.5 h-3.5 text-emerald-300" />
-                        ) : isStudent ? (
-                          <GraduationCap className="w-3.5 h-3.5 text-teal-300" />
-                        ) : (
+                {footerData.portals
+                  ?.filter(
+                    (p) =>
+                      p.enabled &&
+                      !p.url?.toLowerCase().includes('admin') &&
+                      !p.url?.toLowerCase().includes('teacher') &&
+                      !p.badge?.toLowerCase().includes('admin') &&
+                      !p.badge?.toLowerCase().includes('teacher')
+                  )
+                  ?.map((portal) => {
+                    const cleanUrl = portal.url?.startsWith('/login') ? '/login' : portal.url;
+                    return (
+                      <li key={portal.id || portal.label}>
+                        <Link
+                          href={cleanUrl}
+                          target={portal.target || '_self'}
+                          rel={portal.target === '_blank' ? 'noopener noreferrer' : undefined}
+                          className="transition flex items-center gap-1.5 group hover:text-white font-medium"
+                        >
                           <span className="text-[#E8B4A8] text-[10px]">•</span>
-                        )}
-                        <span>{portal.label}</span>
-                        {portal.target === '_blank' && (
-                          <ExternalLink className="w-3 h-3 opacity-60 ml-0.5" />
-                        )}
-                      </Link>
-                    </li>
-                  );
-                })}
+                          <span>{portal.label}</span>
+                          {portal.target === '_blank' && (
+                            <ExternalLink className="w-3 h-3 opacity-60 ml-0.5" />
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
               </ul>
 
               {/* Admissions Information Card */}

@@ -54,19 +54,13 @@ export default function AdminLoginPage() {
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-emerald-500/5 blur-[100px] pointer-events-none rounded-full" />
 
       {/* Top back link */}
-      <div className="sm:mx-auto sm:w-full sm:max-w-md mb-6 flex items-center justify-between text-xs">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md mb-6 flex items-center justify-start text-xs">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to School Website</span>
-        </Link>
-        <Link
-          href="/login"
-          className="text-slate-400 hover:text-purple-400 transition font-medium"
-        >
-          Student / Teacher Login →
         </Link>
       </div>
 

@@ -828,7 +828,7 @@ export default function AdminStudentsPage() {
               <button
                 type="button"
                 onClick={() => {
-                  const text = `Success Point School - Student Login Credentials\nName: ${createdCredentials.name}\nUser ID: ${createdCredentials.userId}\nLogin Email: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/login?role=student`;
+                  const text = `Success Point School - Student Login Credentials\nName: ${createdCredentials.name}\nUser ID: ${createdCredentials.userId}\nLogin Email: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\nLogin Portal: ${window.location.origin}/login`;
                   navigator.clipboard.writeText(text);
                   setCopied(true);
                   setTimeout(() => setCopied(false), 3000);

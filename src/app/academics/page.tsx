@@ -316,12 +316,12 @@ export default function AcademicsPage() {
               </p>
               <div className="pt-2 flex flex-wrap gap-4">
                 <Link
-                  href="/login?role=student"
+                  href="/login"
                   className="px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2"
                   style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
                 >
                   <Video className="w-4 h-4" />
-                  <span>Student Portal Login</span>
+                  <span>Go to Dashboard</span>
                 </Link>
                 <Link
                   href="/faculty"

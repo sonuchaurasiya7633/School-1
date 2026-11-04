@@ -251,7 +251,7 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                 className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white rounded-xl shadow-sm transition hover:opacity-95"
                 style={{ backgroundColor: '#214F39' }}
               >
-                <span>{t('header.dashboard', 'Dashboard')}</span>
+                <span>Dashboard</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             ) : (
@@ -260,8 +260,8 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                 className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white rounded-xl shadow-sm transition hover:opacity-95"
                 style={{ backgroundColor: '#214F39' }}
               >
-                <LogIn className="w-3.5 h-3.5 text-[#E8B4A8]" />
-                <span>{t('header.login', 'Portal Login')}</span>
+                <GraduationCap className="w-3.5 h-3.5 text-[#E8B4A8]" />
+                <span>Go to Dashboard</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
@@ -431,108 +431,31 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                     </button>
                   </div>
                 </div>
-                {/* 1. PORTAL LOGIN SECTION (FEATURED PROMINENTLY INSIDE DRAWER) */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
-                      <LogIn className="w-3.5 h-3.5 text-[#214F39]" />
-                      <span>School Portals Login</span>
-                    </span>
-                    <span
-                      className="text-[9px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
-                    >
-                      Secure Access
-                    </span>
-                  </div>
-
-                  {user ? (
-                    <div className="p-4 rounded-2xl bg-white border border-stone-200/90 shadow-2xs space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white"
-                          style={{ backgroundColor: '#214F39' }}
-                        >
-                          {user.name.charAt(0)}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-bold text-stone-900 truncate">{user.name}</p>
-                          <p className="text-[10px] text-stone-500 capitalize">{user.role} Session Active</p>
-                        </div>
-                      </div>
-                      <Link
-                        href={
-                          user.role === 'admin'
-                            ? '/admin/dashboard'
-                            : user.role === 'teacher'
-                            ? '/teacher/dashboard'
-                            : '/student/dashboard'
-                        }
-                        onClick={() => setMobileNavOpen(false)}
-                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold text-white shadow-xs transition"
-                        style={{ backgroundColor: '#214F39' }}
-                      >
-                        <span>Open My Dashboard</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-2.5">
-                      {/* Student Login Tile */}
-                      <Link
-                        href="/login?role=student"
-                        onClick={() => setMobileNavOpen(false)}
-                        className="p-3.5 rounded-2xl bg-white border border-stone-200/90 hover:border-[#214F39]/50 shadow-2xs transition group flex flex-col justify-between"
-                      >
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center mb-2"
-                          style={{ backgroundColor: 'rgba(33, 79, 57, 0.08)', color: '#214F39' }}
-                        >
-                          <GraduationCap className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-black text-stone-900 group-hover:text-[#214F39] transition">
-                            Student Login
-                          </p>
-                          <p className="text-[10px] text-stone-500 mt-0.5 leading-snug">
-                            Lectures & Tasks
-                          </p>
-                        </div>
-                      </Link>
-
-                      {/* Teacher Login Tile */}
-                      <Link
-                        href="/login?role=teacher"
-                        onClick={() => setMobileNavOpen(false)}
-                        className="p-3.5 rounded-2xl bg-white border border-stone-200/90 hover:border-[#214F39]/50 shadow-2xs transition group flex flex-col justify-between"
-                      >
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center mb-2"
-                          style={{ backgroundColor: 'rgba(232, 180, 168, 0.25)', color: '#214F39' }}
-                        >
-                          <Users className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-black text-stone-900 group-hover:text-[#214F39] transition">
-                            Teacher Login
-                          </p>
-                          <p className="text-[10px] text-stone-500 mt-0.5 leading-snug">
-                            Homework & Marks
-                          </p>
-                        </div>
-                      </Link>
-                    </div>
-                  )}
-
-                  {/* Single Unified Login Button */}
+                {/* 1. STUDENT DASHBOARD ACCESS */}
+                <div>
                   <Link
-                    href="/login"
+                    href={
+                      user
+                        ? user.role === 'admin'
+                          ? '/admin/dashboard'
+                          : user.role === 'teacher'
+                          ? '/teacher/dashboard'
+                          : '/student/dashboard'
+                        : '/login'
+                    }
                     onClick={() => setMobileNavOpen(false)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold text-white shadow-xs transition hover:opacity-95"
-                    style={{ backgroundColor: '#214F39' }}
+                    className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#214F39] text-white shadow-md active:scale-95 transition"
                   >
-                    <span>General Portal Sign-In</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-[#E8B4A8]" />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-[#E8B4A8]">
+                        <GraduationCap className="w-4 h-4" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-xs font-black">{user ? 'Open Dashboard' : 'Go to Dashboard'}</p>
+                        <p className="text-[10px] text-emerald-200">Classes, Tasks &amp; Results</p>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-[#E8B4A8]" />
                   </Link>
                 </div>
 
@@ -596,20 +519,7 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                   </div>
                 </div>
 
-                {/* 3. SUPER ADMIN CONSOLE LINK */}
-                <div className="pt-2">
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileNavOpen(false)}
-                    className="flex items-center justify-between p-3 rounded-2xl bg-purple-950/20 border border-purple-900/30 text-purple-900 hover:bg-purple-900/30 transition text-xs font-bold"
-                  >
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-purple-700" />
-                      <span>Super Admin Console</span>
-                    </div>
-                    <span className="text-[10px] text-purple-600 font-mono">/admin</span>
-                  </Link>
-                </div>
+
               </div>
 
               {/* Drawer Bottom Footer Contact Bar */}

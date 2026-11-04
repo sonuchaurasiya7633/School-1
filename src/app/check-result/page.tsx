@@ -11,7 +11,7 @@ export default function CheckResultPage() {
   useEffect(() => {
     // Automatically redirect to Student Portal Login
     const timer = setTimeout(() => {
-      router.replace('/login?role=student');
+      router.replace('/login');
     }, 1800);
     return () => clearTimeout(timer);
   }, [router]);
@@ -37,12 +37,12 @@ export default function CheckResultPage() {
 
         <div className="pt-2">
           <Link
-            href="/login?role=student"
+            href="/login"
             className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-950 transition shadow-lg"
             style={{ backgroundColor: '#E8B4A8' }}
           >
             <GraduationCap className="w-4 h-4 text-slate-950" />
-            <span>Login to Student Dashboard</span>
+            <span>Go to Dashboard</span>
             <ArrowRight className="w-4 h-4 text-slate-950" />
           </Link>
         </div>
