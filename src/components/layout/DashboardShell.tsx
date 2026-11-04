@@ -45,6 +45,8 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
       if (!user) {
         if (allowedRoles?.includes('admin')) {
           router.push('/admin/login');
+        } else if (allowedRoles?.includes('teacher')) {
+          router.push('/teacher/login');
         } else {
           router.push('/login');
         }

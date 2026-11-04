@@ -30,7 +30,7 @@ export default function TeacherLoginPage() {
     setLoading(true);
 
     try {
-      const result = await login(identifier, password);
+      const result = await login(identifier, password, 'teacher');
       if (result.success) {
         if (result.user?.role !== 'teacher') {
           setError('Access Denied. Only registered Faculty & Teachers can access this portal.');

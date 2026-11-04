@@ -69,6 +69,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Role-specific URL & portal restriction check
+    const requiredRole = body.requiredRole || body.role;
+    if (requiredRole && user.role !== requiredRole) {
+      let userRoleTitle = 'Student';
+      let correctPortalUrl = '/login';
+      if (user.role === 'admin') {
+        userRoleTitle = 'Super Administrator';
+        correctPortalUrl = '/admin/login';
+      } else if (user.role === 'teacher') {
+        userRoleTitle = 'Teacher / Faculty';
+        correctPortalUrl = '/teacher/login';
+      }
+
+      let targetPortalTitle = 'Student Portal';
+      if (requiredRole === 'admin') targetPortalTitle = 'Super Admin Console';
+      if (requiredRole === 'teacher') targetPortalTitle = 'Teacher Portal';
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Access Denied: You are registered as ${userRoleTitle}. This login page is strictly for ${targetPortalTitle}. Please log in via ${correctPortalUrl}.`,
+        },
+        { status: 403 }
+      );
+    }
+
     // Generate JWT token
     const token = signToken({
       id: user._id.toString(),

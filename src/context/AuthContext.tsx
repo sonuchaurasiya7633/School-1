@@ -8,7 +8,11 @@ import { authFetch } from '@/lib/api';
 interface AuthContextType {
   user: IUser | null;
   loading: boolean;
-  login: (identifier: string, password: string) => Promise<{ success: boolean; message?: string; user?: IUser }>;
+  login: (
+    identifier: string,
+    password: string,
+    requiredRole?: 'admin' | 'teacher' | 'student'
+  ) => Promise<{ success: boolean; message?: string; user?: IUser }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -99,16 +103,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshUser();
   }, []);
 
-  const login = async (identifier: string, password: string) => {
+  const login = async (
+    identifier: string,
+    password: string,
+    requiredRole?: 'admin' | 'teacher' | 'student'
+  ) => {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ identifier, password, requiredRole }),
       });
 
       const data = await res.json();
       if (data.success && data.user) {
+        // Enforce role barrier if requiredRole specified
+        if (requiredRole && data.user.role !== requiredRole) {
+          return {
+            success: false,
+            message: `Access Denied. This login is strictly for ${requiredRole} accounts.`,
+          };
+        }
+
         setUser(data.user);
         if (data.token && typeof window !== 'undefined') {
           try {

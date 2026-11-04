@@ -21,14 +21,12 @@ function StudentLoginForm() {
     setLoading(true);
 
     try {
-      const result = await login(identifier, password);
+      const result = await login(identifier, password, 'student');
       if (result.success) {
-        if (result.user?.role === 'student') {
+        if (result.user?.role !== 'student') {
+          setError('Access Denied: This login portal is strictly for Students.');
+        } else {
           router.push('/student/dashboard');
-        } else if (result.user?.role === 'teacher') {
-          router.push('/teacher/dashboard');
-        } else if (result.user?.role === 'admin') {
-          router.push('/admin/dashboard');
         }
       } else {
         setError(result.message || 'Login failed. Please verify your Student ID and password.');

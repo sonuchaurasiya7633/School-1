@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const result = await login(identifier, password);
+      const result = await login(identifier, password, 'admin');
       if (result.success) {
         if (result.user?.role !== 'admin') {
           setError('Access Denied. Only authorized Administrators can access this console.');
