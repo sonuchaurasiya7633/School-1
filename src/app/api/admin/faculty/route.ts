@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
+import '@/models/SchoolClass';
+import '@/models/Subject';
 import Faculty from '@/models/Faculty';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';

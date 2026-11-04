@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import '@/models/SchoolClass';
+import '@/models/Subject';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
 import Faculty from '@/models/Faculty';

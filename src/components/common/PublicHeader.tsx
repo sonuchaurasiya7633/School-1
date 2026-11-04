@@ -241,15 +241,24 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             ) : (
-              <Link
-                href="/login"
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white rounded-xl shadow-sm transition hover:opacity-95"
-                style={{ backgroundColor: '#214F39' }}
-              >
-                <LogIn className="w-3.5 h-3.5 text-[#E8B4A8]" />
-                <span>{t('header.login', 'Portal Login')}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-stone-700 dark:text-stone-200 hover:text-[#5B45B2] dark:hover:text-purple-300 rounded-xl transition"
+                  title="Sign In to Student/Teacher Portal"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-stone-400" />
+                  <span>{t('header.login', 'Login')}</span>
+                </Link>
+
+                <Link
+                  href="/admissions"
+                  className="flex items-center gap-1.5 px-5 py-2.5 text-xs font-extrabold text-white rounded-xl shadow-md shadow-purple-600/20 transition hover:shadow-lg hover:-translate-y-0.5 active:scale-95 bg-[#5B45B2] hover:bg-[#4d39a3]"
+                >
+                  <span>{language === 'hi' ? 'नामांकन करें' : 'Apply Now'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             )}
           </div>
 

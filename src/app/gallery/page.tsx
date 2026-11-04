@@ -29,6 +29,7 @@ export default function GalleryPage() {
         'Audio-visual interactive whiteboards, HD projector systems, and multimedia lessons ensuring engaging conceptual learning.',
       icon: Monitor,
       tag: 'Technology',
+      image: '/images/classroom.jpg',
     },
     {
       id: 2,
@@ -38,6 +39,7 @@ export default function GalleryPage() {
         'Equipped Physics, Chemistry, and Biology experimental workstations adhering to modern educational safety standards.',
       icon: Layers,
       tag: 'Laboratories',
+      image: '/images/science-lab.jpg',
     },
     {
       id: 3,
@@ -47,6 +49,7 @@ export default function GalleryPage() {
         'Modern networked desktop computers with internet access for Coding, Information Technology, DCA, and digital literacy training.',
       icon: Monitor,
       tag: 'Computing',
+      image: '/images/computer-lab.jpg',
     },
     {
       id: 4,
@@ -56,6 +59,7 @@ export default function GalleryPage() {
         'Over 5,000+ academic textbooks, reference encyclopedias, competitive exam materials, journals, and quiet reading zones.',
       icon: BookOpen,
       tag: 'Library',
+      image: '/images/library.jpg',
     },
     {
       id: 5,
@@ -65,6 +69,7 @@ export default function GalleryPage() {
         'Dedicated fields for Cricket, Football, Badminton, Volleyball, and athletics fostering physical fitness and teamwork.',
       icon: Trophy,
       tag: 'Athletics',
+      image: '/images/sports-field.jpg',
     },
     {
       id: 6,
@@ -74,6 +79,7 @@ export default function GalleryPage() {
         'CCTV-monitored premises, filtered RO drinking water points, clean sanitation blocks, and dedicated security guards.',
       icon: School,
       tag: 'Infrastructure',
+      image: '/images/campus-building.jpg',
     },
     {
       id: 7,
@@ -83,6 +89,7 @@ export default function GalleryPage() {
         'Students actively design working science models, robotics experiments, and fine art displays for parents and visitors.',
       icon: Sparkles,
       tag: 'Co-Curricular',
+      image: '/images/students-group.jpg',
     },
     {
       id: 8,
@@ -92,6 +99,7 @@ export default function GalleryPage() {
         'Chess, Carrom, Table Tennis, and creative toy rooms for pre-primary and primary students to unwind and sharpen reflexes.',
       icon: Trophy,
       tag: 'Recreation',
+      image: '/images/hero-students.jpg',
     },
   ];
 
@@ -169,27 +177,36 @@ export default function GalleryPage() {
                   key={fac.id}
                   className="bg-white rounded-3xl border border-stone-200/90 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
                 >
+                  {fac.image && (
+                    <div className="relative h-48 w-full overflow-hidden bg-stone-100">
+                      <Image
+                        src={fac.image}
+                        alt={fac.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
+                      <span className="absolute bottom-3 right-3 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/95 text-[#214F39] shadow-sm backdrop-blur-xs">
+                        {fac.tag}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="p-7">
-                    <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center justify-between mb-4">
                       <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform"
+                        className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform"
                         style={{
                           backgroundColor: '#FAF8F5',
                           color: '#214F39',
                           border: '1px solid #E8B4A8',
                         }}
                       >
-                        <Icon className="w-6 h-6 text-[#214F39]" />
+                        <Icon className="w-5 h-5 text-[#214F39]" />
                       </div>
-                      <span
-                        className="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
-                        style={{
-                          backgroundColor: '#FAF8F5',
-                          borderColor: '#E8B4A8',
-                          color: '#214F39',
-                        }}
-                      >
-                        {fac.tag}
+                      <span className="text-[11px] font-bold text-stone-500">
+                        Amenity #{fac.id}
                       </span>
                     </div>
 

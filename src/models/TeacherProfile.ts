@@ -1,4 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import './SchoolClass';
+import './Subject';
 
 export interface IAssignedClass {
   class: mongoose.Types.ObjectId;

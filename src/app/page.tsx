@@ -28,11 +28,21 @@ import {
   FileCheck2,
   Atom,
   TrendingUp,
+  Play,
+  Target,
+  Eye,
+  Trophy,
+  Compass,
+  X,
+  School,
+  Building2,
+  PhoneCall,
 } from 'lucide-react';
 
 export default function HomePage() {
   const { language, t } = usePublicThemeLanguage();
   const [notices, setNotices] = useState<any[]>([]);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [settings, setSettings] = useState<any>({
     schoolName: 'Success Point School',
     tagline: 'Best Education, Good Results.',
@@ -171,302 +181,606 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#FAF8F5] dark:bg-stone-950 text-stone-800 dark:text-stone-100 flex flex-col font-sans selection:bg-[#214F39] selection:text-white transition-colors">
       <PublicHeader activePage="home" />
 
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#214F39] via-[#1a3f2d] to-emerald-950 text-white py-14 sm:py-24 md:py-28">
-        <div className="absolute inset-0 bg-[radial-gradient(#E8B4A8_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-emerald-500/10 blur-3xl pointer-events-none rounded-full" />
+      {/* 1. HERO SECTION (REFERENCE DESIGN ALIGNED) */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#FAF9F6] via-white to-[#FAF9F6] dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 pt-8 sm:pt-14 pb-20 sm:pb-28 transition-colors">
+        {/* Subtle geometric dot grid background */}
+        <div className="absolute inset-0 bg-[radial-gradient(#5B45B2_1.2px,transparent_1.2px)] dark:bg-[radial-gradient(#34d399_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-10 dark:opacity-15 pointer-events-none" />
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div
-            className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold mb-5 sm:mb-6 shadow-sm max-w-full"
-            style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#214F39] shrink-0" />
-            <span className="truncate">
-              {language === 'hi'
-                ? t('hero.badge', 'भविष्य के कर्णधारों का निर्माण')
-                : settings.heroBadge || 'Success Point School • Empowering Future Leaders'}
-            </span>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            {/* Left Column: Headlines & CTAs */}
+            <div className="lg:col-span-6 space-y-6 sm:space-y-7 text-left">
+              {/* Eyebrow Pill */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black tracking-widest uppercase bg-purple-50 dark:bg-purple-950/70 text-[#5B45B2] dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60 shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#5B45B2] dark:text-purple-300 shrink-0" />
+                <span>
+                  {language === 'hi'
+                    ? 'भविष्य का निर्माण • उत्कृष्टता की राह'
+                    : 'SHAPING MINDS. BUILDING FUTURES.'}
+                </span>
+              </div>
 
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-            {language === 'hi'
-              ? t('hero.title', 'ज्ञान, संस्कार एवं शैक्षणिक उत्कृष्टता का संगम')
-              : settings.heroTitle}
-          </h1>
+              {/* Bold Headline */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl 2xl:text-7xl font-black tracking-tight text-stone-900 dark:text-white leading-[1.08]">
+                {language === 'hi' ? (
+                  <>
+                    उज्ज्वल भविष्य <br />
+                    <span className="text-[#5B45B2] dark:text-purple-400">के निर्माण हेतु</span>
+                  </>
+                ) : (
+                  <>
+                    For A Better <br />
+                    <span className="text-[#5B45B2] dark:text-purple-400">Tomorrow</span>
+                  </>
+                )}
+              </h1>
 
-          <p className="mt-4 sm:mt-6 text-xs sm:text-base md:text-lg text-emerald-100 max-w-3xl mx-auto leading-relaxed">
-            {language === 'hi'
-              ? t('hero.subtitle', 'सक्सेस पॉइंट स्कूल (S.P.S.) के डिजिटल परिसर में आपका स्वागत है। आधुनिक स्मार्ट शिक्षा, सतत मूल्यांकन और उत्कृष्ट संस्कार।')
-              : settings.heroSubtitle}
-          </p>
+              {/* Subheading */}
+              <p className="text-sm sm:text-base lg:text-lg text-stone-600 dark:text-stone-300 max-w-xl leading-relaxed">
+                {language === 'hi'
+                  ? 'छात्रों को ज्ञान, संस्कार और आधुनिक कौशलों से सशक्त बनाकर जिम्मेदार वैश्विक नागरिक बनाना।'
+                  : 'Empowering students with knowledge, values, and skills to become responsible global citizens.'}
+              </p>
 
-          {/* Quick CTA Buttons */}
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
-            <Link
-              href={settings.heroCta1Link || '/admissions'}
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg flex items-center justify-center gap-2 hover:opacity-95 text-center"
-              style={{ backgroundColor: '#E8B4A8', color: '#214F39' }}
-            >
-              <Award className="w-4 h-4 shrink-0" />
-              <span>{language === 'hi' ? t('hero.cta_apply', 'प्रवेश हेतु आवेदन करें') : settings.heroCta1Text || 'Apply for Admission 2026-27'}</span>
-            </Link>
-            <Link
-              href={settings.heroCta2Link || '/academics'}
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition flex items-center justify-center gap-2 text-center"
-            >
-              <BookOpen className="w-4 h-4 text-[#E8B4A8] shrink-0" />
-              <span>{language === 'hi' ? t('hero.cta_programs', 'पाठ्यक्रम एवं कक्षाएं') : settings.heroCta2Text || 'Explore Programs & Streams'}</span>
-            </Link>
-            <Link
-              href="/login"
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-emerald-900/80 hover:bg-emerald-900 text-emerald-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-emerald-700/60 transition flex items-center justify-center gap-2 text-center"
-            >
-              <GraduationCap className="w-4 h-4 text-[#E8B4A8] shrink-0" />
-              <span>{language === 'hi' ? t('hero.cta_portal', 'छात्र एवं शिक्षक पोर्टल') : 'Student & Faculty Portal'}</span>
-            </Link>
+              {/* Interactive CTA Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-1">
+                <Link
+                  href={settings.heroCta2Link || '/academics'}
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-[#5B45B2] hover:bg-[#4d39a3] text-white text-xs sm:text-sm font-bold shadow-lg shadow-purple-600/25 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+                >
+                  <span>{language === 'hi' ? 'पाठ्यक्रम देखें' : 'Explore More'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setVideoModalOpen(true)}
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-100 text-xs sm:text-sm font-bold border border-stone-200 dark:border-stone-700 shadow-xs hover:border-[#5B45B2] hover:-translate-y-0.5 active:scale-95 transition-all duration-200 group"
+                >
+                  <span className="w-6 h-6 rounded-full bg-purple-50 dark:bg-purple-900/60 text-[#5B45B2] dark:text-purple-300 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xs">
+                    <Play className="w-3 h-3 fill-current ml-0.5" />
+                  </span>
+                  <span>{language === 'hi' ? 'वीडियो देखें' : 'Watch Video'}</span>
+                </button>
+
+                <Link
+                  href={settings.heroCta1Link || '/admissions'}
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-[#214F39] dark:text-emerald-300 text-xs sm:text-sm font-bold border border-emerald-200 dark:border-emerald-800 transition active:scale-95"
+                >
+                  <Award className="w-4 h-4 text-[#214F39] dark:text-emerald-300" />
+                  <span>{language === 'hi' ? 'प्रवेश आवेदन' : 'Apply Now'}</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Hero Graphic with Students & Curved Accent Wave */}
+            <div className="lg:col-span-6 relative flex items-center justify-center">
+              {/* Flowing Curved Accent Ribbon (Matching reference screenshot) */}
+              <div className="absolute -right-8 -bottom-10 w-[360px] h-[360px] sm:w-[480px] sm:h-[480px] bg-gradient-to-tr from-[#5B45B2] via-[#7C3AED] to-purple-400 rounded-full opacity-20 blur-3xl pointer-events-none" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-44 sm:w-64 h-[120%] bg-gradient-to-l from-[#5B45B2]/20 via-[#5B45B2]/5 to-transparent rounded-l-[140px] pointer-events-none -mr-4 sm:-mr-8" />
+
+              {/* Main Student Hero Image Container */}
+              <div className="relative z-10 w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-stone-800 group bg-stone-100 dark:bg-stone-900">
+                <Image
+                  src="/images/hero-students.jpg"
+                  alt="Success Point School Students"
+                  width={750}
+                  height={550}
+                  priority
+                  className="w-full h-[340px] sm:h-[420px] lg:h-[480px] object-cover object-top group-hover:scale-102 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+
+                {/* Floating Bottom Card Over Hero Image */}
+                <div className="absolute bottom-4 left-4 right-4 p-3.5 sm:p-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border border-white/80 dark:border-stone-700/80 flex items-center justify-between shadow-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#5B45B2] text-white flex items-center justify-center font-black text-sm shadow-sm shrink-0">
+                      SPS
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-white truncate">
+                        Academic Excellence
+                      </p>
+                      <p className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 truncate">
+                        Nursery to Class 12th • CBSE & State Board
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shrink-0">
+                    Admissions Open
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2. KEY STATS RIBBON */}
-      <section className="bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 py-6 sm:py-8 shadow-xs transition-colors">
-        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
-            <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] dark:text-emerald-400 tracking-tight">
-                {settings.statsStudents || '1,400+'}
-              </p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-600 dark:text-stone-300 uppercase tracking-wider mt-1">
-                {language === 'hi' ? t('stats.students', 'नामांकित छात्र') : 'Enrolled Students'}
-              </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">
-                {settings.statsStudentsSub || 'Nursery to Class 12th'}
-              </p>
+      {/* 2. FLOATING STATS RIBBON (OVERLAPPING CARD FROM REFERENCE) */}
+      <section className="relative z-20 -mt-10 sm:-mt-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/90 dark:border-stone-800 shadow-xl p-5 sm:p-7 transition-colors">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 divide-y md:divide-y-0 md:divide-x divide-stone-100 dark:divide-stone-800">
+            {/* Stat 1 */}
+            <div className="flex items-center gap-3.5 p-2 pt-3 md:pt-2">
+              <div className="w-11 h-11 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-[#5B45B2] dark:text-purple-300 flex items-center justify-center shrink-0 border border-purple-100 dark:border-purple-800">
+                <GraduationCap className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
+                  25+
+                </p>
+                <p className="text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                  Years of Excellence
+                </p>
+              </div>
             </div>
-            <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
-                {settings.statsFaculty || '35+'}
-              </p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
-                Qualified Faculty
-              </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
-                {settings.statsFacultySub || 'B.Ed / D.El.Ed Certified'}
-              </p>
+
+            {/* Stat 2 */}
+            <div className="flex items-center gap-3.5 p-2 pt-3 md:pt-2 md:pl-6">
+              <div className="w-11 h-11 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-800">
+                <Users className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
+                  1500+
+                </p>
+                <p className="text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                  Students Enrolled
+                </p>
+              </div>
             </div>
-            <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">
-                {settings.statsSmartClasses || '100%'}
-              </p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
-                Smart Classrooms
-              </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
-                {settings.statsSmartClassesSub || 'Audio/Video Enabled'}
-              </p>
+
+            {/* Stat 3 */}
+            <div className="flex items-center gap-3.5 p-2 pt-3 md:pt-2 md:pl-6">
+              <div className="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-300 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
+                  120+
+                </p>
+                <p className="text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                  Expert Teachers
+                </p>
+              </div>
             </div>
-            <div className="p-2 sm:p-3">
-              <p className="text-2xl sm:text-4xl font-black text-[#214F39] tracking-tight">
-                {settings.statsDistinction || '99.4%'}
-              </p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-600 uppercase tracking-wider mt-1">
-                Board Distinction
-              </p>
-              <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
-                {settings.statsDistinctionSub || 'Consistent Top Ranks'}
-              </p>
+
+            {/* Stat 4 */}
+            <div className="flex items-center gap-3.5 p-2 pt-3 md:pt-2 md:pl-6">
+              <div className="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-100 dark:border-amber-800">
+                <Trophy className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
+                  50+
+                </p>
+                <p className="text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                  Awards Won
+                </p>
+              </div>
+            </div>
+
+            {/* Stat 5 */}
+            <div className="flex items-center gap-3.5 p-2 pt-3 md:pt-2 md:pl-6 col-span-2 md:col-span-1">
+              <div className="w-11 h-11 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 flex items-center justify-center shrink-0 border border-rose-100 dark:border-rose-800">
+                <Star className="w-5 h-5 fill-current" />
+              </div>
+              <div>
+                <p className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white tracking-tight">
+                  98%
+                </p>
+                <p className="text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+                  Parent Satisfaction
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. DIRECTOR PROFILE SECTION */}
-      <DirectorSection id="director" />
+      {/* 3. ABOUT SCHOOL — MISSION & VISION SECTION (REFERENCE DESIGN ALIGNED) */}
+      <section className="py-20 sm:py-24 bg-white dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Campus Study Image + Floating Badge */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-3xl overflow-hidden shadow-xl border-4 border-white dark:border-stone-800 group">
+                <Image
+                  src="/images/students-group.jpg"
+                  alt="Students at Success Point School"
+                  width={600}
+                  height={450}
+                  className="w-full h-[320px] sm:h-[380px] object-cover group-hover:scale-103 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
-      {/* 4. ABOUT SCHOOL SPOTLIGHT */}
+                {/* Floating Badge (Bottom Left, exactly as seen in reference image) */}
+                <div className="absolute bottom-4 left-4 p-3.5 rounded-2xl bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border border-white/80 dark:border-stone-700 shadow-lg flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-[#5B45B2] dark:text-purple-300 flex items-center justify-center shrink-0 border border-purple-200 dark:border-purple-800">
+                    <School className="w-5 h-5 text-[#5B45B2]" />
+                  </div>
+                  <div>
+                    <p className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-white leading-tight">
+                      Excellence in Education
+                    </p>
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+                      Since 1998
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Mission and Vision Cards */}
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Mission Card */}
+              <div className="p-7 rounded-3xl bg-[#FAF9F6] dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 shadow-2xs hover:shadow-md transition flex flex-col justify-between space-y-4">
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-[#5B45B2] dark:text-purple-300 flex items-center justify-center mb-4 border border-purple-100 dark:border-purple-800">
+                    <Target className="w-6 h-6 text-[#5B45B2]" />
+                  </div>
+                  <h3 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">
+                    Our Mission
+                  </h3>
+                  <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-3 leading-relaxed">
+                    To provide a nurturing and inclusive environment that encourages academic excellence, creativity and character development to prepare students for a successful future.
+                  </p>
+                </div>
+                <div className="pt-2">
+                  <Link
+                    href="/about"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline group"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Vision Card */}
+              <div className="p-7 rounded-3xl bg-[#FAF9F6] dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 shadow-2xs hover:shadow-md transition flex flex-col justify-between space-y-4">
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-300 flex items-center justify-center mb-4 border border-blue-100 dark:border-blue-800">
+                    <Eye className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-black text-stone-900 dark:text-white tracking-tight">
+                    Our Vision
+                  </h3>
+                  <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-3 leading-relaxed">
+                    To be a leading international school recognized for delivering quality education and inspiring students to achieve their full potential and make a positive impact on the world.
+                  </p>
+                </div>
+                <div className="pt-2">
+                  <Link
+                    href="/about"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline group"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. PROGRAMS WE OFFER (EXACTLY MATCHING BOTTOM OF REFERENCE SCREENSHOT) */}
+      <section className="py-20 sm:py-24 bg-[#FAF9F6] dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Centered Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-14 space-y-2.5">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-900 dark:text-white tracking-wider uppercase">
+              PROGRAMS WE OFFER
+            </h2>
+            <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+              A wide range of academic and co-curricular programs designed to bring out the best in every student.
+            </p>
+          </div>
+
+          {/* Program Image Cards Grid (6 Real Images & Cards) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {/* Program 1: Pre-Primary */}
+            <div className="bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="relative h-48 sm:h-52 overflow-hidden bg-stone-100">
+                  <Image
+                    src="/images/classroom.jpg"
+                    alt="Foundational Pre-Primary Classroom"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-[#5B45B2] dark:text-purple-300 border border-white/60">
+                    Nursery to UKG
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white">
+                    Foundational & Pre-Primary
+                  </h3>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 leading-relaxed">
+                    Interactive storytelling, phonics, motor skills, creative arts, and joyful play-based learning in an engaging environment.
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-stone-100 dark:border-stone-800/60 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-bold text-stone-400">Early Years</span>
+                <Link
+                  href="/academics"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline"
+                >
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Program 2: Primary */}
+            <div className="bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="relative h-48 sm:h-52 overflow-hidden bg-stone-100">
+                  <Image
+                    src="/images/students-group.jpg"
+                    alt="Primary School Stage"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-emerald-700 dark:text-emerald-300 border border-white/60">
+                    Class 1st to 5th
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white">
+                    Primary Stage Curriculum
+                  </h3>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 leading-relaxed">
+                    Conceptual mathematics, environmental sciences, reading comprehension, language fluency, and moral discipline.
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-stone-100 dark:border-stone-800/60 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-bold text-stone-400">Primary Wing</span>
+                <Link
+                  href="/academics"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline"
+                >
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Program 3: Middle School */}
+            <div className="bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="relative h-48 sm:h-52 overflow-hidden bg-stone-100">
+                  <Image
+                    src="/images/computer-lab.jpg"
+                    alt="Middle School IT & Computer Lab"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-blue-700 dark:text-blue-300 border border-white/60">
+                    Class 6th to 8th
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white">
+                    Middle School & IT Coding
+                  </h3>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 leading-relaxed">
+                    Analytical problem solving, computer lab sessions, programming fundamentals, and introductory scientific experiments.
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-stone-100 dark:border-stone-800/60 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-bold text-stone-400">Middle Wing</span>
+                <Link
+                  href="/academics"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline"
+                >
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Program 4: Secondary Board */}
+            <div className="bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="relative h-48 sm:h-52 overflow-hidden bg-stone-100">
+                  <Image
+                    src="/images/science-lab.jpg"
+                    alt="Secondary Board Laboratory"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-amber-700 dark:text-amber-300 border border-white/60">
+                    Class 9th & 10th
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white">
+                    Secondary Board Excellence
+                  </h3>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 leading-relaxed">
+                    Rigorous preparation for 10th board exams, structured mock test series, physics, chemistry, biology laboratory work.
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-stone-100 dark:border-stone-800/60 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-bold text-stone-400">Board Division</span>
+                <Link
+                  href="/academics"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline"
+                >
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Program 5: Senior Secondary Streams */}
+            <div className="bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="relative h-48 sm:h-52 overflow-hidden bg-stone-100">
+                  <Image
+                    src="/images/library.jpg"
+                    alt="Senior Secondary Library & Research"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-purple-700 dark:text-purple-300 border border-white/60">
+                    Class 11th & 12th
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white">
+                    Senior Secondary Streams
+                  </h3>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 leading-relaxed">
+                    Specialized career pathways in Science (PCM / PCB), Commerce with Accounts & Economics, and Humanities / Arts.
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-stone-100 dark:border-stone-800/60 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-bold text-stone-400">Senior Secondary</span>
+                <Link
+                  href="/academics"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline"
+                >
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Program 6: Sports & Co-Curricular */}
+            <div className="bg-white dark:bg-stone-900 rounded-3xl overflow-hidden border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="relative h-48 sm:h-52 overflow-hidden bg-stone-100">
+                  <Image
+                    src="/images/sports-field.jpg"
+                    alt="Sports Ground & Physical Education"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-rose-700 dark:text-rose-300 border border-white/60">
+                    All Grades
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white">
+                    Sports & Holistic Development
+                  </h3>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-2 leading-relaxed">
+                    Physical education, football, cricket, track athletics, yoga, debate competitions, cultural celebrations, and arts.
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 pt-0 border-t border-stone-100 dark:border-stone-800/60 mt-4 flex items-center justify-between">
+                <span className="text-[11px] font-bold text-stone-400">Co-Curricular</span>
+                <Link
+                  href="/gallery"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#5B45B2] dark:text-purple-400 hover:underline"
+                >
+                  <span>Learn More</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. CAMPUS INFRASTRUCTURE SPOTLIGHT */}
       <section className="py-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-5">
               <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
-                style={{ backgroundColor: '#FAF8F5', color: '#214F39', border: '1px solid #E8B4A8' }}
+                className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-purple-50 dark:bg-purple-950/70 text-[#5B45B2] dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60"
               >
-                <span>{settings.aboutHomeBadge || 'About Our Institution'}</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#5B45B2]" />
+                <span>Modern Infrastructure</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-stone-900 leading-tight">
-                {settings.aboutHomeTitle || (
-                  <>
-                    Empowering Students with <br />
-                    <span style={{ color: '#214F39' }}>Knowledge, Ethics & Modern Skills</span>
-                  </>
-                )}
+              <h2 className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-white leading-tight">
+                Empowering Students with <br />
+                <span className="text-[#5B45B2] dark:text-purple-400">Smart Technology & Creative Spaces</span>
               </h2>
-              <p className="text-sm text-stone-600 leading-relaxed">
-                {settings.aboutHomeDesc ||
-                  'At Success Point School, education transcends routine textbooks. We blend rigorous academic instruction with interactive smart classroom technologies, moral values, debate, sports, and science exhibitions.'}
+              <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+                At Success Point School, educational infrastructure goes beyond conventional walls. We provide cutting-edge smart audio-visual classrooms, STEM laboratories, fully networked IT centers, and safe sports environments.
               </p>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>{settings.aboutHomeFeature1 || 'Activity-Based Kindergarten'}</span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800 dark:text-stone-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Activity-Based Smart Classrooms</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>{settings.aboutHomeFeature2 || 'Digital Video Lecture Portal'}</span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800 dark:text-stone-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Digital Video Lecture Portal</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>{settings.aboutHomeFeature3 || 'Science, Arts & Commerce Streams'}</span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800 dark:text-stone-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Physics, Chem & Bio Laboratories</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#214F39] shrink-0" />
-                  <span>{settings.aboutHomeFeature4 || 'CCTV Safe & Secure Campus'}</span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-stone-800 dark:text-stone-200">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>CCTV 24x7 Secured Campus</span>
                 </div>
               </div>
+
               <div className="pt-3">
                 <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-xs"
-                  style={{ backgroundColor: '#214F39', color: '#FFFFFF' }}
+                  href="/gallery"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-bold transition shadow-md bg-[#214F39] hover:bg-[#1a3f2d] text-white active:scale-95"
                 >
-                  <span>Read Full About Us & Vision</span>
+                  <span>Explore Campus Facilities & Gallery</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
             <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
-                  <Monitor className="w-5 h-5 text-[#214F39]" />
+              <div className="p-5 sm:p-6 rounded-3xl bg-[#FAF9F6] dark:bg-stone-800/80 border border-stone-200/90 dark:border-stone-700 space-y-3">
+                <div className="w-11 h-11 rounded-2xl bg-white dark:bg-stone-700 flex items-center justify-center border border-purple-200 dark:border-purple-800 text-[#5B45B2] dark:text-purple-300 shadow-2xs">
+                  <Monitor className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-sm text-stone-900">Smart E-Learning</h4>
-                <p className="text-xs text-stone-600 leading-relaxed">
-                  Recorded lectures and online homework submission on every student dashboard.
+                <h4 className="font-bold text-sm text-stone-900 dark:text-white">Smart Classrooms</h4>
+                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+                  Interactive screens, audio-visual instruction, and recorded lectures available on student dashboards.
                 </p>
               </div>
 
-              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
-                  <Atom className="w-5 h-5 text-[#214F39]" />
+              <div className="p-5 sm:p-6 rounded-3xl bg-[#FAF9F6] dark:bg-stone-800/80 border border-stone-200/90 dark:border-stone-700 space-y-3">
+                <div className="w-11 h-11 rounded-2xl bg-white dark:bg-stone-700 flex items-center justify-center border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-300 shadow-2xs">
+                  <Atom className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-sm text-stone-900">Science Practical Labs</h4>
-                <p className="text-xs text-stone-600 leading-relaxed">
-                  Equipped Physics, Chemistry, and Biology experimental setups.
+                <h4 className="font-bold text-sm text-stone-900 dark:text-white">Practical Science Labs</h4>
+                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+                  Dedicated apparatus and safety equipment for Physics, Chemistry, and Biology experiments.
                 </p>
               </div>
 
-              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
-                  <FileCheck2 className="w-5 h-5 text-[#214F39]" />
+              <div className="p-5 sm:p-6 rounded-3xl bg-[#FAF9F6] dark:bg-stone-800/80 border border-stone-200/90 dark:border-stone-700 space-y-3">
+                <div className="w-11 h-11 rounded-2xl bg-white dark:bg-stone-700 flex items-center justify-center border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-300 shadow-2xs">
+                  <FileCheck2 className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-sm text-stone-900">Continuous Assessment</h4>
-                <p className="text-xs text-stone-600 leading-relaxed">
-                  Regular diagnostic tests, periodic feedback, and automated marksheet records.
+                <h4 className="font-bold text-sm text-stone-900 dark:text-white">Continuous Evaluation</h4>
+                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+                  Regular diagnostic tests, periodic feedback, and online marksheet records for every pupil.
                 </p>
               </div>
 
-              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border border-stone-200/90 space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-[#E8B4A8]">
-                  <HeartHandshake className="w-5 h-5 text-[#214F39]" />
+              <div className="p-5 sm:p-6 rounded-3xl bg-[#FAF9F6] dark:bg-stone-800/80 border border-stone-200/90 dark:border-stone-700 space-y-3">
+                <div className="w-11 h-11 rounded-2xl bg-white dark:bg-stone-700 flex items-center justify-center border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 shadow-2xs">
+                  <HeartHandshake className="w-5 h-5" />
                 </div>
-                <h4 className="font-bold text-sm text-stone-900">Individual Mentoring</h4>
-                <p className="text-xs text-stone-600 leading-relaxed">
-                  Caring educators who nurture every student’s confidence and strengths.
+                <h4 className="font-bold text-sm text-stone-900 dark:text-white">Personalized Mentorship</h4>
+                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+                  Caring educators who nurture each child’s intellectual curiosity, ethics, and character.
                 </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. ACADEMIC PROGRAM DIVISIONS PREVIEW */}
-      <section className="py-20 bg-[#FAF8F5] border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span
-                className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border shadow-2xs"
-                style={{ backgroundColor: '#FFFFFF', color: '#214F39', borderColor: '#E8B4A8' }}
-              >
-                Curriculum Structure
-              </span>
-              <h2 className="text-3xl font-black text-stone-900 mt-2">
-                Academic Programs & Streams
-              </h2>
-              <p className="text-sm text-stone-600 mt-1">
-                Holistic curriculum tailored for intellectual clarity, board excellence, and character building.
-              </p>
-            </div>
-            <Link
-              href="/academics"
-              className="mt-4 md:mt-0 text-xs font-bold text-[#214F39] flex items-center gap-1 hover:underline"
-            >
-              <span>Explore Detailed Academic Syllabus</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-7 rounded-3xl border border-stone-200/90 shadow-2xs hover:shadow-lg transition flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-[#214F39] border border-emerald-200">
-                  Pre-Primary & Primary
-                </span>
-                <h3 className="text-xl font-bold text-stone-900 mt-4">
-                  Foundational & Primary Stage
-                </h3>
-                <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                  Interactive storytelling, phonics, mental math, moral education, and creative art in an engaging environment.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#214F39]">
-                <span>Nursery to Class 5th</span>
-                <Link href="/academics" className="flex items-center gap-1 hover:underline">
-                  Details <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white p-7 rounded-3xl border border-stone-200/90 shadow-2xs hover:shadow-lg transition flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200">
-                  Middle & Secondary
-                </span>
-                <h3 className="text-xl font-bold text-stone-900 mt-4">
-                  Secondary Board Excellence
-                </h3>
-                <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                  Intensive Science, Mathematics, Social Sciences, Computer applications, laboratory experiments, and board exam series.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#214F39]">
-                <span>Class 6th to 10th</span>
-                <Link href="/academics" className="flex items-center gap-1 hover:underline">
-                  Details <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white p-7 rounded-3xl border border-stone-200/90 shadow-2xs hover:shadow-lg transition flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-800 border border-purple-200">
-                  Senior Secondary
-                </span>
-                <h3 className="text-xl font-bold text-stone-900 mt-4">
-                  Specialized Career Streams
-                </h3>
-                <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                  Dedicated Science (Medical/Non-Medical), Commerce, and Arts streams with college guidance and competitive exam orientation.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-[#214F39]">
-                <span>Class 11th & 12th</span>
-                <Link href="/academics" className="flex items-center gap-1 hover:underline">
-                  Details <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
             </div>
           </div>
@@ -751,6 +1065,72 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* CAMPUS VIDEO TOUR MODAL */}
+      {videoModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
+          onClick={() => setVideoModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl bg-stone-900 rounded-3xl overflow-hidden shadow-2xl border border-stone-800 text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-stone-800 bg-stone-900/90">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#5B45B2] flex items-center justify-center text-white">
+                  <Play className="w-4 h-4 fill-current ml-0.5" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm sm:text-base text-white">
+                    Success Point School — Virtual Campus Tour
+                  </h3>
+                  <p className="text-[11px] text-stone-400">
+                    Discover Our Smart Classrooms, Labs & Student Life
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setVideoModalOpen(false)}
+                className="w-9 h-9 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white flex items-center justify-center transition"
+                aria-label="Close video"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Video Container (16:9 Aspect Ratio) */}
+            <div className="relative w-full aspect-video bg-black">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&rel=0"
+                title="Success Point School Campus Tour"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+
+            {/* Modal Footer Call to Action */}
+            <div className="p-4 sm:p-5 bg-stone-950 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <p className="text-xs text-stone-400 text-center sm:text-left">
+                Admissions open for Academic Session 2026-27 • Nursery to Class 12th
+              </p>
+              <Link
+                href="/admissions"
+                onClick={() => setVideoModalOpen(false)}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#5B45B2] hover:bg-[#4d39a3] text-white text-xs font-bold transition shadow-sm"
+              >
+                <span>Apply for Admission Online</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <PublicFooter />
     </div>
