@@ -3,6 +3,8 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles, hashPassword } from '@/lib/auth';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
+import SchoolClass from '@/models/SchoolClass';
+import Subject from '@/models/Subject';
 import {
   reconcileAllFacultyWithTeachers,
   syncTeacherProfileToFaculty,

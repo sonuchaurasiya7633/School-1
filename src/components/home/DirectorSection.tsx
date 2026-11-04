@@ -103,7 +103,7 @@ export default function DirectorSection({
 
         {/* Director Profile Card (Desktop: Two Columns, Mobile: Single Column) */}
         <div
-          className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden max-w-5xl mx-auto"
+          className="glass-panel rounded-[32px] border border-stone-200/80 dark:border-stone-800 shadow-xl overflow-hidden max-w-5xl mx-auto"
         >
           {/* Top Decorative Border in Deep Green and Soft Peach */}
           <div className="h-2 w-full bg-gradient-to-r from-[#214F39] via-[#E8B4A8] to-[#214F39]" />
@@ -114,22 +114,15 @@ export default function DirectorSection({
               <div className="relative group w-full max-w-xs sm:max-w-sm">
                 {/* Background Glow Ring */}
                 <div
-                  className="absolute -inset-1 rounded-3xl blur-md opacity-40 group-hover:opacity-75 transition duration-500"
-                  style={{
-                    backgroundColor: '#E8B4A8',
-                  }}
+                  className="absolute -inset-1 rounded-3xl blur-md opacity-40 group-hover:opacity-75 transition duration-500 bg-[#E8B4A8]"
                   aria-hidden="true"
                 />
 
                 {/* Photo Frame Container */}
                 <div
-                  className="relative rounded-2xl overflow-hidden border-4 shadow-lg bg-white"
-                  style={{
-                    borderColor: '#FFFFFF',
-                    outline: '2px solid rgba(232, 180, 168, 0.7)',
-                  }}
+                  className="relative rounded-2xl overflow-hidden border-4 shadow-lg bg-white dark:bg-stone-800 border-white dark:border-stone-700"
                 >
-                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-stone-100">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-stone-100 dark:bg-stone-900">
                     <Image
                       src={data.image}
                       alt={`${data.name} - ${data.designation}, Success Point School`}
@@ -142,11 +135,7 @@ export default function DirectorSection({
 
                   {/* Verification Pill Overlay */}
                   <div
-                    className="absolute bottom-3 inset-x-3 backdrop-blur-md px-3.5 py-2 rounded-xl border flex items-center justify-between shadow-md"
-                    style={{
-                      backgroundColor: 'rgba(33, 79, 57, 0.92)',
-                      borderColor: '#E8B4A8',
-                    }}
+                    className="absolute bottom-3 inset-x-3 backdrop-blur-md px-3.5 py-2 rounded-xl border flex items-center justify-between shadow-md bg-[#214F39]/90 border-[#E8B4A8]"
                   >
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -167,40 +156,30 @@ export default function DirectorSection({
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               {/* Designation Badge */}
               <div
-                className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider"
-                style={{
-                  backgroundColor: '#FAF8F5',
-                  color: '#214F39',
-                  border: '1px solid #E8B4A8',
-                }}
+                className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-stone-100 dark:bg-stone-800 text-[#214F39] dark:text-emerald-400 border border-[#E8B4A8] dark:border-stone-700 shadow-2xs"
               >
-                <School className="w-3.5 h-3.5 text-[#214F39]" />
+                <School className="w-3.5 h-3.5 text-[#214F39] dark:text-emerald-400" />
                 <span>{data.designation}</span>
               </div>
 
               {/* Prominent Name */}
               <div>
                 <h3
-                  className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight"
-                  style={{ color: '#214F39' }}
+                  className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-stone-900 dark:text-stone-100"
                 >
                   {data.name}
                 </h3>
-                <p className="text-sm sm:text-base font-bold text-stone-600 mt-1">
+                <p className="text-sm sm:text-base font-bold text-[#214F39] dark:text-emerald-400 mt-1">
                   {data.designation}, Success Point School
                 </p>
               </div>
 
               {/* Direct Qualifications Line */}
               <div
-                className="p-3.5 sm:p-4 rounded-xl border flex items-center justify-center lg:justify-start gap-2.5 flex-wrap"
-                style={{
-                  backgroundColor: '#FAF8F5',
-                  borderColor: 'rgba(232, 180, 168, 0.6)',
-                }}
+                className="p-3.5 sm:p-4 rounded-2xl border flex items-center justify-center lg:justify-start gap-2.5 flex-wrap bg-stone-50 dark:bg-stone-800/80 border-stone-200/80 dark:border-stone-700"
               >
-                <GraduationCap className="w-5 h-5 text-[#214F39] shrink-0" />
-                <span className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                <GraduationCap className="w-5 h-5 text-[#214F39] dark:text-emerald-400 shrink-0" />
+                <span className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
                   Qualifications:
                 </span>
                 <span

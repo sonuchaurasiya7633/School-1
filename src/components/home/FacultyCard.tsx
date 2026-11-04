@@ -20,30 +20,21 @@ export default function FacultyCard({ member }: FacultyCardProps) {
 
   return (
     <div
-      className="group relative flex flex-col justify-between h-full bg-white dark:bg-stone-900 rounded-2xl border border-stone-200/80 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
-      style={{
-        boxShadow: '0 4px 20px -2px rgba(33, 79, 57, 0.06)',
-      }}
+      className="group relative flex flex-col justify-between h-full glass-panel glass-card-hover rounded-3xl border border-stone-200/80 dark:border-stone-800 shadow-md transition-all duration-300 overflow-hidden"
     >
-      {/* Top Accent Bar in Soft Peach & Deep Green */}
+      {/* Top Accent Gradient Bar */}
       <div className="h-1.5 w-full bg-gradient-to-r from-[#214F39] via-[#E8B4A8] to-[#214F39] group-hover:h-2 transition-all duration-300" />
 
-      {/* Card Header & Avatar */}
+      {/* Card Header & Avatar (Ref: Circular Glow Avatar) */}
       <div className="p-6 pb-4 flex flex-col items-center text-center">
-        {/* Profile Photo Placeholder with Neutral Avatar Icon */}
+        {/* Profile Photo Placeholder with Glowing Ring */}
         <div className="relative mb-4">
+          <div className="absolute -inset-1 rounded-full bg-[#E8B4A8]/40 blur-sm group-hover:blur-md transition-all duration-300" />
           <div
-            className="w-20 h-20 sm:w-22 sm:h-22 rounded-full flex items-center justify-center p-1 border-2 transition-transform duration-300 group-hover:scale-105"
-            style={{
-              backgroundColor: '#FAF8F5',
-              borderColor: '#E8B4A8',
-            }}
+            className="w-20 h-20 sm:w-22 sm:h-22 rounded-full flex items-center justify-center p-1 border-2 transition-transform duration-300 group-hover:scale-105 relative z-10 bg-white dark:bg-stone-800 border-[#E8B4A8]"
           >
             <div
-              className="w-full h-full rounded-full flex items-center justify-center text-[#214F39] relative overflow-hidden"
-              style={{
-                backgroundColor: 'rgba(33, 79, 57, 0.06)',
-              }}
+              className="w-full h-full rounded-full flex items-center justify-center text-[#214F39] dark:text-emerald-400 relative overflow-hidden bg-stone-50 dark:bg-stone-900"
               aria-label={`Profile for ${member.name}`}
             >
               {member.avatar ? (
@@ -53,18 +44,14 @@ export default function FacultyCard({ member }: FacultyCardProps) {
                   className="w-full h-full object-cover object-top"
                 />
               ) : (
-                <User className="w-10 h-10 text-[#214F39]/70 group-hover:text-[#214F39] transition-colors" strokeWidth={1.5} />
+                <User className="w-10 h-10 text-[#214F39]/70 dark:text-emerald-400/80 group-hover:text-[#214F39] transition-colors" strokeWidth={1.5} />
               )}
             </div>
           </div>
 
           {/* Academic Verification Badge */}
           <span
-            className="absolute bottom-0 right-0 w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-xs"
-            style={{
-              backgroundColor: '#214F39',
-              color: '#FFFFFF',
-            }}
+            className="absolute bottom-0 right-0 w-6 h-6 rounded-full flex items-center justify-center border-2 border-white dark:border-stone-800 shadow-xs z-20 bg-[#214F39] text-white"
             title="Verified Faculty Member"
           >
             <Sparkles className="w-3 h-3 text-[#E8B4A8]" />
@@ -73,26 +60,22 @@ export default function FacultyCard({ member }: FacultyCardProps) {
 
         {/* Faculty Member Name */}
         <h3
-          className="font-bold text-base sm:text-lg tracking-tight transition-colors line-clamp-2 text-[#214F39] dark:text-emerald-400"
+          className="font-extrabold text-base sm:text-lg tracking-tight transition-colors line-clamp-2 text-stone-900 dark:text-stone-100 group-hover:text-[#214F39] dark:group-hover:text-emerald-400"
         >
           {member.name}
         </h3>
 
-        {/* Neutral Badge for Academic Role */}
+        {/* Status Pill Badge (Ref: Image 3 Pill Badges) */}
         <span
-          className="inline-block mt-1 text-[11px] font-semibold tracking-wide uppercase px-2.5 py-0.5 rounded-full"
-          style={{
-            backgroundColor: '#FAF8F5',
-            color: '#214F39',
-            border: '1px solid rgba(232, 180, 168, 0.5)',
-          }}
+          className="inline-flex items-center gap-1.5 mt-1.5 text-[10px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
         >
-          Teaching Faculty
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          Verified Faculty
         </span>
       </div>
 
       {/* Card Details: Qualification & University */}
-      <div className="px-6 pb-6 pt-2 flex-1 flex flex-col justify-between space-y-3.5 border-t border-stone-100">
+      <div className="px-6 pb-6 pt-2 flex-1 flex flex-col justify-between space-y-3.5 border-t border-stone-100 dark:border-stone-800">
         <div className="space-y-3">
           {/* Educational Qualification */}
           <div className="flex items-start gap-2.5 text-left">

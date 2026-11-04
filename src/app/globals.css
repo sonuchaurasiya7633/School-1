@@ -231,6 +231,77 @@
   .saas-btn-outline {
     @apply inline-flex items-center justify-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold shadow-2xs transition-all;
   }
+
+  /* Educational Glass & Pastel Design System (Reference UI) */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 16px 40px -10px rgba(33, 79, 57, 0.07);
+  }
+
+  html.dark .glass-panel {
+    background: rgba(20, 30, 24, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.45);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 50px -12px rgba(33, 79, 57, 0.12);
+  }
+
+  html.dark .glass-card-hover:hover {
+    box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+}
+
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-0.8deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.06);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 7s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
 }
 
 @media print {
@@ -250,4 +321,46 @@
     padding: 20px;
     background: white;
   }
+}
+
+/* ==========================================================================
+   STRICT GOOGLE TRANSLATE BANNER / PATTI SUPPRESSION (Global Override)
+   ========================================================================== */
+html,
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.skiptranslate,
+iframe[id*=":1.container"],
+iframe[id*=":2.container"],
+iframe[class*="VIpgJd"],
+iframe[class*="goog-te"],
+.VIpgJd-ZVi9od-ORHb-OEVmcb,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe-OiiCO,
+.VIpgJd-ZVi9od-l4eHX-hSRLGd,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0px !important;
+  width: 0px !important;
+  opacity: 0 !important;
+  position: fixed !important;
+  top: -99999px !important;
+  left: -99999px !important;
+  pointer-events: none !important;
+  z-index: -99999 !important;
+}
+
+body > .skiptranslate:not(#google_translate_element):not(:has(#google_translate_element)) {
+  display: none !important;
+  visibility: hidden !important;
 }

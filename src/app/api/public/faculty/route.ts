@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import Faculty from '@/models/Faculty';
+import SchoolClass from '@/models/SchoolClass';
+import Subject from '@/models/Subject';
 import { FACULTY_MEMBERS } from '@/data/facultyData';
 
 export const dynamic = 'force-dynamic';

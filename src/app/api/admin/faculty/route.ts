@@ -4,6 +4,8 @@ import { authorizeRoles } from '@/lib/auth';
 import Faculty from '@/models/Faculty';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
+import SchoolClass from '@/models/SchoolClass';
+import Subject from '@/models/Subject';
 import { FACULTY_MEMBERS } from '@/data/facultyData';
 import {
   syncFacultyMemberToTeacherProfile,

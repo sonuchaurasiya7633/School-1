@@ -79,6 +79,24 @@ const TRANSLATIONS: Record<string, { en: string; hi: string }> = {
   'common.whatsapp_us': { en: 'WhatsApp Inquiry', hi: 'व्हाट्सएप पूछताछ' },
 };
 
+function clearGoogleTransCookies() {
+  if (typeof window === 'undefined') return;
+  const host = window.location.hostname;
+  const hostParts = host.split('.');
+  const baseDomain = hostParts.length > 2 ? hostParts.slice(-2).join('.') : host;
+  const domains = [host, `.${host}`, baseDomain, `.${baseDomain}`, ''];
+  const paths = ['/', window.location.pathname];
+  const past = 'Thu, 01 Jan 1970 00:00:00 UTC; max-age=0;';
+
+  domains.forEach((d) => {
+    paths.forEach((p) => {
+      const dStr = d ? `; domain=${d}` : '';
+      document.cookie = `googtrans=; expires=${past}; path=${p}${dStr}`;
+      document.cookie = `googtrans=deleted; expires=${past}; path=${p}${dStr}`;
+    });
+  });
+}
+
 function applyGoogleTranslation(lang: 'en' | 'hi') {
   if (typeof window === 'undefined') return;
 
@@ -86,7 +104,7 @@ function applyGoogleTranslation(lang: 'en' | 'hi') {
   const isLocal = host === 'localhost' || host === '127.0.0.1';
 
   if (lang === 'hi') {
-    // Set cookies for Google translate
+    // Set cookies for Google translate to Hindi
     document.cookie = 'googtrans=/en/hi; path=/';
     document.cookie = 'googtrans=/auto/hi; path=/';
     if (!isLocal) {
@@ -105,23 +123,14 @@ function applyGoogleTranslation(lang: 'en' | 'hi') {
         select.value = 'hi';
         select.dispatchEvent(new Event('change', { bubbles: true }));
         clearInterval(interval);
-      } else if (attempts >= 15) {
+      } else if (attempts >= 20) {
         clearInterval(interval);
-        // If combo isn't available, reload to let cookie take effect
         window.location.reload();
       }
-    }, 80);
+    }, 70);
   } else {
-    // Revert to English
-    const past = 'Thu, 01 Jan 1970 00:00:00 UTC';
-    document.cookie = `googtrans=; expires=${past}; path=/`;
-    document.cookie = `googtrans=/en/en; path=/`;
-    if (!isLocal) {
-      document.cookie = `googtrans=; expires=${past}; path=/; domain=.${host}`;
-      document.cookie = `googtrans=; expires=${past}; path=/; domain=${host}`;
-      document.cookie = `googtrans=/en/en; path=/; domain=.${host}`;
-      document.cookie = `googtrans=/en/en; path=/; domain=${host}`;
-    }
+    // Revert to English cleanly: completely clear cookies
+    clearGoogleTransCookies();
 
     const select = document.querySelector('select.goog-te-combo') as HTMLSelectElement | null;
     if (select) {
@@ -137,8 +146,9 @@ function applyGoogleTranslation(lang: 'en' | 'hi') {
       select.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    // Quick reload ensures clean, untranslated English DOM
+    // Quick reload ensures clean, untranslated English DOM without Google Translate banner artifacts
     setTimeout(() => {
+      clearGoogleTransCookies();
       window.location.reload();
     }, 120);
   }
@@ -215,17 +225,38 @@ export function PublicThemeLanguageProvider({ children }: { children: React.Reac
 
       // Suppress any Google Translate top banner iframe without hiding the combo
       const suppressBanner = () => {
+        if (typeof document === 'undefined') return;
         if (document.body && document.body.style.top && document.body.style.top !== '0px') {
           document.body.style.setProperty('top', '0px', 'important');
         }
-        document.querySelectorAll<HTMLElement>(
-          '.goog-te-banner-frame, iframe.goog-te-banner-frame, iframe.skiptranslate, .VIpgJd-ZVi9od-ORHb-OEVmcb'
-        ).forEach((el) => {
+        if (document.documentElement && document.documentElement.style.top && document.documentElement.style.top !== '0px') {
+          document.documentElement.style.setProperty('top', '0px', 'important');
+        }
+        const bannerSelectors = [
+          '.goog-te-banner-frame',
+          'iframe.goog-te-banner-frame',
+          'iframe.skiptranslate',
+          'iframe[id*=":1.container"]',
+          'iframe[id*=":2.container"]',
+          'iframe[class*="VIpgJd"]',
+          'iframe[class*="goog-te"]',
+          '.VIpgJd-ZVi9od-ORHb-OEVmcb',
+          '.VIpgJd-ZVi9od-aZ2wEe-wOHMyf',
+          '.VIpgJd-ZVi9od-aZ2wEe-OiiCO',
+          '.VIpgJd-ZVi9od-l4eHX-hSRLGd',
+          '#goog-gt-tt',
+          '.goog-te-balloon-frame',
+        ];
+        document.querySelectorAll<HTMLElement>(bannerSelectors.join(', ')).forEach((el) => {
           el.style.setProperty('display', 'none', 'important');
           el.style.setProperty('visibility', 'hidden', 'important');
           el.style.setProperty('height', '0px', 'important');
+          el.style.setProperty('width', '0px', 'important');
+          el.style.setProperty('opacity', '0', 'important');
           el.style.setProperty('position', 'absolute', 'important');
-          el.style.setProperty('top', '-9999px', 'important');
+          el.style.setProperty('top', '-99999px', 'important');
+          el.style.setProperty('left', '-99999px', 'important');
+          el.style.setProperty('pointer-events', 'none', 'important');
         });
       };
 
@@ -234,8 +265,14 @@ export function PublicThemeLanguageProvider({ children }: { children: React.Reac
         suppressBanner();
       });
       if (document.body) {
-        observer.observe(document.body, { attributes: true, childList: true });
+        observer.observe(document.body, { attributes: true, childList: true, subtree: true });
       }
+      if (document.documentElement) {
+        observer.observe(document.documentElement, { attributes: true, childList: true });
+      }
+
+      const pollBanner = setInterval(suppressBanner, 200);
+      setTimeout(() => clearInterval(pollBanner), 6000);
     }
   }, []);
 

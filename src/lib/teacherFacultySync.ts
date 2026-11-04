@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
 import Faculty from '@/models/Faculty';
+import SchoolClass from '@/models/SchoolClass';
+import Subject from '@/models/Subject';
 import { hashPassword } from '@/lib/auth';
 
 function escapeRegex(text: string) {

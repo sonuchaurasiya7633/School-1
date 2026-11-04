@@ -262,10 +262,16 @@ export default function AdminTeachersPage() {
 
     const initialAssigned = (t.assignedClasses || []).map((ac: any) => ({
       class: ac.class?._id || ac.class,
-      className: ac.class?.name || 'Class',
+      className:
+        ac.class?.name ||
+        classes.find((c) => String(c._id) === String(ac.class?._id || ac.class))?.name ||
+        'Class',
       section: ac.section || 'A',
       subject: ac.subject?._id || ac.subject,
-      subjectName: ac.subject?.name || 'Subject',
+      subjectName:
+        ac.subject?.name ||
+        subjects.find((s) => String(s._id) === String(ac.subject?._id || ac.subject))?.name ||
+        'Subject',
     }));
     setEditAssignedClasses(initialAssigned);
     setNewAssignClass(classes[0]?._id || '');
