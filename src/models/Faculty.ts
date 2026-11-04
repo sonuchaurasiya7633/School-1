@@ -15,6 +15,7 @@ export interface IFacultyDocument extends Document {
   order: number;
   isActive: boolean;
   avatar?: string;
+  user?: mongoose.Types.ObjectId;
   assignedClasses?: IFacultyAssignedClass[];
 }
 
@@ -28,6 +29,7 @@ const FacultySchema = new Schema<IFacultyDocument>(
     order: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
     avatar: { type: String, default: '' },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     assignedClasses: [
       {
         class: { type: Schema.Types.ObjectId, ref: 'SchoolClass', required: true },

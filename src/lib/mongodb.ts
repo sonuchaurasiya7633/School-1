@@ -18,6 +18,7 @@ import '@/models/SchoolSetting';
 import '@/models/Timetable';
 import '@/models/Faculty';
 import '@/models/SchoolCalendarEvent';
+import '@/models/AcademicSession';
 
 const ATLAS_FALLBACK_URI = 'mongodb+srv://sonukumar763303_db_user:JRrnDHofZ3IhKq4B@cluster0.pvcryae.mongodb.net/Success-Point-school';
 const MONGODB_URI = process.env.MONGODB_URI || ATLAS_FALLBACK_URI;

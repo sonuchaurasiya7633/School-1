@@ -5,6 +5,10 @@ import Faculty from '@/models/Faculty';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
 import { FACULTY_MEMBERS } from '@/data/facultyData';
+import {
+  syncFacultyMemberToTeacherProfile,
+  reconcileAllFacultyWithTeachers,
+} from '@/lib/teacherFacultySync';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,23 +76,8 @@ export async function POST(req: NextRequest) {
       assignedClasses: body.assignedClasses || [],
     });
 
-    // Synchronize with TeacherProfile if user with same name exists
-    if (body.assignedClasses?.length > 0) {
-      try {
-        const matchingUser = await User.findOne({
-          role: 'teacher',
-          name: { $regex: new RegExp(`^${body.name.trim()}$`, 'i') },
-        });
-        if (matchingUser) {
-          await TeacherProfile.findOneAndUpdate(
-            { user: matchingUser._id },
-            { $set: { assignedClasses: body.assignedClasses } }
-          );
-        }
-      } catch (err) {
-        console.error('TeacherProfile sync error in POST:', err);
-      }
-    }
+    // Synchronize with User & TeacherProfile
+    await syncFacultyMemberToTeacherProfile(newFaculty);
 
     const populated = await Faculty.findById(newFaculty._id)
       .populate('assignedClasses.class', 'name grade sections')
@@ -128,23 +117,8 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Faculty not found.' }, { status: 404 });
     }
 
-    // Synchronize with TeacherProfile if user with same name exists
-    if (updateData.assignedClasses) {
-      try {
-        const matchingUser = await User.findOne({
-          role: 'teacher',
-          name: { $regex: new RegExp(`^${updated.name.trim()}$`, 'i') },
-        });
-        if (matchingUser) {
-          await TeacherProfile.findOneAndUpdate(
-            { user: matchingUser._id },
-            { $set: { assignedClasses: updateData.assignedClasses } }
-          );
-        }
-      } catch (err) {
-        console.error('TeacherProfile sync error in PUT:', err);
-      }
-    }
+    // Synchronize with User & TeacherProfile
+    await syncFacultyMemberToTeacherProfile(updated);
 
     return NextResponse.json({
       success: true,

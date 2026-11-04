@@ -3,6 +3,10 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles, hashPassword } from '@/lib/auth';
 import User from '@/models/User';
 import TeacherProfile from '@/models/TeacherProfile';
+import {
+  reconcileAllFacultyWithTeachers,
+  syncTeacherProfileToFaculty,
+} from '@/lib/teacherFacultySync';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +17,9 @@ export async function GET(req: NextRequest) {
     if (!auth.authorized) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
+
+    // Reconcile and synchronize all faculty directory assignments with teacher profiles
+    await reconcileAllFacultyWithTeachers();
 
     const teachers = await TeacherProfile.find()
       .populate('user', '-password')
@@ -69,6 +76,9 @@ export async function POST(req: NextRequest) {
       .populate('assignedClasses.class')
       .populate('assignedClasses.subject');
 
+    // Sync to Faculty Directory
+    await syncTeacherProfileToFaculty(profile, newUser);
+
     return NextResponse.json({
       success: true,
       message: 'Teacher created successfully.',
@@ -114,6 +124,9 @@ export async function PUT(req: NextRequest) {
       }
       await user.save();
     }
+
+    // Sync back to Faculty Directory
+    await syncTeacherProfileToFaculty(profile, user);
 
     const updated = await TeacherProfile.findById(targetTeacherId)
       .populate('user', '-password')

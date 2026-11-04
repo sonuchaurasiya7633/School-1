@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/context/AuthContext';
-import { Settings, Save, Lock, RefreshCw, CheckCircle, ShieldAlert, UserCheck } from 'lucide-react';
+import { Settings, Save, Lock, RefreshCw, CheckCircle, ShieldAlert, UserCheck, Layers, ExternalLink } from 'lucide-react';
 import { AvatarUploader } from '@/components/common/AvatarUploader';
 import { authFetch } from '@/lib/api';
 
@@ -27,6 +28,8 @@ export default function AdminSettingsPage() {
     phone: '',
     address: '',
   });
+
+  const [academicSessions, setAcademicSessions] = useState<any[]>([]);
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -78,10 +81,17 @@ export default function AdminSettingsPage() {
 
   const fetchSettings = async () => {
     try {
-      const res = await authFetch('/api/admin/settings');
-      const data = await res.json();
-      if (data.success && data.settings) {
-        setSettings(data.settings);
+      const [resS, resSessions] = await Promise.all([
+        authFetch('/api/admin/settings'),
+        authFetch('/api/admin/sessions'),
+      ]);
+      const dataS = await resS.json();
+      const dataSessions = await resSessions.json();
+      if (dataS.success && dataS.settings) {
+        setSettings(dataS.settings);
+      }
+      if (dataSessions.success && dataSessions.sessions) {
+        setAcademicSessions(dataSessions.sessions);
       }
     } catch (err) {
       console.error(err);
@@ -241,13 +251,36 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div>
-                <label className="font-semibold text-slate-700">Academic Session</label>
-                <input
-                  type="text"
-                  value={settings.academicYear}
-                  onChange={(e) => setSettings({ ...settings, academicYear: e.target.value })}
-                  className="w-full mt-1 p-2 border border-slate-300 rounded-lg"
-                />
+                <div className="flex items-center justify-between">
+                  <label className="font-semibold text-slate-700">Academic Session</label>
+                  <Link
+                    href="/admin/sessions"
+                    className="text-[10px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-0.5"
+                  >
+                    <span>+ Manage</span>
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </Link>
+                </div>
+                {academicSessions.length > 0 ? (
+                  <select
+                    value={settings.academicYear}
+                    onChange={(e) => setSettings({ ...settings, academicYear: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg font-bold text-slate-800 bg-white"
+                  >
+                    {academicSessions.map((s) => (
+                      <option key={s._id} value={s.sessionName}>
+                        {s.sessionName} {s.isCurrent ? '(Active Current)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    value={settings.academicYear}
+                    onChange={(e) => setSettings({ ...settings, academicYear: e.target.value })}
+                    className="w-full mt-1 p-2 border border-slate-300 rounded-lg font-bold"
+                  />
+                )}
               </div>
               <div>
                 <label className="font-semibold text-slate-700">Principal Name</label>
@@ -432,6 +465,48 @@ export default function AdminSettingsPage() {
                 {savingPassword ? 'Updating...' : 'Change Password'}
               </button>
             </form>
+          </div>
+
+          {/* Academic Sessions Card */}
+          <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 mb-3">
+              <div className="flex items-center gap-2">
+                <Layers className="w-4 h-4 text-emerald-600" />
+                <h3 className="font-bold text-sm text-slate-800">Academic Sessions</h3>
+              </div>
+              <Link
+                href="/admin/sessions"
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200"
+              >
+                <span>+ Create / Manage</span>
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
+            <p className="text-xs text-slate-500 mb-3">
+              Active session determines curriculum periods, student batch promotions, and online application forms.
+            </p>
+            <div className="space-y-1.5">
+              {academicSessions.map((s) => (
+                <div
+                  key={s._id}
+                  className={`flex items-center justify-between p-2 rounded-lg text-xs font-semibold ${
+                    s.isCurrent ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-slate-50 text-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold">{s.sessionName}</span>
+                    {s.isCurrent && (
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-black bg-emerald-600 text-white">
+                        ACTIVE
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-slate-500 uppercase">
+                    {s.isAdmissionOpen ? 'Admissions Open' : 'Closed'}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Database Reset & Reseed Box */}
