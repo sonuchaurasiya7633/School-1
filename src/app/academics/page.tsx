@@ -108,7 +108,7 @@ export default function AcademicsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-[#214F39] selection:text-white">
+    <div className="min-h-screen bg-[#FAF8F5] dark:bg-stone-950 text-stone-800 dark:text-stone-100 flex flex-col font-sans selection:bg-[#214F39] selection:text-white transition-colors">
       <PublicHeader activePage="academics" />
 
       {/* Header Banner */}

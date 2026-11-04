@@ -285,7 +285,7 @@ export default function HomePage() {
       <DirectorSection id="director" />
 
       {/* 4. ABOUT SCHOOL SPOTLIGHT */}
-      <section className="py-20 bg-white border-b border-stone-200">
+      <section className="py-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-5">
@@ -515,7 +515,7 @@ export default function HomePage() {
       </section>
 
       {/* 8. NOTICE BOARD PREVIEW */}
-      <section id="notices" className="py-16 bg-white border-b border-stone-200">
+      <section id="notices" className="py-16 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
@@ -635,7 +635,7 @@ export default function HomePage() {
       </section>
 
       {/* 9. PARENT & STUDENT TESTIMONIALS */}
-      <section className="py-20 bg-[#FAF8F5] border-b border-stone-200">
+      <section className="py-20 bg-[#FAF8F5] dark:bg-stone-950 border-b border-stone-200 dark:border-stone-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span
@@ -682,7 +682,7 @@ export default function HomePage() {
       </section>
 
       {/* 10. DIGITAL PORTALS UNIFIED ACCESS */}
-      <section id="portals" className="py-20 bg-white border-b border-stone-200">
+      <section id="portals" className="py-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span

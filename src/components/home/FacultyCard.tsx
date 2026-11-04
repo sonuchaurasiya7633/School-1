@@ -20,7 +20,7 @@ export default function FacultyCard({ member }: FacultyCardProps) {
 
   return (
     <div
-      className="group relative flex flex-col justify-between h-full bg-white rounded-2xl border border-stone-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
+      className="group relative flex flex-col justify-between h-full bg-white dark:bg-stone-900 rounded-2xl border border-stone-200/80 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
       style={{
         boxShadow: '0 4px 20px -2px rgba(33, 79, 57, 0.06)',
       }}
@@ -73,8 +73,7 @@ export default function FacultyCard({ member }: FacultyCardProps) {
 
         {/* Faculty Member Name */}
         <h3
-          className="font-bold text-base sm:text-lg tracking-tight transition-colors line-clamp-2"
-          style={{ color: '#214F39' }}
+          className="font-bold text-base sm:text-lg tracking-tight transition-colors line-clamp-2 text-[#214F39] dark:text-emerald-400"
         >
           {member.name}
         </h3>

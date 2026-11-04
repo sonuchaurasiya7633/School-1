@@ -26,20 +26,20 @@ const PublicThemeLanguageContext = createContext<PublicThemeLanguageContextType>
 // Comprehensive English-Hindi dictionary for the public school website
 const TRANSLATIONS: Record<string, { en: string; hi: string }> = {
   // Navigation Links
-  'nav.home': { en: 'Home', hi: 'होम' },
+  'nav.home': { en: 'Home', hi: 'मुख्य पृष्ठ' },
   'nav.about': { en: 'About Us', hi: 'हमारे बारे में' },
   'nav.academics': { en: 'Academics', hi: 'शैक्षणिक' },
-  'nav.admissions': { en: 'Admissions', hi: 'प्रवेश' },
-  'nav.faculty': { en: 'Faculty & Team', hi: 'शिक्षक एवं टीम' },
-  'nav.campus': { en: 'Campus & Facilities', hi: 'परिसर' },
+  'nav.admissions': { en: 'Admissions', hi: 'नामांकन / प्रवेश' },
+  'nav.faculty': { en: 'Faculty & Team', hi: 'शिक्षक एवं संकाय' },
+  'nav.campus': { en: 'Campus & Facilities', hi: 'परिसर एवं सुविधाएं' },
   'nav.notices': { en: 'Notice Board', hi: 'सूचना पट्ट' },
-  'nav.calendar': { en: 'Calendar', hi: 'कैलेंडर' },
+  'nav.calendar': { en: 'Calendar', hi: 'वार्षिक कैलेंडर' },
   'nav.contact': { en: 'Contact', hi: 'संपर्क करें' },
 
   // Header Actions
   'header.portal': { en: 'E-Learning Portal', hi: 'ई-लर्निंग पोर्टल' },
   'header.apply': { en: 'Apply 2026-27', hi: 'प्रवेश 2026-27' },
-  'header.login': { en: 'Login', hi: 'लॉगिन' },
+  'header.login': { en: 'Portal Login', hi: 'पोर्टल लॉगिन' },
   'header.dashboard': { en: 'Dashboard', hi: 'डैशबोर्ड' },
   'header.call': { en: 'Call Helpline', hi: 'हेल्पलाइन' },
 
@@ -79,6 +79,26 @@ const TRANSLATIONS: Record<string, { en: string; hi: string }> = {
   'common.whatsapp_us': { en: 'WhatsApp Inquiry', hi: 'व्हाट्सएप पूछताछ' },
 };
 
+function triggerGoogleTranslate(lang: 'en' | 'hi') {
+  if (typeof window === 'undefined') return;
+
+  const cookieVal = lang === 'hi' ? '/en/hi' : '/en/en';
+  const domain = window.location.hostname;
+
+  document.cookie = `googtrans=${cookieVal}; path=/;`;
+  if (domain && domain !== 'localhost') {
+    document.cookie = `googtrans=${cookieVal}; path=/; domain=.${domain};`;
+    document.cookie = `googtrans=${cookieVal}; path=/; domain=${domain};`;
+  }
+
+  // Attempt to select within google translate iframe or combo
+  const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+  if (select) {
+    select.value = lang;
+    select.dispatchEvent(new Event('change'));
+  }
+}
+
 export function PublicThemeLanguageProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<PublicTheme>('light');
   const [language, setLanguageState] = useState<PublicLanguage>('en');
@@ -100,6 +120,50 @@ export function PublicThemeLanguageProvider({ children }: { children: React.Reac
     const savedLang = localStorage.getItem('sps_public_lang') as PublicLanguage;
     if (savedLang === 'hi' || savedLang === 'en') {
       setLanguageState(savedLang);
+    }
+
+    // Inject hidden google translate element container
+    if (typeof document !== 'undefined') {
+      let div = document.getElementById('google_translate_element');
+      if (!div) {
+        div = document.createElement('div');
+        div.id = 'google_translate_element';
+        div.style.display = 'none';
+        document.body.appendChild(div);
+      }
+
+      (window as any).googleTranslateElementInit = () => {
+        try {
+          if ((window as any).google?.translate?.TranslateElement) {
+            new (window as any).google.translate.TranslateElement(
+              {
+                pageLanguage: 'en',
+                includedLanguages: 'hi,en',
+                autoDisplay: false,
+              },
+              'google_translate_element'
+            );
+
+            // If initialized and language is hindi, trigger it
+            const currentLang = localStorage.getItem('sps_public_lang');
+            if (currentLang === 'hi') {
+              setTimeout(() => {
+                triggerGoogleTranslate('hi');
+              }, 600);
+            }
+          }
+        } catch {
+          // ignore
+        }
+      };
+
+      if (!document.getElementById('google-translate-script')) {
+        const script = document.createElement('script');
+        script.id = 'google-translate-script';
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        script.async = true;
+        document.body.appendChild(script);
+      }
     }
   }, []);
 
@@ -123,19 +187,12 @@ export function PublicThemeLanguageProvider({ children }: { children: React.Reac
   const setLanguage = (lang: PublicLanguage) => {
     setLanguageState(lang);
     localStorage.setItem('sps_public_lang', lang);
-
-    // If Google Translate is on page, trigger it
-    if (typeof window !== 'undefined' && (window as any).googleTranslateElementInit) {
-      const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-      if (select) {
-        select.value = lang === 'hi' ? 'hi' : 'en';
-        select.dispatchEvent(new Event('change'));
-      }
-    }
+    triggerGoogleTranslate(lang);
   };
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'hi' : 'en');
+    const nextLang = language === 'en' ? 'hi' : 'en';
+    setLanguage(nextLang);
   };
 
   const t = (key: string, fallback?: string): string => {

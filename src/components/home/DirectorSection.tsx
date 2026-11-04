@@ -71,10 +71,7 @@ export default function DirectorSection({
     <section
       id={id}
       aria-labelledby="director-heading"
-      className={`py-16 sm:py-20 relative transition-colors ${className}`}
-      style={{
-        backgroundColor: '#FAF8F5', // Light Cream
-      }}
+      className={`py-16 sm:py-20 relative bg-[#FAF8F5] dark:bg-stone-950 transition-colors ${className}`}
     >
       {/* Decorative Subtle Accent Divider */}
       <div
@@ -86,36 +83,27 @@ export default function DirectorSection({
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
           <div
-            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-xs mb-3"
-            style={{
-              backgroundColor: '#FFFFFF',
-              color: '#214F39',
-              border: '1px solid #E8B4A8',
-            }}
+            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-xs mb-3 bg-white dark:bg-stone-900 text-[#214F39] dark:text-emerald-400 border border-[#E8B4A8] dark:border-stone-700"
           >
-            <Shield className="w-3.5 h-3.5 text-[#214F39]" />
+            <Shield className="w-3.5 h-3.5 text-[#214F39] dark:text-emerald-400" />
             <span>Institutional Leadership</span>
           </div>
 
           <h2
             id="director-heading"
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight"
-            style={{ color: '#214F39' }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#214F39] dark:text-emerald-400"
           >
             Meet Our Director
           </h2>
 
-          <p className="text-stone-600 text-sm sm:text-base leading-relaxed mt-2">
+          <p className="text-stone-600 dark:text-stone-300 text-sm sm:text-base leading-relaxed mt-2">
             Guiding Success Point School with educational vision, academic leadership, and dedication to student excellence.
           </p>
         </div>
 
         {/* Director Profile Card (Desktop: Two Columns, Mobile: Single Column) */}
         <div
-          className="bg-white rounded-3xl border border-stone-200/90 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden max-w-5xl mx-auto"
-          style={{
-            boxShadow: '0 10px 30px -5px rgba(33, 79, 57, 0.08)',
-          }}
+          className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden max-w-5xl mx-auto"
         >
           {/* Top Decorative Border in Deep Green and Soft Peach */}
           <div className="h-2 w-full bg-gradient-to-r from-[#214F39] via-[#E8B4A8] to-[#214F39]" />

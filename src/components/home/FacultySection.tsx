@@ -80,10 +80,7 @@ export default function FacultySection({ id = 'faculty', className = '' }: Facul
     <section
       id={id}
       aria-labelledby="faculty-heading"
-      className={`py-20 relative transition-colors ${className}`}
-      style={{
-        backgroundColor: '#FAF8F5', // Light Cream
-      }}
+      className={`py-20 relative bg-[#FAF8F5] dark:bg-stone-950 transition-colors ${className}`}
     >
       {/* Decorative Subtle Background Accents */}
       <div
@@ -101,28 +98,22 @@ export default function FacultySection({ id = 'faculty', className = '' }: Facul
         <div className="text-center max-w-3xl mx-auto space-y-4">
           {/* Eyebrow Pill */}
           <div
-            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-xs"
-            style={{
-              backgroundColor: '#FFFFFF',
-              color: '#214F39',
-              border: '1px solid #E8B4A8',
-            }}
+            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-xs bg-white dark:bg-stone-900 text-[#214F39] dark:text-emerald-400 border border-[#E8B4A8] dark:border-stone-700"
           >
-            <Users className="w-3.5 h-3.5 text-[#214F39]" />
+            <Users className="w-3.5 h-3.5 text-[#214F39] dark:text-emerald-400" />
             <span>Our Teaching Team</span>
           </div>
 
           {/* Section Title */}
           <h2
             id="faculty-heading"
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight"
-            style={{ color: '#214F39' }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#214F39] dark:text-emerald-400"
           >
             Meet Our Qualified Faculty
           </h2>
 
           {/* Section Subtitle */}
-          <p className="text-stone-600 text-sm sm:text-base leading-relaxed pt-1">
+          <p className="text-stone-600 dark:text-stone-300 text-sm sm:text-base leading-relaxed pt-1">
             Our dedicated and qualified educators are committed to providing quality education,
             guidance, and a supportive learning environment for every student.
           </p>

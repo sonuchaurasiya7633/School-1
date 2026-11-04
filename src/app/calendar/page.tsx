@@ -233,7 +233,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F6] text-stone-800 antialiased font-sans">
+    <div className="min-h-screen flex flex-col bg-[#FAF9F6] dark:bg-stone-950 text-stone-800 dark:text-stone-100 antialiased font-sans transition-colors">
       <PublicHeader />
 
       <main className="flex-1 pb-16">
