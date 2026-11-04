@@ -164,6 +164,30 @@ export function PublicThemeLanguageProvider({ children }: { children: React.Reac
         script.async = true;
         document.body.appendChild(script);
       }
+
+      // Suppress any Google Translate top banner patti dynamically
+      const suppressBanner = () => {
+        if (document.body && document.body.style.top && document.body.style.top !== '0px') {
+          document.body.style.setProperty('top', '0px', 'important');
+        }
+        document.querySelectorAll<HTMLElement>(
+          '.goog-te-banner-frame, iframe.goog-te-banner-frame, body > .skiptranslate, .VIpgJd-ZVi9od-ORHb-OEVmcb'
+        ).forEach((el) => {
+          el.style.setProperty('display', 'none', 'important');
+          el.style.setProperty('visibility', 'hidden', 'important');
+          el.style.setProperty('height', '0px', 'important');
+          el.style.setProperty('position', 'absolute', 'important');
+          el.style.setProperty('top', '-9999px', 'important');
+        });
+      };
+
+      suppressBanner();
+      const observer = new MutationObserver(() => {
+        suppressBanner();
+      });
+      if (document.body) {
+        observer.observe(document.body, { attributes: true, childList: true });
+      }
     }
   }, []);
 
