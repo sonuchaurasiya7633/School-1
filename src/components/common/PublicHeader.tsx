@@ -50,8 +50,16 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
     announcement: 'Welcome to Success Point School — Admissions Open for Session 2026-2027',
   });
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
     setMounted(true);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 8);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Lock body scroll when mobile drawer is open
@@ -114,7 +122,13 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-stone-900/95 backdrop-blur-md shadow-xs border-b border-stone-200 dark:border-stone-800 transition-colors">
+      <header
+        className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+          isScrolled
+            ? 'bg-white/95 dark:bg-stone-900/95 backdrop-blur-md shadow-md border-b border-stone-200/90 dark:border-stone-800'
+            : 'bg-white/95 dark:bg-stone-900/95 backdrop-blur-md shadow-xs border-b border-stone-200 dark:border-stone-800'
+        }`}
+      >
         {/* MAIN NAVIGATION BAR */}
         <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">

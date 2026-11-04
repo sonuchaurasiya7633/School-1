@@ -168,7 +168,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] dark:bg-stone-950 text-stone-800 dark:text-stone-100 flex flex-col font-sans selection:bg-[#214F39] selection:text-white transition-colors relative overflow-hidden">
+    <div className="min-h-screen bg-[#FAF8F5] dark:bg-stone-950 text-stone-800 dark:text-stone-100 flex flex-col font-sans selection:bg-[#214F39] selection:text-white transition-colors relative">
       <PublicHeader activePage="home" />
 
       {/* 1. PREMIUM HERO SECTION (Ref: Modern Pastel Glass & Floating Orbs) */}
