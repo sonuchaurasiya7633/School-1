@@ -56,6 +56,9 @@ export const metadata: Metadata = {
       'Official website of Success Point School. Admissions open for Nursery through Class 11th.',
     images: ['/images/logo.jpeg'],
   },
+  verification: {
+    google: 'Xlskr_Er9mhiqAUvN2TvAnGqbAzEvUTmBe_1trT-zN0',
+  },
   icons: {
     icon: '/images/logo.jpeg',
     apple: '/images/logo.jpeg',
