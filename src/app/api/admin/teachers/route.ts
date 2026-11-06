@@ -58,8 +58,8 @@ export async function GET(req: NextRequest) {
     const periodsCountMap: { [teacherUserId: string]: number } = {};
 
     allTimetables.forEach((tt) => {
-      // Exclude Saturday and Sunday periods
-      if (tt.day === 'Saturday' || tt.day === 'Sunday') return;
+      // Exclude Saturday (fixed weekly holiday OFF)
+      if (tt.day === 'Saturday') return;
 
       tt.periods?.forEach((p) => {
         if (p.teacher && !p.isBreak) {

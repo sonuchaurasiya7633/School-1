@@ -71,14 +71,14 @@ export default function AdminDashboardPage() {
   }
 
   const attendancePieData = [
-    { name: 'Present', value: stats.attendance?.present || 2, color: '#10b981' },
-    { name: 'Absent', value: stats.attendance?.absent || 1, color: '#f43f5e' },
-    { name: 'Late', value: stats.attendance?.late || 0, color: '#f59e0b' },
+    { name: 'Present', value: stats.attendance?.present ?? 0, color: '#10b981' },
+    { name: 'Absent', value: stats.attendance?.absent ?? 0, color: '#f43f5e' },
+    { name: 'Late', value: stats.attendance?.late ?? 0, color: '#f59e0b' },
   ];
 
   const feeBarData = [
-    { name: 'Collected', amount: stats.fees?.collected || 11000 },
-    { name: 'Pending Dues', amount: stats.fees?.pending || 5000 },
+    { name: 'Collected', amount: stats.fees?.collected ?? 0 },
+    { name: 'Pending Dues', amount: stats.fees?.pending ?? 0 },
   ];
 
   return (

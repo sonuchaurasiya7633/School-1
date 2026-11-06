@@ -62,13 +62,13 @@ export default function TeacherDashboardPage() {
     fetchTeacherData();
   }, []);
 
-  const assignedClassesCount = profile?.assignedClasses?.length || 2;
+  const assignedClassesCount = profile?.assignedClasses?.length || 0;
   const pendingHomeworkCount = homeworkList.filter((h) => h.submissions?.some((s: any) => s.status === 'Submitted')).length;
 
   return (
     <DashboardShell
       title={`Hi, ${user?.name?.split(' ')[0] || 'Teacher'}`}
-      subtitle={`Faculty ID: ${profile?.employeeId || 'FAC-102'} • ${profile?.specialization || 'Mathematics'}`}
+      subtitle={`Faculty ID: ${user?.userId || profile?.user?.userId || profile?.employeeId || 'TCH'} • ${profile?.specialization || 'General Faculty'}`}
       allowedRoles={['teacher']}
       onRefresh={fetchTeacherData}
     >

@@ -30,8 +30,8 @@ export default function AdminTimetablePage() {
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string; conflicts?: string[] } | null>(null);
 
-  const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const holidayDays = ['Saturday', 'Sunday'];
+  const workingDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const holidayDays = ['Saturday'];
   const isSelectedDayHoliday = holidayDays.includes(selectedDay);
 
   const defaultSlots = [
@@ -325,10 +325,10 @@ export default function AdminTimetablePage() {
                 onClick={handleCopyToAllWorkingDays}
                 disabled={saving}
                 className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition"
-                title="Copy Monday schedule to all working days"
+                title="Copy current day schedule to all working days"
               >
                 <Copy className="w-3.5 h-3.5 text-slate-500" />
-                <span>Copy to Mon—Fri</span>
+                <span>Copy to All Working Days</span>
               </button>
 
               <button
@@ -365,7 +365,7 @@ export default function AdminTimetablePage() {
               </button>
             ))}
 
-            {/* Saturday - FIXED HOLIDAY */}
+            {/* Saturday - FIXED HOLIDAY (OFF BY DEFAULT) */}
             <button
               onClick={() => setSelectedDay('Saturday')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border ${
@@ -375,18 +375,6 @@ export default function AdminTimetablePage() {
               }`}
             >
               <span>Saturday (OFF)</span>
-            </button>
-
-            {/* Sunday - FIXED HOLIDAY */}
-            <button
-              onClick={() => setSelectedDay('Sunday')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border ${
-                selectedDay === 'Sunday'
-                  ? 'bg-stone-700 text-white border-stone-800'
-                  : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
-              }`}
-            >
-              <span>Sunday (OFF)</span>
             </button>
           </div>
         </div>

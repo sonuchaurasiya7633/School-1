@@ -3,6 +3,7 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
 import User from '@/models/User';
 import SchoolClass from '@/models/SchoolClass';
+import Subject from '@/models/Subject';
 import Attendance from '@/models/Attendance';
 import Fee from '@/models/Fee';
 import Notice from '@/models/Notice';
@@ -15,11 +16,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
 
-    const [totalStudents, totalTeachers, totalClasses] = await Promise.all([
+    const [totalStudents, totalTeachers, allClasses, totalSubjects] = await Promise.all([
       User.countDocuments({ role: 'student', isActive: true }),
       User.countDocuments({ role: 'teacher', isActive: true }),
-      SchoolClass.countDocuments(),
+      SchoolClass.find().select('sections').lean(),
+      Subject.countDocuments(),
     ]);
+
+    const totalClasses = allClasses.length;
+    const totalSections = allClasses.reduce((acc, c) => acc + (c.sections?.length || 1), 0);
 
     // Today's attendance summary
     const today = new Date().toISOString().split('T')[0];
@@ -31,7 +36,7 @@ export async function GET(req: NextRequest) {
     let totalMarked = 0;
 
     attendanceRecords.forEach((att) => {
-      att.records.forEach((r: any) => {
+      att.records?.forEach((r: any) => {
         totalMarked++;
         if (r.status === 'Present') totalPresent++;
         else if (r.status === 'Absent') totalAbsent++;
@@ -39,7 +44,7 @@ export async function GET(req: NextRequest) {
       });
     });
 
-    const attendanceRate = totalMarked > 0 ? Math.round((totalPresent / totalMarked) * 100) : 95;
+    const attendanceRate = totalMarked > 0 ? Math.round((totalPresent / totalMarked) * 100) : 0;
 
     // Fees summary
     const feeRecords = await Fee.find();
@@ -80,6 +85,8 @@ export async function GET(req: NextRequest) {
         totalStudents,
         totalTeachers,
         totalClasses,
+        totalSections,
+        totalSubjects,
         attendance: {
           marked: totalMarked,
           present: totalPresent,

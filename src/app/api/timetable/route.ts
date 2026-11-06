@@ -60,8 +60,8 @@ export async function GET(req: NextRequest) {
       success: true,
       timetables,
       teacherTimetable: teacherSchedule,
-      workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      holidays: ['Saturday', 'Sunday'],
+      workingDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      holidays: ['Saturday'],
     });
   } catch (err: any) {
     return NextResponse.json({ success: false, message: err.message }, { status: 500 });
@@ -86,24 +86,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // STRICT RULE: Saturday and Sunday are fixed weekly holidays (OFF)
+    // STRICT RULE: Saturday is a fixed weekly holiday (OFF by default)
     const normalizedDay = day.trim();
     if (normalizedDay.toLowerCase() === 'saturday') {
       return NextResponse.json(
         {
           success: false,
           message:
-            'Strict Policy: Saturday is a mandatory fixed weekly holiday (OFF). No classes, teaching periods, or teacher assignments can be scheduled on Saturday.',
-        },
-        { status: 400 }
-      );
-    }
-    if (normalizedDay.toLowerCase() === 'sunday') {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Sunday is a designated weekly holiday (OFF). Regular class timetables cannot be scheduled on Sunday.',
+            'Strict Policy: Saturday is a mandatory weekly holiday (OFF by default). No classes, teaching periods, or teacher assignments can be scheduled on Saturday.',
         },
         { status: 400 }
       );

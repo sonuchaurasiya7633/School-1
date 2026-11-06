@@ -71,8 +71,8 @@ export default function StudentDashboardPage() {
   }, []);
 
   const totalMax = marks.reduce((acc, m) => acc + (m.maxMarks || 100), 0);
-  const totalObt = marks.reduce((acc, m) => acc + (m.marksObtained || 0), 0);
-  const overallPercentage = totalMax > 0 ? ((totalObt / totalMax) * 100).toFixed(0) : '88';
+  const totalObt = marks.reduce((acc, m) => acc + (m.isAbsent ? 0 : m.marksObtained || 0), 0);
+  const overallPercentage = totalMax > 0 ? ((totalObt / totalMax) * 100).toFixed(0) : '0';
 
   const pendingHomework = homeworkList.filter(
     (h) => !h.submissions?.some((s: any) => s.student?._id === user?._id || s.student === user?._id)

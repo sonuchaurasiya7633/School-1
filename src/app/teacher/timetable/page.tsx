@@ -19,8 +19,8 @@ export default function TeacherTimetablePage() {
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [loading, setLoading] = useState(true);
 
-  const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const holidayDays = ['Saturday', 'Sunday'];
+  const workingDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const holidayDays = ['Saturday'];
   const isSelectedDayHoliday = holidayDays.includes(selectedDay);
 
   const fetchTimetable = async () => {
@@ -112,7 +112,7 @@ export default function TeacherTimetablePage() {
             </button>
           ))}
 
-          {/* Saturday - FIXED HOLIDAY */}
+          {/* Saturday - FIXED HOLIDAY (OFF BY DEFAULT) */}
           <button
             onClick={() => setSelectedDay('Saturday')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition border ${
@@ -122,18 +122,6 @@ export default function TeacherTimetablePage() {
             }`}
           >
             <span>Saturday (OFF)</span>
-          </button>
-
-          {/* Sunday - FIXED HOLIDAY */}
-          <button
-            onClick={() => setSelectedDay('Sunday')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition border ${
-              selectedDay === 'Sunday'
-                ? 'bg-stone-700 text-white border-stone-800'
-                : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'
-            }`}
-          >
-            <span>Sunday (OFF)</span>
           </button>
         </div>
       </div>

@@ -102,6 +102,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const cleanEmail = email.toLowerCase().trim();
+    const existingEmail = await User.findOne({ email: cleanEmail });
+    if (existingEmail) {
+      return NextResponse.json(
+        { success: false, message: `A user with email "${cleanEmail}" is already registered.` },
+        { status: 400 }
+      );
+    }
+
+    const cleanRoll = rollNumber.trim();
+    const existingRoll = await StudentProfile.findOne({
+      class: classId,
+      section: section || 'A',
+      rollNumber: cleanRoll,
+    });
+    if (existingRoll) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Roll number "${cleanRoll}" is already assigned to another student in Section ${section || 'A'}.`,
+        },
+        { status: 400 }
+      );
+    }
+
     // Generate unique User ID if not provided (e.g. STD004)
     const count = await User.countDocuments({ role: 'student' });
     const userId = `STD${String(count + 1).padStart(3, '0')}`;
