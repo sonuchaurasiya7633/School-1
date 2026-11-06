@@ -23,7 +23,15 @@ export function formatDate(dateString?: string | Date): string {
   });
 }
 
-export function calculateGrade(marks: number, maxMarks: number = 100): string {
+export function calculateGrade(
+  marks: number,
+  maxMarks: number = 100,
+  isAbsent: boolean = false,
+  passMarks: number = 35
+): string {
+  if (isAbsent) return 'AB';
+  if (maxMarks <= 0) return 'F (Fail)';
+  if (marks < passMarks) return 'F (Fail)';
   const percentage = (marks / maxMarks) * 100;
   if (percentage >= 90) return 'A+';
   if (percentage >= 80) return 'A';

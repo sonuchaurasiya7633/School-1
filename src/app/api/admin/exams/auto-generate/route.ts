@@ -7,6 +7,8 @@ import Mark from '@/models/Mark';
 import Subject from '@/models/Subject';
 import { calculateGrade } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
@@ -40,9 +42,10 @@ export async function POST(req: NextRequest) {
     // Get subjects from exam schedule or subjects of class
     let examSubjects: any[] = [];
     if (exam.schedule && exam.schedule.length > 0) {
-      examSubjects = exam.schedule.map((s: any) => s.subject);
+      examSubjects = exam.schedule;
     } else {
-      examSubjects = await Subject.find({ classes: targetClassId });
+      const dbSubs = await Subject.find({ classes: targetClassId });
+      examSubjects = dbSubs.map((s) => ({ subject: s, maxMarks: 100, passMarks: 35 }));
     }
 
     if (examSubjects.length === 0) {
@@ -53,12 +56,15 @@ export async function POST(req: NextRequest) {
     }
 
     let generatedCount = 0;
+    const now = new Date();
 
     for (const st of students) {
       const studentUserId = st.user._id;
 
-      for (const sub of examSubjects) {
-        const subId = sub._id || sub;
+      for (const item of examSubjects) {
+        const subId = item.subject?._id || item.subject;
+        const maxMarks = item.maxMarks || 100;
+        const passMarks = item.passMarks || 35;
 
         // Check if mark already exists
         const existingMark = await Mark.findOne({
@@ -69,13 +75,12 @@ export async function POST(req: NextRequest) {
 
         if (!existingMark) {
           // Generate realistic marks (75 to 98)
-          const baseScore = 75 + Math.floor(Math.random() * 21); // 75 - 95
-          const marksObtained = Math.min(100, Math.max(40, baseScore));
-          const maxMarks = 100;
-          const grade = calculateGrade(marksObtained, maxMarks);
+          const baseScore = Math.floor(75 + Math.random() * 23);
+          const marksObtained = Math.min(maxMarks, Math.max(passMarks + 5, baseScore));
+          const grade = calculateGrade(marksObtained, maxMarks, false, passMarks);
           const remarks =
             marksObtained >= 90
-              ? 'Outstanding performance & conceptual clarity'
+              ? 'Outstanding conceptual clarity'
               : marksObtained >= 80
               ? 'Very good academic understanding'
               : marksObtained >= 70
@@ -90,22 +95,36 @@ export async function POST(req: NextRequest) {
             student: studentUserId,
             marksObtained,
             maxMarks,
+            passMarks,
+            isAbsent: false,
             grade,
             remarks,
+            status: 'Published',
             enteredBy: auth.user.id,
+            reviewedBy: auth.user.id,
+            approvedAt: now,
+            reviewRemarks: 'Auto-generated & approved',
+            auditLogs: [
+              {
+                action: 'Published',
+                changedBy: auth.user.id,
+                timestamp: now,
+                details: 'Auto-generated marksheet baseline',
+              },
+            ],
           });
           generatedCount++;
         }
       }
     }
 
-    // Automatically publish the exam so students can view marksheets immediately
+    // Mark the exam as published
     exam.isPublished = true;
     await exam.save();
 
     return NextResponse.json({
       success: true,
-      message: `Successfully generated and published marksheets for ${students.length} students (${generatedCount} subject mark entries created)!`,
+      message: `Successfully generated and published marksheets for ${students.length} students (${generatedCount} subject marks created)!`,
       studentsCount: students.length,
       generatedCount,
     });

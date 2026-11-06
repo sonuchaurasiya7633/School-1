@@ -14,7 +14,14 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const classId = searchParams.get('classId');
+    const session = searchParams.get('session');
+
     let filter: any = {};
+    if (classId) filter.class = classId;
+    if (session) filter.session = session;
+
     if (auth.user.role === 'student') {
       const studentProfile = await StudentProfile.findOne({ user: auth.user.id });
       if (studentProfile) {
@@ -26,6 +33,7 @@ export async function GET(req: NextRequest) {
     const exams = await Exam.find(filter)
       .populate('class', 'name grade')
       .populate('schedule.subject', 'name code')
+      .populate('schedule.teacher', 'name email')
       .sort({ startDate: -1 });
 
     return NextResponse.json({ success: true, exams });
@@ -42,7 +50,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
 
-    const { name, startDate, endDate, classId, isPublished, schedule } = await req.json();
+    const { name, session, startDate, endDate, classId, isPublished, schedule } = await req.json();
 
     if (!name || !startDate || !endDate || !classId) {
       return NextResponse.json({ success: false, message: 'All exam details are required.' }, { status: 400 });
@@ -50,6 +58,7 @@ export async function POST(req: NextRequest) {
 
     const newExam = await Exam.create({
       name,
+      session: session || '2026-2027',
       startDate,
       endDate,
       class: classId,
@@ -59,7 +68,8 @@ export async function POST(req: NextRequest) {
 
     const populated = await Exam.findById(newExam._id)
       .populate('class', 'name grade')
-      .populate('schedule.subject', 'name code');
+      .populate('schedule.subject', 'name code')
+      .populate('schedule.teacher', 'name email');
 
     return NextResponse.json({
       success: true,
@@ -79,12 +89,17 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
 
-    const { id, name, startDate, endDate, classId, isPublished, schedule } = await req.json();
+    const { id, name, session, startDate, endDate, classId, isPublished, schedule } = await req.json();
+
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'Exam ID is required.' }, { status: 400 });
+    }
 
     const updated = await Exam.findByIdAndUpdate(
       id,
       {
         name,
+        session: session || '2026-2027',
         startDate,
         endDate,
         class: classId,
@@ -94,7 +109,8 @@ export async function PUT(req: NextRequest) {
       { new: true }
     )
       .populate('class', 'name grade')
-      .populate('schedule.subject', 'name code');
+      .populate('schedule.subject', 'name code')
+      .populate('schedule.teacher', 'name email');
 
     return NextResponse.json({
       success: true,
