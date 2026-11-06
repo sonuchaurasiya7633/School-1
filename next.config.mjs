@@ -6,7 +6,7 @@ const nextConfig = {
   },
   transpilePackages: ['lucide-react'],
   experimental: {
-    serverComponentsExternalPackages: ['mongoose', 'mongodb-memory-server', 'bcryptjs'],
+    serverComponentsExternalPackages: ['mongoose', 'bcryptjs'],
   },
 };
 

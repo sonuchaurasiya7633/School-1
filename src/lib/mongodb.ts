@@ -20,13 +20,13 @@ import '@/models/Faculty';
 import '@/models/SchoolCalendarEvent';
 import '@/models/AcademicSession';
 
-const ATLAS_FALLBACK_URI = 'mongodb+srv://sonukumar763303_db_user:JRrnDHofZ3IhKq4B@cluster0.pvcryae.mongodb.net/Success-Point-school';
+const ATLAS_FALLBACK_URI =
+  'mongodb+srv://sonukumar763303_db_user:JRrnDHofZ3IhKq4B@cluster0.pvcryae.mongodb.net/Success-Point-school';
 const MONGODB_URI = process.env.MONGODB_URI || ATLAS_FALLBACK_URI;
 
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
-  memServer?: any;
 }
 
 declare global {
@@ -58,31 +58,7 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
         console.log('MongoDB successfully connected!');
         return m;
       } catch (err: any) {
-        console.warn(`Primary MongoDB connection failed: ${err.message}`);
-
-        // Never attempt in-memory MongoDB in Vercel or production serverless environments
-        const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === 'production';
-        if (!isServerless) {
-          try {
-            const { MongoMemoryServer } = await import('mongodb-memory-server');
-            if (!cached.memServer) {
-              cached.memServer = await MongoMemoryServer.create({
-                instance: {
-                  dbName: 'school_management',
-                },
-              });
-            }
-            const memoryUri = cached.memServer.getUri();
-            console.log(`Connected to local In-Memory MongoDB at ${memoryUri}`);
-            const m = await mongoose.connect(memoryUri, {
-              bufferCommands: false,
-            });
-            return m;
-          } catch (memErr: any) {
-            console.error('Failed to initialize in-memory MongoDB server:', memErr);
-          }
-        }
-
+        console.error(`MongoDB connection error: ${err.message}`);
         throw new Error(
           `Database connection error: ${err.message}. If deploying on Vercel, ensure MongoDB Atlas Network Access has IP whitelist set to 0.0.0.0/0 (Allow access from anywhere).`
         );
