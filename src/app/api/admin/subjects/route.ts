@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { authorizeRoles } from '@/lib/auth';
 import Subject from '@/models/Subject';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,7 +22,10 @@ export async function GET(req: NextRequest) {
       filter.classes = classId;
     }
 
-    const subjects = await Subject.find(filter).populate('classes', 'name grade').sort({ name: 1 });
+    const subjects = await Subject.find(filter)
+      .populate('classes', 'name grade')
+      .populate('teachers', 'name email userId')
+      .sort({ name: 1 });
 
     return NextResponse.json({ success: true, subjects });
   } catch (err: any) {
@@ -35,19 +41,50 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
 
-    const { name, code, classes } = await req.json();
+    const { name, code, type = 'compulsory', classes, teachers } = await req.json();
 
     if (!name || !code) {
-      return NextResponse.json({ success: false, message: 'Subject name and code are required.' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Subject name and subject code are required.' }, { status: 400 });
     }
 
-    const newSubject = await Subject.create({
-      name,
-      code: code.toUpperCase().trim(),
-      classes: classes || [],
+    const cleanCode = code.toUpperCase().trim();
+    const cleanName = name.trim();
+
+    // Prevent duplicate subject code or name
+    const existing = await Subject.findOne({
+      $or: [
+        { code: cleanCode },
+        { name: { $regex: new RegExp(`^${cleanName}$`, 'i') } },
+      ],
     });
 
-    const populated = await Subject.findById(newSubject._id).populate('classes', 'name grade');
+    if (existing) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            existing.code === cleanCode
+              ? `Subject code "${cleanCode}" already exists. Please choose a unique code.`
+              : `Subject name "${cleanName}" already exists.`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const validClasses = (classes || []).filter((c: any) => mongoose.isValidObjectId(c));
+    const validTeachers = (teachers || []).filter((t: any) => mongoose.isValidObjectId(t));
+
+    const newSubject = await Subject.create({
+      name: cleanName,
+      code: cleanCode,
+      type: type === 'optional' ? 'optional' : 'compulsory',
+      classes: validClasses,
+      teachers: validTeachers,
+    });
+
+    const populated = await Subject.findById(newSubject._id)
+      .populate('classes', 'name grade')
+      .populate('teachers', 'name email userId');
 
     return NextResponse.json({
       success: true,
@@ -67,17 +104,43 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ success: false, message: auth.message }, { status: 403 });
     }
 
-    const { id, name, code, classes } = await req.json();
+    const { id, name, code, type = 'compulsory', classes, teachers } = await req.json();
 
-    const updated = await Subject.findByIdAndUpdate(
-      id,
-      {
-        name,
-        code: code.toUpperCase().trim(),
-        classes,
-      },
-      { new: true }
-    ).populate('classes', 'name grade');
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'Subject ID is required.' }, { status: 400 });
+    }
+
+    const cleanCode = code ? code.toUpperCase().trim() : undefined;
+    const cleanName = name ? name.trim() : undefined;
+
+    // Check duplicate code on other subject
+    if (cleanCode) {
+      const duplicate = await Subject.findOne({
+        _id: { $ne: id },
+        code: cleanCode,
+      });
+      if (duplicate) {
+        return NextResponse.json(
+          { success: false, message: `Subject code "${cleanCode}" is already in use by another subject.` },
+          { status: 400 }
+        );
+      }
+    }
+
+    const updatePayload: any = {};
+    if (cleanName) updatePayload.name = cleanName;
+    if (cleanCode) updatePayload.code = cleanCode;
+    if (type) updatePayload.type = type === 'optional' ? 'optional' : 'compulsory';
+    if (classes) {
+      updatePayload.classes = classes.filter((c: any) => mongoose.isValidObjectId(c));
+    }
+    if (teachers) {
+      updatePayload.teachers = teachers.filter((t: any) => mongoose.isValidObjectId(t));
+    }
+
+    const updated = await Subject.findByIdAndUpdate(id, updatePayload, { new: true })
+      .populate('classes', 'name grade')
+      .populate('teachers', 'name email userId');
 
     return NextResponse.json({
       success: true,

@@ -339,6 +339,18 @@ export default function AdminTeachersPage() {
                   <span className="font-medium text-slate-700">{t.qualification}</span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="text-slate-400">Weekly Workload:</span>
+                  <span className="font-bold text-emerald-700">{t.weeklyPeriodsCount || 0} Periods / Week</span>
+                </div>
+                {t.classTeacherAssignments && t.classTeacherAssignments.length > 0 && (
+                  <div className="flex justify-between items-center pt-1 border-t border-slate-100">
+                    <span className="text-slate-400">Class Teacher Of:</span>
+                    <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded text-[11px] border border-blue-200">
+                      {t.classTeacherAssignments.join(', ')}
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-between">
                   <span className="text-slate-400">Contact:</span>
                   <span className="font-medium text-slate-700">{t.user?.phone || 'N/A'}</span>
                 </div>
