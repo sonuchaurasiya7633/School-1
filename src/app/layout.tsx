@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { PublicThemeLanguageProvider } from '@/context/PublicThemeLanguageContext';
+import { SchoolJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.successpointschool.online'),
@@ -15,11 +16,12 @@ export const metadata: Metadata = {
     'Success Point School',
     'SPS School',
     'Success Point School Online',
-    'Best School',
+    'Best School in Bihar',
     'School Admission 2026-27',
+    'CBSE School',
     'Smart Class School',
     'Quality Education',
-    'CBSE School',
+    'Nursery to 12th School Admission',
   ],
   authors: [{ name: 'Success Point School' }],
   creator: 'Success Point School',
@@ -31,6 +33,17 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://www.successpointschool.online',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   openGraph: {
     type: 'website',
@@ -79,6 +92,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <SchoolJsonLd />
+      </head>
       <body>
         <AuthProvider>
           <PublicThemeLanguageProvider>{children}</PublicThemeLanguageProvider>

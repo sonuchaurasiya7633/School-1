@@ -40,8 +40,9 @@ export default function FacultyCard({ member }: FacultyCardProps) {
               {member.avatar ? (
                 <img
                   src={member.avatar}
-                  alt={member.name}
+                  alt={`${member.name} - ${member.qualification || 'Faculty'}, Success Point School`}
                   className="w-full h-full object-cover object-top"
+                  loading="lazy"
                 />
               ) : (
                 <User className="w-10 h-10 text-[#214F39]/70 dark:text-emerald-400/80 group-hover:text-[#214F39] transition-colors" strokeWidth={1.5} />
