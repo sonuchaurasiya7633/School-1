@@ -7,15 +7,19 @@ import { SchoolJsonLd } from '@/components/seo/JsonLd';
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.successpointschool.online'),
   title: {
-    default: 'Success Point School | Best Education, Good Results',
+    default: 'Success Point School | Success Point Official Website',
     template: '%s | Success Point School',
   },
   description:
-    'Official website of Success Point School (S.P.S.). Admissions open for 2026-27 session. Providing academic excellence, smart digital classrooms, disciplined environment, and holistic student growth.',
+    'Success Point School (Success Point) official website. Admissions open for 2026-27 session. Providing academic excellence, smart digital classrooms, disciplined environment, and holistic student growth.',
   keywords: [
+    'Success Point',
     'Success Point School',
-    'SPS School',
     'Success Point School Online',
+    'Success Point Official',
+    'SPS School',
+    'Success Point Education',
+    'Success Point Campus',
     'Best School in Bihar',
     'School Admission 2026-27',
     'CBSE School',
@@ -49,9 +53,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: 'https://www.successpointschool.online',
-    title: 'Success Point School | Best Education, Good Results',
+    title: 'Success Point School | Success Point Official Website',
     description:
-      'Official website of Success Point School (S.P.S.). Admissions open for 2026-27 session. Smart digital classrooms, expert faculty, and holistic learning.',
+      'Success Point School (Success Point) official website. Admissions open for 2026-27 session. Smart digital classrooms, expert faculty, and holistic learning.',
     siteName: 'Success Point School',
     images: [
       {
@@ -64,9 +68,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Success Point School | Best Education, Good Results',
+    title: 'Success Point School | Success Point Official Website',
     description:
-      'Official website of Success Point School. Admissions open for Nursery through Class 11th.',
+      'Success Point School (Success Point) official website. Admissions open for Nursery through Class 12th.',
     images: ['/images/logo.jpeg'],
   },
   verification: {

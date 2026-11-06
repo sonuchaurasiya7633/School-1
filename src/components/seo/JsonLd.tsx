@@ -18,7 +18,14 @@ export function SchoolJsonLd() {
         '@type': ['School', 'EducationalOrganization', 'LocalBusiness'],
         '@id': 'https://www.successpointschool.online/#school',
         name: 'Success Point School',
-        alternateName: ['S.P.S.', 'Success Point School Online'],
+        alternateName: [
+          'Success Point',
+          'Success Point School Online',
+          'S.P.S.',
+          'SPS School',
+          'Success Point Campus',
+          'Success Point Education',
+        ],
         url: 'https://www.successpointschool.online',
         logo: {
           '@type': 'ImageObject',

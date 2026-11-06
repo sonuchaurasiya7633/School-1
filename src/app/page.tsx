@@ -150,12 +150,17 @@ export default function HomePage() {
             {/* Main Headline with Gradient Sheen Highlight */}
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.15]">
               {language === 'hi' ? (
-                t('hero.title', 'ज्ञान, संस्कार एवं शैक्षणिक उत्कृष्टता का संगम')
+                <>
+                  सक्सेस पॉइंट स्कूल
+                  <span className="block text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#E8B4A8] via-amber-200 to-emerald-200 mt-2 sm:mt-3">
+                    ज्ञान, संस्कार एवं शैक्षणिक उत्कृष्टता
+                  </span>
+                </>
               ) : (
                 <>
-                  Building Knowledge, Character &amp;{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E8B4A8] via-amber-200 to-emerald-200">
-                    Academic Brilliance
+                  Success Point School
+                  <span className="block text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#E8B4A8] via-amber-200 to-emerald-200 mt-2 sm:mt-3 tracking-tight">
+                    Building Knowledge, Character &amp; Academic Brilliance
                   </span>
                 </>
               )}
