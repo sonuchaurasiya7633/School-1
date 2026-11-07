@@ -89,13 +89,13 @@ export default function PublicFooter({ initialData, previewMode = false }: Publi
           {/* ================= COLUMN 1: BRANDING & ADMISSION CTA ================= */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-white p-1 overflow-hidden shrink-0 shadow-md border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-white p-0.5 overflow-hidden shrink-0 shadow-md border border-white/20 flex items-center justify-center">
                 <Image
                   src={footerData.logo || '/images/logo.jpeg'}
                   alt={footerData.schoolName || 'Success Point School'}
                   width={48}
                   height={48}
-                  className="object-contain w-full h-full"
+                  className="object-contain w-full h-full rounded-full"
                   onError={(e) => {
                     // Fallback to default logo if custom URL fails
                     (e.target as any).src = '/images/logo.jpeg';

@@ -103,13 +103,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
     <aside className="w-64 max-w-full bg-slate-950 text-slate-300 flex flex-col h-full border-r border-slate-800/80 shadow-2xl relative select-none">
       {/* Brand Header */}
       <div className="p-5 border-b border-slate-800/80 flex items-center gap-3.5">
-        <div className="relative w-11 h-11 rounded-2xl overflow-hidden bg-white p-1 shrink-0 shadow-lg border border-white/20">
+        <div className="relative w-11 h-11 rounded-full overflow-hidden bg-white p-0.5 shrink-0 shadow-lg border border-white/20 flex items-center justify-center">
           <Image
             src="/images/logo.jpeg"
             alt="Success Point School"
             width={44}
             height={44}
-            className="object-contain w-full h-full"
+            className="object-contain w-full h-full rounded-full"
             priority
           />
         </div>

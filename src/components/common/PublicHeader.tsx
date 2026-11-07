@@ -134,13 +134,13 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* School Brand / Logo */}
             <Link href="/" className="flex items-center gap-2.5 sm:gap-3.5 group min-w-0 mr-2">
-              <div className="w-10 h-10 sm:w-13 sm:h-13 rounded-xl sm:rounded-2xl bg-white p-1 border-2 border-[#214F39]/20 shadow-xs group-hover:scale-105 transition-transform overflow-hidden flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white p-0.5 shadow-xs group-hover:scale-105 transition-transform overflow-hidden flex items-center justify-center shrink-0 border border-emerald-600/15 dark:border-emerald-500/20">
                 <Image
                   src="/images/logo.jpeg"
                   alt="Success Point School"
-                  width={52}
-                  height={52}
-                  className="object-contain w-full h-full"
+                  width={48}
+                  height={48}
+                  className="object-contain w-full h-full rounded-full"
                   priority
                 />
               </div>
@@ -157,178 +157,71 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
               </div>
             </Link>
 
-          {/* Desktop Navigation Links (XL Screens) */}
-          <nav className="hidden xl:flex items-center gap-4 2xl:gap-5 text-[13px] font-bold text-stone-600 dark:text-stone-300">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`py-1 transition-colors relative flex items-center gap-1.5 ${
-                    isActive
-                      ? 'text-[#214F39] dark:text-emerald-400 font-black'
-                      : 'hover:text-[#214F39] dark:hover:text-emerald-300'
+            {/* Right Controls: Language + Theme + Hamburger Menu (Consistent on ALL Devices) */}
+            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+              {/* Language Switcher Pill */}
+              <div
+                className="inline-flex items-center p-0.5 sm:p-1 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-xs font-bold shadow-xs select-none"
+                title="Switch Language: English / हिन्दी"
+              >
+                <button
+                  type="button"
+                  onClick={() => setLanguage('en')}
+                  className={`px-2 sm:px-2.5 py-1 rounded-lg transition-all text-[11px] sm:text-xs ${
+                    language === 'en'
+                      ? 'bg-[#214F39] text-white shadow-xs font-black'
+                      : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
                   }`}
+                  title="Switch to English"
                 >
-                  <span>{link.label}</span>
-                  {link.badge && (
-                    <span
-                      className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full uppercase"
-                      style={{ backgroundColor: '#FAF8F5', color: '#214F39', border: '1px solid #E8B4A8' }}
-                    >
-                      {link.badge}
-                    </span>
-                  )}
-                  {isActive && (
-                    <span
-                      className="absolute -bottom-1 inset-x-0 h-0.5 rounded-full"
-                      style={{ backgroundColor: '#214F39' }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+                  EN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLanguage('hi')}
+                  className={`px-2 sm:px-2.5 py-1 rounded-lg transition-all text-[11px] sm:text-xs ${
+                    language === 'hi'
+                      ? 'bg-[#214F39] text-white shadow-xs font-black'
+                      : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
+                  }`}
+                  title="हिन्दी में अनुवाद करें"
+                >
+                  हिन्दी
+                </button>
+              </div>
 
-          {/* Desktop Action Buttons */}
-          <div className="hidden xl:flex items-center gap-2">
-            {/* Language Switcher Pill */}
-            <div
-              className="inline-flex items-center gap-1 p-1 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-xs font-bold shadow-xs select-none"
-              title="Switch Language: English / हिन्दी"
-            >
-              <Globe className="w-4 h-4 ml-1.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              {/* Dark / Light Mode Toggle Button */}
               <button
-                type="button"
-                onClick={() => setLanguage('en')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  language === 'en'
-                    ? 'bg-[#214F39] text-white shadow-xs font-black'
-                    : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
-                }`}
-                title="Switch to English"
+                onClick={toggleTheme}
+                className="p-2 sm:p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 hover:border-[#214F39] transition active:scale-95 shadow-xs"
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               >
-                EN
+                {theme === 'dark' ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-stone-600" />
+                )}
               </button>
-              <span className="text-stone-300 dark:text-stone-600 font-light">|</span>
+
+              {/* Hamburger Menu Button */}
               <button
-                type="button"
-                onClick={() => setLanguage('hi')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  language === 'hi'
-                    ? 'bg-[#214F39] text-white shadow-xs font-black'
-                    : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100'
-                }`}
-                title="हिन्दी में अनुवाद करें"
+                onClick={() => setMobileNavOpen(true)}
+                className="p-2 sm:p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 hover:text-[#214F39] hover:border-[#214F39] dark:hover:text-emerald-400 transition active:scale-95 shadow-xs flex items-center gap-1.5"
+                aria-label="Open navigation drawer"
+                title="Open Navigation Menu"
               >
-                हिन्दी
+                <Menu className="w-5 h-5 text-stone-700 dark:text-stone-200" />
               </button>
             </div>
-
-            {/* Dark / Light Mode Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 hover:border-[#214F39] transition active:scale-95"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Moon className="w-4 h-4 text-stone-600" />
-              )}
-            </button>
-
-            {user ? (
-              <Link
-                href={
-                  user.role === 'admin'
-                    ? '/admin/dashboard'
-                    : user.role === 'teacher'
-                    ? '/teacher/dashboard'
-                    : '/student/dashboard'
-                }
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white rounded-xl shadow-sm transition hover:opacity-95"
-                style={{ backgroundColor: '#214F39' }}
-              >
-                <span>Dashboard</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white rounded-xl shadow-sm transition hover:opacity-95"
-                style={{ backgroundColor: '#214F39' }}
-              >
-                <GraduationCap className="w-3.5 h-3.5 text-[#E8B4A8]" />
-                <span>Go to Dashboard</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            )}
-          </div>
-
-          {/* Mobile Right Controls: Language + Theme + Hamburger Menu */}
-          <div className="flex xl:hidden items-center gap-1.5 sm:gap-2">
-            {/* Language Switcher Mobile */}
-            <div className="flex items-center p-0.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-xs font-bold select-none">
-              <button
-                type="button"
-                onClick={() => setLanguage('en')}
-                className={`px-2 py-1 rounded-lg transition text-[11px] ${
-                  language === 'en'
-                    ? 'bg-[#214F39] text-white font-black shadow-2xs'
-                    : 'text-stone-500 dark:text-stone-400'
-                }`}
-                title="English"
-              >
-                EN
-              </button>
-              <button
-                type="button"
-                onClick={() => setLanguage('hi')}
-                className={`px-2 py-1 rounded-lg transition text-[11px] ${
-                  language === 'hi'
-                    ? 'bg-[#214F39] text-white font-black shadow-2xs'
-                    : 'text-stone-500 dark:text-stone-400'
-                }`}
-                title="हिन्दी"
-              >
-                हिन्दी
-              </button>
-            </div>
-
-            {/* Dark / Light Mode Toggle Mobile */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 hover:border-[#214F39] transition"
-              title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Moon className="w-4 h-4 text-stone-600" />
-              )}
-            </button>
-
-            {/* Hamburger Button */}
-            <button
-              onClick={() => setMobileNavOpen(true)}
-              className="p-2 sm:p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-200 hover:text-[#214F39] transition shadow-2xs flex items-center gap-1.5"
-              aria-label="Open navigation drawer"
-            >
-              <Menu className="w-5 h-5" />
-              <span className="text-xs font-bold hidden xs:inline">Menu</span>
-            </button>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-      {/* 3. PREMIUM MOBILE SLIDE-OVER DRAWER (PORTALED DIRECTLY TO DOCUMENT.BODY TO PREVENT ANY CLIPPING/STACKING BUGS) */}
+      {/* 3. PREMIUM SLIDE-OVER DRAWER (PORTALED DIRECTLY TO DOCUMENT.BODY FOR ALL DEVICES) */}
       {mounted &&
         createPortal(
           <div
-            className={`fixed inset-0 z-[99999] overflow-hidden xl:hidden transition-all duration-300 ${
+            className={`fixed inset-0 z-[99999] overflow-hidden transition-all duration-300 ${
               mobileNavOpen ? 'visible pointer-events-auto' : 'invisible pointer-events-none'
             }`}
             aria-hidden={!mobileNavOpen}
@@ -358,13 +251,13 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
                   onClick={() => setMobileNavOpen(false)}
                   className="flex items-center gap-3 min-w-0"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-white p-1 border border-[#214F39]/20 shadow-xs overflow-hidden shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-white p-0.5 border border-emerald-600/15 dark:border-emerald-500/20 shadow-xs overflow-hidden shrink-0 flex items-center justify-center">
                     <Image
                       src="/images/logo.jpeg"
                       alt="Success Point School"
                       width={40}
                       height={40}
-                      className="object-contain w-full h-full"
+                      className="object-contain w-full h-full rounded-full"
                     />
                   </div>
                   <div className="min-w-0">
