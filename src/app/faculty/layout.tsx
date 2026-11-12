@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'Experienced Teachers & Academic Faculty | Success Point School',
+  title: 'Director, Experienced Teachers & Academic Faculty',
   description:
     'Meet the passionate, qualified, and certified teaching faculty at Success Point School. Expert subject mentors providing personalized guidance and academic excellence.',
   keywords: [

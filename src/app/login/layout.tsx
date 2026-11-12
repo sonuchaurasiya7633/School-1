@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Student & Staff Portal Sign-In | Success Point School',
+  title: 'Student & Staff Portal Sign-In',
   description: 'Authorized sign-in gateway for enrolled students, faculty, and administration of Success Point School.',
   robots: {
     index: false,

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'Academic Curriculum, Smart Classes & Syllabus | Success Point School',
+  title: 'Academic Curriculum, Smart Classes & Syllabus',
   description:
     'Discover our comprehensive academic framework from Nursery to Class 12th. Modern CBSE-aligned syllabus, smart digital classrooms, hands-on science labs, and continuous student assessments.',
   keywords: [

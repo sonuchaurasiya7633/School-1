@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'Latest School Notices & Circulars | Success Point School',
+  title: 'Latest School Notices & Circulars',
   description:
     'Stay updated with the latest official notices, examination timetables, holiday announcements, and academic circulars from Success Point School administration.',
   keywords: [

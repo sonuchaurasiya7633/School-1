@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Teacher Portal | Success Point School',
+  title: 'Teacher Portal',
   robots: {
     index: false,
     follow: false,

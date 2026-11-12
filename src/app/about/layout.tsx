@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'About Success Point School | Vision, Philosophy & Academic Leadership',
+  title: 'About Us — Vision, Philosophy & Academic Leadership',
   description:
     'Discover Success Point School (S.P.S.) — our educational philosophy, qualified faculty, audio-visual smart classrooms, leadership, and mission of nurturing future leaders.',
   keywords: [

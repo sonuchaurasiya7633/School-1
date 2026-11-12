@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'School Admission 2026-27 | Nursery to 11th Open | Success Point School',
+  title: 'School Admission 2026-27 (Nursery to 11th Open)',
   description:
     'Admissions open for Session 2026-27 at Success Point School. Apply online for Nursery, KG, Primary & Secondary classes. Explore admission criteria, fees, and required documents.',
   keywords: [

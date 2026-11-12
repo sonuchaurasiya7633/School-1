@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd, FAQJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'Contact School Administration & Admissions Desk | Success Point School',
+  title: 'Contact School Administration & Admissions Desk',
   description:
     'Get in touch with Success Point School administration. Campus address, admissions helpline (+91 8051217686), official email, visiting hours, and instant inquiry submission.',
   keywords: [

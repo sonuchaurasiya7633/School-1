@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Admin Control Center | Success Point School',
+  title: 'Admin Control Center',
   robots: {
     index: false,
     follow: false,

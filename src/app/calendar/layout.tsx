@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'Academic Calendar 2026-27 & Holiday Schedule | Success Point School',
+  title: 'Academic Calendar 2026-27 & Holiday Schedule',
   description:
     'Plan ahead with the official 2026-27 academic calendar of Success Point School. View term examinations, parent-teacher meetings, activity dates, and gazetted holidays.',
   keywords: [
