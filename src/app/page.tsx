@@ -130,22 +130,23 @@ export default function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Live Status Pill with Animated Glowing Pulse Dot */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide mb-6 shadow-md backdrop-blur-xl bg-white/15 border border-white/25 text-white">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
+            {/* Human-Crafted Academic Announcement Ribbon */}
+            <Link
+              href="/admissions"
+              className="group inline-flex items-center gap-2.5 sm:gap-3 p-1.5 pr-3.5 sm:pr-4 rounded-full bg-[#163a29]/80 hover:bg-[#163a29] border border-emerald-500/30 hover:border-[#E8B4A8]/60 shadow-lg shadow-black/20 backdrop-blur-md transition-all duration-300 mb-6 hover:scale-[1.02] active:scale-[0.98] max-w-full"
+              title="Click to view Admissions 2026-27 details"
+            >
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8B4A8] text-[#214F39] text-[11px] font-black uppercase tracking-wider shadow-xs shrink-0">
+                <GraduationCap className="w-3.5 h-3.5 text-[#214F39]" />
+                <span>Admissions 2026–27</span>
               </span>
-              <span className="text-[#E8B4A8] font-black uppercase text-[10px] sm:text-[11px] tracking-wider">
-                Admissions Open 2026-27
-              </span>
-              <span className="text-white/60">|</span>
-              <span className="text-white/95 text-[11px] sm:text-xs">
+              <span className="text-[11px] sm:text-xs md:text-[13px] font-semibold text-emerald-100 group-hover:text-white transition-colors truncate">
                 {language === 'hi'
-                  ? t('hero.badge', 'भविष्य के कर्णधारों का निर्माण')
-                  : settings.heroBadge || 'Success Point School • Empowering Future Leaders'}
+                  ? 'सत्र 2026-27 नामांकन प्रारंभ • ऑनलाइन आवेदन करें'
+                  : 'Nursery to Class 11th • Apply Online'}
               </span>
-            </div>
+              <ArrowRight className="w-3.5 h-3.5 text-[#E8B4A8] group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
+            </Link>
 
             {/* Main Headline with Gradient Sheen Highlight */}
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.15]">
