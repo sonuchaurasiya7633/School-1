@@ -406,13 +406,20 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="pt-2">
+              <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
                   href="/about"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-bold transition shadow-md hover:scale-[1.02] active:scale-[0.98] bg-[#214F39] text-white hover:opacity-95"
                 >
                   <span>Read Full About Us &amp; Vision</span>
                   <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/gallery"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold transition border border-stone-300 dark:border-stone-700 hover:border-[#214F39] text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800"
+                >
+                  <span>Explore Campus Gallery</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#214F39] dark:text-emerald-400" />
                 </Link>
               </div>
             </div>
@@ -627,13 +634,22 @@ export default function HomePage() {
                 Official holiday schedules, examination announcements, and school events.
               </p>
             </div>
-            <Link
-              href="/notices"
-              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs font-extrabold text-[#214F39] dark:text-emerald-400 hover:underline px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 transition"
-            >
-              <span>View All Circulars</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-2.5 mt-4 md:mt-0">
+              <Link
+                href="/calendar"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-[#214F39] dark:hover:text-emerald-400 px-3.5 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 transition"
+              >
+                <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Academic Calendar</span>
+              </Link>
+              <Link
+                href="/notices"
+                className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#214F39] dark:text-emerald-400 hover:underline px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 transition"
+              >
+                <span>View All Circulars</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

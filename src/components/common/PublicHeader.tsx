@@ -157,6 +157,17 @@ export default function PublicHeader({ activePage }: PublicHeaderProps) {
               </div>
             </Link>
 
+            {/* Semantic Accessible Navigation for Search Crawlers & Screen Readers */}
+            <nav aria-label="Main Navigation" className="sr-only">
+              <ul>
+                {navLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href}>{link.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
             {/* Right Controls: Language + Theme + Hamburger Menu (Consistent on ALL Devices) */}
             <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
               {/* Language Switcher Pill */}

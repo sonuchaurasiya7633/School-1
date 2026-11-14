@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import Link from 'next/link';
 import { FACULTY_MEMBERS, FACULTY_FILTERS, FacultyMember } from '@/data/facultyData';
 import FacultyCard from './FacultyCard';
-import { Search, X, Users, BookOpen, GraduationCap, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Search, X, Users, BookOpen, GraduationCap, CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react';
 
 interface FacultySectionProps {
   id?: string;
@@ -264,6 +265,18 @@ export default function FacultySection({ id = 'faculty', className = '' }: Facul
               </button>
             </div>
           )}
+        </div>
+
+        {/* Link to Full Faculty Directory for SEO & User Exploration */}
+        <div className="mt-10 text-center">
+          <Link
+            href="/faculty"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-white shadow-md transition-all hover:scale-105 active:scale-95 hover:opacity-95"
+            style={{ backgroundColor: '#214F39' }}
+          >
+            <span>View Complete Faculty &amp; Educator Profiles</span>
+            <ArrowRight className="w-4 h-4 text-[#E8B4A8]" />
+          </Link>
         </div>
       </div>
     </section>
